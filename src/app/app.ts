@@ -8,8 +8,7 @@ import {AsyncPipe} from '@angular/common';
 @Component({
   selector: 'app-root',
   imports: [GameList, LoginComponent, AsyncPipe],
-  templateUrl: './app.html',
-  styleUrl: './app.css'
+  templateUrl: './app.html'
 })
 export class App {
   protected readonly title = signal('voetbal-app');
