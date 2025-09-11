@@ -1,0 +1,6 @@
+﻿@if (user$ | async; as u) {
+  <p>Ingelogd als {{ u.displayName }} ({{ u.email }})</p>
+  <button class="logout-btn" (click)="logout()">Logout</button>
+} @else {
+  <button class="google-login-btn" (click)="login()" aria-label="Login met Google">🔐 Login met Google</button>
+}

@@ -1,0 +1,16 @@
+@if (user$ | async) {
+  <header class="app-header">
+    <h1>⚽ Zaal Ballie App</h1>
+    <app-login></app-login>
+  </header>
+  <hr>
+  <app-game-list></app-game-list>
+} @else {
+  <div class="login-page">
+    <div class="login-card">
+      <h1>⚽ Zaal Ballie App</h1>
+      <p>Welkom! Log in om verder te gaan.</p>
+      <app-login></app-login>
+    </div>
+  </div>
+}
