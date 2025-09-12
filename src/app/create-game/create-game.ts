@@ -4,7 +4,7 @@ import { ReactiveFormsModule, FormArray, FormBuilder, Validators, FormGroup } fr
 import { Router } from '@angular/router';
 import { GameService, Game } from '../../services/game.service';
 import { Player, PlayerService } from '../../services/player.service';
-import { Observable } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-create-game',
@@ -13,7 +13,7 @@ import { Observable } from 'rxjs';
   templateUrl: './create-game.html'
 })
 export class CreateGame {
-  players$: Observable<Player[]>;
+  players = toSignal(this.playerService.getPlayers());
 
   form!: FormGroup;
 
@@ -35,7 +35,6 @@ export class CreateGame {
       events: this.fb.array([] as { playerId: string; type: 'goal' | 'assist' }[])
     });
 
-    this.players$ = this.playerService.getPlayers();
     // start with one empty event row by default
     this.addEvent();
   }

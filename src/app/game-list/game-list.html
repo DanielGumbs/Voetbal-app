@@ -5,28 +5,32 @@
   </a>
 </div>
 
-
-<div class="bg-white rounded shadow divide-y" *ngIf="games$ | async as games; else loading">
-  <div class="p-4 text-gray-500" *ngIf="!games.length">Nog geen wedstrijden.</div>
-  <div class="p-4" *ngFor="let g of games">
-    <div class="flex items-center justify-between">
-      <div>
-        <div class="font-semibold">{{ g.opponent }}</div>
-        <div class="text-sm text-gray-500">{{ g.date | date:'mediumDate' }}</div>
-      </div>
-      <div class="text-right">
-        <div class="text-lg font-bold" *ngIf="g.scoreTeam != null && g.scoreOpponent != null; else noScore">
-          {{ g.scoreTeam }} - {{ g.scoreOpponent }}
-        </div>
-        <ng-template #noScore>
-          <div class="text-gray-400">Geen stand</div>
-        </ng-template>
-        <div class="text-xs text-gray-500">Events: {{ g.events.length || 0 }}</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<ng-template #loading>
+@if (games() === undefined) {
   <div class="text-gray-300">Laden...</div>
-</ng-template>
+} @else {
+  @let list = games()!;
+  <div class="bg-white rounded shadow divide-y">
+    @if (!list.length) {
+      <div class="p-4 text-gray-500">Nog geen wedstrijden.</div>
+    }
+
+    @for (g of list; track g.id ?? (g.opponent + g.date)) {
+      <div class="p-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="font-semibold">{{ g.opponent }}</div>
+            <div class="text-sm text-gray-500">{{ g.date | date:'mediumDate' }}</div>
+          </div>
+          <div class="text-right">
+            @if (g.scoreTeam != null && g.scoreOpponent != null) {
+              <div class="text-lg font-bold">{{ g.scoreTeam }} - {{ g.scoreOpponent }}</div>
+            } @else {
+              <div class="text-gray-400">Geen stand</div>
+            }
+            <div class="text-xs text-gray-500">Events: {{ (g.events?.length ?? 0) }}</div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+}

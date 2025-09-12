@@ -1,20 +1,17 @@
 import { Component } from '@angular/core';
-import { AsyncPipe, DatePipe, NgForOf, NgIf } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Game, GameService } from '../../services/game.service';
-import { Observable } from 'rxjs';
-import {PlayerService} from '../../services/player.service';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-game-list',
   standalone: true,
-  imports: [NgIf, NgForOf, RouterLink, AsyncPipe, DatePipe],
+  imports: [RouterLink, DatePipe],
   templateUrl: './game-list.html'
 })
 export class GameList {
-  games$: Observable<Game[]>;
+  games = toSignal(this.gameService.getGames());
 
-  constructor(private gameService: GameService) {
-    this.games$ = this.gameService.getGames();
-  }
+  constructor(private gameService: GameService) {}
 }
