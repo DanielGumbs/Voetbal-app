@@ -29,7 +29,7 @@
       <div class="p-4 text-gray-500">Laden...</div>
     } @else {
       @let list = sorted()!;
-      <div class="divide-y">
+      <div class="divide-y max-h-[65vh] overflow-y-auto">
         @if (!list.length) {
           <div class="p-4 text-gray-500">Nog geen spelers.</div>
         }
@@ -38,7 +38,7 @@
             <div class="flex items-center gap-3">
               <div class="w-8 text-center font-bold">{{ i + 1 }}</div>
               <div>
-                <div class="font-semibold text-lg">{{ s.player.name }} - {{ s.player.number }}</div>
+                <div class="font-semibold">{{ s.player.name }} - {{ s.player.number }}</div>
                 <div class="text-xs text-gray-600 font-medium flex flex-wrap gap-3 mt-0.5">
                    <span class="inline-flex items-center gap-1 bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">
                     <span class="w-1.5 h-1.5 bg-purple-500 rounded-full"></span>
@@ -57,13 +57,13 @@
             </div>
             <div class="text-right">
               @if (tab() === 'goals') {
-                <div class="text-lg font-bold">{{ s.goals }}</div>
+                <div class="font-bold">{{ s.goals }}</div>
                 <div class="text-xs text-gray-500">Doelpunten</div>
               } @else if (tab() === 'assists') {
-                <div class="text-lg font-bold">{{ s.assists }}</div>
+                <div class="font-bold">{{ s.assists }}</div>
                 <div class="text-xs text-gray-500">Assists</div>
               } @else {
-                <div class="text-lg font-bold">{{ s.goals + s.assists }}</div>
+                <div class="font-bold">{{ s.goals + s.assists }}</div>
                 <div class="text-xs text-gray-500">Totaal</div>
               }
             </div>
