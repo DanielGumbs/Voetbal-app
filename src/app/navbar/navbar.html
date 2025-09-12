@@ -2,7 +2,7 @@
   <div class="max-w-6xl mx-auto px-4">
     <div class="flex h-20 items-center justify-between gap-4">
       <a class="flex items-center gap-3 select-none" routerLink="/">
-        <img src="/logo/vedette-logo.jpg" alt="Club logo" class="h-16 w-auto border-2 border-red-600 p-1 rounded" />
+        <img alt="Club logo" class="h-16 w-auto border-2 border-red-600 p-1 rounded" src="/logo/vedette-logo.jpg"/>
         <div class="leading-tight">
           <span class="block font-extrabold tracking-wide">ZVV Vedette</span>
           <span class="block text-[11px] text-gray-300 uppercase tracking-wider">De Remise</span>
@@ -11,7 +11,8 @@
 
       <div class="hidden sm:flex items-center gap-1">
         <a class="px-3 py-2 rounded-md font-medium text-white hover:bg-white/10" routerLink="/games">Games</a>
-        <a class="px-3 py-2 rounded-md font-medium text-white hover:bg-white/10" routerLink="/team">Team</a>
+        <a class="px-3 py-2 rounded-md font-medium text-white hover:bg-white/10"
+           routerLink="/leaderboard">Leaderboard</a>
       </div>
 
       <div class="flex items-center gap-2">
@@ -25,13 +26,15 @@
             title="Menu"
           >
             @if (!mobileOpen()) {
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                   stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
               </svg>
             } @else {
               <!-- X icon when open -->
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                   stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
               </svg>
             }
           </button>
@@ -41,15 +44,18 @@
 
     @if (mobileOpen() && (user$ | async)) {
       <div id="mobile-menu" class="sm:hidden border-t border-white/10 pt-2 pb-3">
-        <a class="block px-3 py-2 rounded-md font-medium text-white hover:bg-white/10" routerLink="/games" (click)="closeMenu()">Games</a>
-        <a class="block px-3 py-2 rounded-md font-medium text-white hover:bg-white/10" routerLink="/team" (click)="closeMenu()">Team</a>
+        <a class="block px-3 py-2 rounded-md font-medium text-white hover:bg-white/10" routerLink="/games"
+           (click)="closeMenu()">Games</a>
+        <a class="block px-3 py-2 rounded-md font-medium text-white hover:bg-white/10" routerLink="/leaderboard"
+           (click)="closeMenu()">Leaderboard</a>
         @if (user$ | async) {
           <button
             class="mt-1 w-full text-left block px-3 py-2 rounded-md font-medium text-white hover:bg-white/10"
             (click)="logout(); closeMenu()"
             aria-label="Logout"
             title="Logout"
-          >Logout</button>
+          >Logout
+          </button>
         }
       </div>
     }
