@@ -2,20 +2,20 @@
   <h2 class="text-xl font-bold text-white mb-4">Nieuwe wedstrijd</h2>
 
   <form (ngSubmit)="submit()" [formGroup]="form"
-        class="bg-white border-4 border-red-600 rounded shadow p-4 space-y-4 sticky top-2 sm:top-4 sm:mb-16">
+        class="bg-white border-4 border-red-600 rounded shadow p-4 pt-6 space-y-4 sticky top-2 sm:top-4 sm:mb-16">
     <div class="max-h-[calc(100vh-20rem)] overflow-y-auto pr-1">
-      <div>
+      <div class="mb-2">
         <label class="block text-sm font-medium text-gray-700 mb-1">Tegenstander</label>
         <input class="w-full border rounded px-4 py-3 text-base" formControlName="opponent" placeholder="CTO '70 vv 22"
                type="text"/>
       </div>
 
-      <div>
+      <div class="mb-2">
         <label class="block text-sm font-medium text-gray-700 mb-1">Datum</label>
         <input class="w-full border rounded px-4 py-3 text-base" formControlName="date" type="date"/>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-2">
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Score Thuis Team</label>
           <input class="w-full border rounded px-4 py-3 text-base" formControlName="scoreTeam" inputmode="numeric"
@@ -30,7 +30,7 @@
         </div>
       </div>
 
-      <div>
+      <div class="mb-2">
         <label class="block text-sm font-medium text-gray-700 mb-2">Spelers die speelden</label>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 overflow-auto pr-1">
           @for (p of (players() || []); track p.id) {
