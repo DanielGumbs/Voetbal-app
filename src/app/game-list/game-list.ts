@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Game, GameService } from '../../services/game.service';
@@ -11,7 +11,9 @@ import { toSignal } from '@angular/core/rxjs-interop';
   templateUrl: './game-list.html'
 })
 export class GameList {
-  games = toSignal(this.gameService.getGames());
+  games!: Signal<Game[] | undefined>;
 
-  constructor(private gameService: GameService) {}
+  constructor(private gameService: GameService) {
+    this.games = toSignal(this.gameService.getGames());
+  }
 }

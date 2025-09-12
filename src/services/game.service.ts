@@ -14,6 +14,7 @@ export interface Game {
   scoreTeam?: number;
   scoreOpponent?: number;
   events: GameEvent[];
+  players?: string[]; // player IDs who played this game
 }
 
 @Injectable({ providedIn: 'root' })

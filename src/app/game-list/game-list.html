@@ -9,7 +9,7 @@
   <div class="text-gray-300">Laden...</div>
 } @else {
   @let list = games()!;
-  <div class="bg-white rounded shadow divide-y">
+  <div class="bg-white rounded shadow divide-y border-2 border-red-600">
     @if (!list.length) {
       <div class="p-4 text-gray-500">Nog geen wedstrijden.</div>
     }
@@ -28,6 +28,7 @@
               <div class="text-gray-400">Geen stand</div>
             }
             <div class="text-xs text-gray-500">Events: {{ (g.events?.length ?? 0) }}</div>
+            <div class="text-xs text-gray-500">Spelers: {{ (g.players?.length ?? 0) }}</div>
           </div>
         </div>
       </div>

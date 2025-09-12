@@ -1,4 +1,4 @@
-﻿import { Component } from '@angular/core';
+﻿import { Component, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormArray, FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -13,9 +13,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
   templateUrl: './create-game.html'
 })
 export class CreateGame {
-  players = toSignal(this.playerService.getPlayers());
-
   form!: FormGroup;
+  players!: Signal<Player[] | undefined>;
 
   get events(): FormArray {
     return this.form.get('events') as FormArray;
@@ -32,11 +31,14 @@ export class CreateGame {
       date: ['', Validators.required],
       scoreTeam: [null as number | null],
       scoreOpponent: [null as number | null],
+      players: this.fb.control([] as string[]),
       events: this.fb.array([] as { playerId: string; type: 'goal' | 'assist' }[])
     });
 
     // start with one empty event row by default
     this.addEvent();
+
+    this.players = toSignal(this.playerService.getPlayers());
   }
 
   addEvent() {
@@ -52,6 +54,24 @@ export class CreateGame {
     this.events.removeAt(index);
   }
 
+  isPlayerSelected(id: string): boolean {
+    const selected = (this.form.get('players')?.value as string[]) || [];
+    return selected.includes(id);
+  }
+
+  onTogglePlayer(id: string, checked: boolean) {
+    const current: string[] = (this.form.get('players')?.value as string[]) || [];
+    const set = new Set(current);
+    if (checked) {
+      set.add(id);
+    } else {
+      set.delete(id);
+    }
+    this.form.get('players')?.setValue(Array.from(set));
+    this.form.get('players')?.markAsDirty();
+    this.form.get('players')?.updateValueAndValidity();
+  }
+
   async submit() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -64,7 +84,8 @@ export class CreateGame {
       date: raw.date!,
       scoreTeam: raw.scoreTeam ?? undefined,
       scoreOpponent: raw.scoreOpponent ?? undefined,
-      events: (raw.events as any[])?.filter(e => e.playerId) ?? []
+      events: (raw.events as any[])?.filter(e => e.playerId) ?? [],
+      players: (raw as any).players ?? []
     };
 
     await this.gameService.addGame(payload);

@@ -16,9 +16,4 @@ export class PlayerService {
     const ref = collection(this.firestore, 'players');
     return collectionData(ref, { idField: 'id' }) as Observable<Player[]>;
   }
-
-  addPlayer(player: Player) {
-    const ref = collection(this.firestore, 'players');
-    return addDoc(ref, player);
-  }
 }
