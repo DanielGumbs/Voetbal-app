@@ -15,29 +15,31 @@
       </div>
 
       <div class="flex items-center gap-2">
-        <button
-          class="sm:hidden inline-flex items-center justify-center rounded-md p-2 text-white/80 hover:text-white hover:bg-white/10 focus:outline-none"
-          aria-label="Toggle menu"
-          [attr.aria-expanded]="mobileOpen()"
-          aria-controls="mobile-menu"
-          (click)="toggleMenu()"
-          title="Menu"
-        >
-          @if (!mobileOpen()) {
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-            </svg>
-          } @else {
-            <!-- X icon when open -->
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          }
-        </button>
+        @if (user$ | async) {
+          <button
+            class="sm:hidden inline-flex items-center justify-center rounded-md p-2 text-white/80 hover:text-white hover:bg-white/10 focus:outline-none"
+            aria-label="Toggle menu"
+            [attr.aria-expanded]="mobileOpen()"
+            aria-controls="mobile-menu"
+            (click)="toggleMenu()"
+            title="Menu"
+          >
+            @if (!mobileOpen()) {
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+              </svg>
+            } @else {
+              <!-- X icon when open -->
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            }
+          </button>
+        }
       </div>
     </div>
 
-    @if (mobileOpen()) {
+    @if (mobileOpen() && (user$ | async)) {
       <div id="mobile-menu" class="sm:hidden border-t border-white/10 pt-2 pb-3">
         <a class="block px-3 py-2 rounded-md font-medium text-white hover:bg-white/10" routerLink="/games" (click)="closeMenu()">Games</a>
         <a class="block px-3 py-2 rounded-md font-medium text-white hover:bg-white/10" routerLink="/team" (click)="closeMenu()">Team</a>
