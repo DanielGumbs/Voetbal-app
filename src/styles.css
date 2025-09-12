@@ -1,16 +1,3 @@
 ﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* Optional: global base styles */
-:root {
-  color-scheme: light dark;
-}
-
-html, body {
-  height: 100%;
-}
-
-body {
-  @apply bg-white text-gray-900;
-}

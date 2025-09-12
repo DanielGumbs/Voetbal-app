@@ -1,1 +1,56 @@
-<p>navbar works!</p>
+<nav class="bg-neutral-900 text-white border-b-4 border-red-600 shadow-lg sticky top-0 z-50">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="flex h-16 items-center justify-between gap-4">
+      <a class="flex items-center gap-3 select-none" routerLink="/">
+        <img ngSrc="logo/vedette-logo.jpg" alt="Club logo" class="h-10 w-auto rounded-sm bg-white p-1 ring-1 ring-white/20"
+             height="640" width="401"/>
+        <div class="leading-tight">
+          <span class="block font-extrabold tracking-wide">ZVV Vedette</span>
+          <span class="block text-[11px] text-gray-300 uppercase tracking-wider">De Remise</span>
+        </div>
+      </a>
+
+      <div class="hidden sm:flex items-center gap-1">
+        <a class="px-3 py-2 rounded-md font-medium text-white hover:bg-white/10" routerLink="/games">Games</a>
+        <a class="px-3 py-2 rounded-md font-medium text-white hover:bg-white/10" routerLink="/team">Team</a>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button
+          class="sm:hidden inline-flex items-center justify-center rounded-md p-2 text-white/80 hover:text-white hover:bg-white/10 focus:outline-none"
+          aria-label="Toggle menu"
+          [attr.aria-expanded]="mobileOpen()"
+          aria-controls="mobile-menu"
+          (click)="toggleMenu()"
+          title="Menu"
+        >
+          @if (!mobileOpen()) {
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+          } @else {
+            <!-- X icon when open -->
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          }
+        </button>
+      </div>
+    </div>
+
+    @if (mobileOpen()) {
+      <div id="mobile-menu" class="sm:hidden border-t border-white/10 pt-2 pb-3">
+        <a class="block px-3 py-2 rounded-md font-medium text-white hover:bg-white/10" routerLink="/games" (click)="closeMenu()">Games</a>
+        <a class="block px-3 py-2 rounded-md font-medium text-white hover:bg-white/10" routerLink="/team" (click)="closeMenu()">Team</a>
+        @if (user$ | async) {
+          <button
+            class="mt-1 w-full text-left block px-3 py-2 rounded-md font-medium text-white hover:bg-white/10"
+            (click)="logout(); closeMenu()"
+            aria-label="Logout"
+            title="Logout"
+          >Logout</button>
+        }
+      </div>
+    }
+  </div>
+</nav>
