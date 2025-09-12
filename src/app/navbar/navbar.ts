@@ -8,7 +8,6 @@ import { Observable } from 'rxjs';
   selector: 'app-navbar',
   imports: [
     RouterLink,
-    NgOptimizedImage,
     AsyncPipe,
   ],
   templateUrl: './navbar.html'
