@@ -2,7 +2,7 @@
   <h2 class="text-xl font-bold text-white mb-4">Nieuwe wedstrijd</h2>
 
   <form (ngSubmit)="submit()" [formGroup]="form"
-        class="bg-white border-4 border-red-600 rounded shadow p-4 pt-6 space-y-4 sticky top-2 sm:top-4 sm:mb-16">
+        class="bg-white border-4 border-red-600 rounded shadow p-2 pl-3 pt-6 space-y-4 sticky top-2 sm:top-4 sm:mb-16">
     <div class="max-h-[calc(100vh-20rem)] overflow-y-auto pr-2">
       <div class="mb-2">
         <label class="block text-sm font-medium text-gray-700 mb-1">Tegenstander</label>
@@ -50,7 +50,7 @@
         <div class="flex items-center justify-between mb-2">
           <label class="block text-sm font-medium text-gray-700">Spelers (Goals/Assists)</label>
           <button (click)="addEvent()" class="text-sm bg-gray-100 hover:bg-gray-200 border rounded px-3 py-2"
-                  type="button">+ Voeg event toe
+                  type="button">Voeg Goals/Assist Toe
           </button>
         </div>
 

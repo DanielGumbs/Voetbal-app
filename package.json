@@ -5,8 +5,12 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:prod": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "firebase:login": "firebase login",
+    "firebase:use": "firebase use",
+    "deploy": "npm run build:prod && firebase deploy --only hosting"
   },
   "prettier": {
     "overrides": [

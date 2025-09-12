@@ -54,6 +54,34 @@ ng e2e
 
 Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
 
+## Deploying to Firebase Hosting
+
+Follow these steps to deploy a new version to Firebase Hosting.
+
+Prerequisites:
+
+- Install Firebase CLI (one time):
+  npm install -g firebase-tools
+- Log in to Firebase (one time per machine):
+  npm run firebase:login
+- Make sure your project is selected or set a default project (replace YOUR_PROJECT_ID):
+  firebase use YOUR_PROJECT_ID
+  or run:
+  npm run firebase:use
+
+Build and deploy:
+
+1. Build a production bundle:
+   npm run build:prod
+2. Deploy to Firebase Hosting:
+   npm run deploy
+
+Notes:
+
+- The Firebase Hosting config is in firebase.json and points to dist/voetbal-app/browser which is where Angular outputs the app.
+- If you haven’t initialized hosting locally before, you can run firebase init hosting and choose “Configure files for Firebase Hosting”. This repo already includes a working firebase.json.
+- If you prefer CI/CD later, you can add GitHub Actions with firebase/cli-action to build and deploy on push to main.
+
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
