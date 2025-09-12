@@ -1,24 +1,20 @@
-﻿import { Component, Signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormArray, FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
-import { GameService, Game } from '../../services/game.service';
-import { Player, PlayerService } from '../../services/player.service';
-import { toSignal } from '@angular/core/rxjs-interop';
+﻿import {Component, Signal} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {Router, RouterLink} from '@angular/router';
+import {Game, GameService} from '../../services/game.service';
+import {Player, PlayerService} from '../../services/player.service';
+import {toSignal} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-create-game',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './create-game.html'
 })
 export class CreateGame {
   form!: FormGroup;
   players!: Signal<Player[] | undefined>;
-
-  get events(): FormArray {
-    return this.form.get('events') as FormArray;
-  }
 
   constructor(
     private fb: FormBuilder,
@@ -39,6 +35,10 @@ export class CreateGame {
     this.addEvent();
 
     this.players = toSignal(this.playerService.getPlayers());
+  }
+
+  get events(): FormArray {
+    return this.form.get('events') as FormArray;
   }
 
   addEvent() {
