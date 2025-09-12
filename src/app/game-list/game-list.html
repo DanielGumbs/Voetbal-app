@@ -3,13 +3,13 @@
   @if ((user$ | async)?.email === 'daniel.r.gumbs@gmail.com') {
     <a class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-500 text-white font-semibold px-4 py-2 rounded"
        routerLink="/games/new">
-      + Nieuwe wedstrijd
+      Nieuwe wedstrijd
     </a>
   } @else {
     <button
       class="inline-flex items-center gap-2 bg-red-600 text-white font-semibold px-4 py-2 rounded opacity-50 cursor-not-allowed"
       aria-disabled="true">
-      + Nieuwe wedstrijd
+      Nieuwe wedstrijd
     </button>
   }
 </div>
