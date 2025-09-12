@@ -1,14 +1,14 @@
 import { Component, signal } from '@angular/core';
-import { GameList } from './game-list/game-list';
 import { LoginComponent } from './login/login';
 import { Navbar } from './navbar/navbar';
 import { Auth, user } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
 import {AsyncPipe} from '@angular/common';
+import {RouterOutlet} from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [GameList, LoginComponent, Navbar, AsyncPipe],
+  imports: [LoginComponent, Navbar, AsyncPipe, RouterOutlet],
   templateUrl: './app.html'
 })
 export class App {

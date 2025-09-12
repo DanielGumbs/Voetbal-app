@@ -11,6 +11,8 @@ export interface Game {
   id?: string;
   opponent: string;
   date: string;
+  scoreTeam?: number;
+  scoreOpponent?: number;
   events: GameEvent[];
 }
 
