@@ -15,6 +15,14 @@
         <input class="w-full border rounded px-4 py-3 text-base" formControlName="date" type="date"/>
       </div>
 
+      <div class="mb-2">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Type wedstrijd</label>
+        <select class="w-full border rounded px-4 py-3 text-base" formControlName="league">
+          <option value="competitie">Competitie</option>
+          <option value="beker">Beker</option>
+        </select>
+      </div>
+
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-2">
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Score Thuis Team</label>

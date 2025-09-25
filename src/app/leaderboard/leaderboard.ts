@@ -1,7 +1,7 @@
 ﻿import {Component, computed, Signal, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {Player, PlayerService} from '../../services/player.service';
-import {Game, GameService} from '../../services/game.service';
+import {Game, GameService, LeagueType} from '../../services/game.service';
 import {toSignal} from '@angular/core/rxjs-interop';
 
 interface PlayerStats {
@@ -12,6 +12,8 @@ interface PlayerStats {
 }
 
 type TabKey = 'total' | 'goals' | 'assists';
+
+type LeagueFilter = 'all' | LeagueType;
 
 @Component({
   selector: 'app-leaderboard',
@@ -24,11 +26,15 @@ export class LeaderboardComponent {
   games!: Signal<Game[] | undefined>;
 
   tab: Signal<TabKey> = signal<TabKey>('total');
+  leagueFilter = signal<LeagueFilter>('all');
 
   stats = computed<PlayerStats[] | undefined>(() => {
     const players = this.players();
     const games = this.games();
+    const league = this.leagueFilter();
     if (!players || !games) return undefined;
+
+    const filteredGames = league === 'all' ? games : games.filter(g => g.league === league);
 
     const res: PlayerStats[] = players.map(p => {
       const pid = p.id!;
@@ -36,7 +42,7 @@ export class LeaderboardComponent {
       let goals = 0;
       let assists = 0;
 
-      for (const g of games) {
+      for (const g of filteredGames) {
         if (g.players && g.players.includes(pid)) {
           gamesPlayed++;
         }
@@ -73,5 +79,9 @@ export class LeaderboardComponent {
 
   selectTab(key: TabKey) {
     (this.tab as any).set(key);
+  }
+
+  setLeagueFilter(v: LeagueFilter) {
+    (this.leagueFilter as any).set(v);
   }
 }

@@ -27,6 +27,7 @@ export class CreateGame {
       date: ['', Validators.required],
       scoreTeam: [null as number | null],
       scoreOpponent: [null as number | null],
+      league: ['competitie', Validators.required],
       players: this.fb.control([] as string[]),
       events: this.fb.array([] as { playerId: string; type: 'goal' | 'assist' }[])
     });
@@ -85,7 +86,8 @@ export class CreateGame {
       scoreTeam: raw.scoreTeam ?? undefined,
       scoreOpponent: raw.scoreOpponent ?? undefined,
       events: (raw.events as any[])?.filter(e => e.playerId) ?? [],
-      players: (raw as any).players ?? []
+      players: (raw as any).players ?? [],
+      league: raw.league!,
     };
 
     await this.gameService.addGame(payload);

@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Auth, signInWithPopup, GoogleAuthProvider, signOut, user } from '@angular/fire/auth';
-import { Observable } from 'rxjs';
+import {Component, Signal} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {Auth, GoogleAuthProvider, signInWithPopup, signOut, user} from '@angular/fire/auth';
+import {toSignal} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-login',
@@ -10,10 +10,10 @@ import { Observable } from 'rxjs';
   templateUrl: './login.html'
 })
 export class LoginComponent {
-  user$: Observable<any>;
+  user!: Signal<any | undefined>;
 
   constructor(private auth: Auth) {
-    this.user$ = user(this.auth);
+    this.user = toSignal(user(this.auth));
   }
 
   async login() {

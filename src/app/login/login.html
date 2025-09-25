@@ -1,4 +1,4 @@
-﻿@if (user$ | async; as u) {
+﻿@if (user(); as u) {
   <p class="text-sm text-gray-700">Ingelogd als {{ u.displayName }} ({{ u.email }})</p>
   <button
     class="mt-2 inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-50 text-sm"

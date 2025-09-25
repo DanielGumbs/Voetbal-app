@@ -1,6 +1,15 @@
 ﻿<div class="max-w-3xl mx-auto">
   <div class="flex items-center justify-between mb-4">
     <h2 class="text-xl font-bold text-white">Leaderboard</h2>
+    <div class="flex items-center gap-2">
+      <select (change)="setLeagueFilter($any($event.target).value)"
+              [value]="$any(leagueFilter())"
+              class="bg-white text-gray-800 font-bold text-sm border-2 border-red-600  rounded px-2 py-1">
+        <option value="all">Alle competities</option>
+        <option value="competitie">Competitie</option>
+        <option value="beker">Beker</option>
+      </select>
+    </div>
   </div>
 
   <div class="bg-white border-4 border-red-600 rounded shadow overflow-hidden">
