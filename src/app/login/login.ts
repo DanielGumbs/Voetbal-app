@@ -1,6 +1,6 @@
 import {Component, Signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {Auth, GoogleAuthProvider, signInWithPopup, signOut, user} from '@angular/fire/auth';
+import {Auth, GoogleAuthProvider, signInWithPopup, signOut, user, User} from '@angular/fire/auth';
 import {toSignal} from '@angular/core/rxjs-interop';
 
 @Component({
@@ -10,7 +10,7 @@ import {toSignal} from '@angular/core/rxjs-interop';
   templateUrl: './login.html'
 })
 export class LoginComponent {
-  user!: Signal<any | undefined>;
+  user!: Signal<User | null | undefined>;
 
   constructor(private auth: Auth) {
     this.user = toSignal(user(this.auth));

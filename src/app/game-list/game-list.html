@@ -1,4 +1,4 @@
-<div class="flex items-center justify-between mb-4">
+<div class="flex items-center justify-between mb-2">
   <h2 class="text-xl font-bold text-white">Wedstrijden</h2>
   @if (user()?.email === 'daniel.r.gumbs@gmail.com') {
     <a class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-500 text-white font-semibold px-4 py-2 rounded"
@@ -14,13 +14,26 @@
   }
 </div>
 
+<div class="flex items-center justify-end gap-3 mt-5 mb-3">
+  <label class="text-white text-sm">
+    <select #lg (change)="onLeagueChange(lg.value)"
+            class="ml-1 rounded px-2 py-1 text-black">
+      @for (league of leagues(); track league) {
+        <option [value]="league" [selected]="selectedLeague() === league">
+          {{ league === 'all' ? 'Alle' : (league | titlecase) }}
+        </option>
+      }
+    </select>
+  </label>
+</div>
+
 @if (games() === undefined) {
   <div class="text-gray-300">Laden...</div>
 } @else {
-  @let list = games()!;
+  @let list = filteredSortedGames();
   <div class="bg-white rounded shadow divide-y border-4 border-red-600">
     @if (!list.length) {
-      <div class="p-4 text-gray-500">Nog geen wedstrijden.</div>
+      <div class="p-4 text-gray-500">Geen wedstrijden voor deze filter.</div>
     }
 
     @for (g of list; track g.id ?? (g.opponent + g.date)) {

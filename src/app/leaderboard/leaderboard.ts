@@ -1,4 +1,4 @@
-﻿import {Component, computed, Signal, signal} from '@angular/core';
+﻿import {Component, computed, Signal, signal, WritableSignal} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {Player, PlayerService} from '../../services/player.service';
 import {Game, GameService, LeagueType} from '../../services/game.service';
@@ -25,7 +25,7 @@ export class LeaderboardComponent {
   players!: Signal<Player[] | undefined>;
   games!: Signal<Game[] | undefined>;
 
-  tab: Signal<TabKey> = signal<TabKey>('total');
+  tab: WritableSignal<TabKey> = signal<TabKey>('total');
   leagueFilter = signal<LeagueFilter>('all');
 
   stats = computed<PlayerStats[] | undefined>(() => {
@@ -78,10 +78,10 @@ export class LeaderboardComponent {
   }
 
   selectTab(key: TabKey) {
-    (this.tab as any).set(key);
+    this.tab.set(key);
   }
 
   setLeagueFilter(v: LeagueFilter) {
-    (this.leagueFilter as any).set(v);
+    this.leagueFilter.set(v);
   }
 }

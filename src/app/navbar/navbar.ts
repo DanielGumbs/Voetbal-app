@@ -1,23 +1,21 @@
-import { Component, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { NgOptimizedImage, AsyncPipe } from '@angular/common';
-import { Auth, signOut, user } from '@angular/fire/auth';
-import { Observable } from 'rxjs';
+import {Component, Signal, signal} from '@angular/core';
+import {RouterLink} from '@angular/router';
+import {Auth, signOut, user, User} from '@angular/fire/auth';
+import {toSignal} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-navbar',
   imports: [
     RouterLink,
-    AsyncPipe,
   ],
   templateUrl: './navbar.html'
 })
 export class Navbar {
   public mobileOpen = signal(false);
-  public user$: Observable<any>;
+  public user!: Signal<User | null | undefined>;
 
   constructor(private auth: Auth) {
-    this.user$ = user(this.auth);
+    this.user = toSignal(user(this.auth));
   }
 
   toggleMenu() {

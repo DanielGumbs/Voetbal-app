@@ -78,16 +78,27 @@ export class CreateGame {
       this.form.markAllAsTouched();
       return;
     }
-    const raw = this.form.getRawValue();
+    type EventForm = { playerId: string; type: 'goal' | 'assist' };
+    type CreateGameForm = {
+      opponent: string;
+      date: string;
+      scoreTeam: number | null;
+      scoreOpponent: number | null;
+      league: 'competitie' | 'beker';
+      players: string[];
+      events: EventForm[];
+    };
+
+    const raw = this.form.getRawValue() as CreateGameForm;
 
     const payload: Game = {
-      opponent: raw.opponent!,
-      date: raw.date!,
+      opponent: raw.opponent,
+      date: raw.date,
       scoreTeam: raw.scoreTeam ?? undefined,
       scoreOpponent: raw.scoreOpponent ?? undefined,
-      events: (raw.events as any[])?.filter(e => e.playerId) ?? [],
-      players: (raw as any).players ?? [],
-      league: raw.league!,
+      events: raw.events?.filter(e => e.playerId) ?? [],
+      players: raw.players ?? [],
+      league: raw.league,
     };
 
     await this.gameService.addGame(payload);

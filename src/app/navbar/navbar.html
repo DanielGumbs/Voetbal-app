@@ -16,7 +16,7 @@
       </div>
 
       <div class="flex items-center gap-2">
-        @if (user$ | async) {
+        @if (user()) {
           <button
             class="sm:hidden inline-flex items-center justify-center rounded-md p-2 text-white/80 hover:text-white hover:bg-white/10 focus:outline-none"
             aria-label="Toggle menu"
@@ -42,7 +42,7 @@
       </div>
     </div>
 
-    @if (mobileOpen() && (user$ | async)) {
+    @if (mobileOpen() && user()) {
       <div class="sm:hidden">
         <!-- Backdrop -->
         <div class="fixed inset-0 z-[60]" (click)="closeMenu()" aria-hidden="true">
@@ -55,7 +55,7 @@
              (click)="closeMenu()">Games</a>
           <a class="block px-4 py-3 rounded-md font-medium text-white hover:bg-white/10" routerLink="/leaderboard"
              (click)="closeMenu()">Leaderboard</a>
-          @if (user$ | async) {
+          @if (user()) {
             <button
               class="mt-1 w-full text-left block px-4 py-3 rounded-md font-medium text-white hover:bg-white/10"
               (click)="logout(); closeMenu()"

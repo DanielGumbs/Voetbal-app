@@ -1,7 +1,7 @@
 <div class="min-h-screen bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900">
   <app-navbar></app-navbar>
 
-  @if (user$ | async) {
+  @if (user()) {
     <main class="max-w-6xl mx-auto px-4 py-4">
       <router-outlet></router-outlet>
     </main>
