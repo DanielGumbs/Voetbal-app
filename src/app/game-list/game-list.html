@@ -37,7 +37,8 @@
     }
 
     @for (g of list; track g.id ?? (g.opponent + g.date)) {
-      <div class="p-3 px-4">
+      <a class="block p-3 px-4 hover:bg-gray-50" [routerLink]="g.id ? ['/games', g.id] : null"
+         [class.pointer-events-none]="!g.id">
         <div class="flex items-center justify-between">
           <div>
             <div class="font-semibold">{{ g.opponent }}</div>
@@ -52,7 +53,7 @@
             <div class="text-xs text-gray-500">Spelers: {{ (g.players?.length ?? 0) }}</div>
           </div>
         </div>
-      </div>
+      </a>
     }
   </div>
 }
