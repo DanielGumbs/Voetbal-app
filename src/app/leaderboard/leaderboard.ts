@@ -81,7 +81,14 @@ export class LeaderboardComponent {
     this.tab.set(key);
   }
 
-  setLeagueFilter(v: LeagueFilter) {
-    this.leagueFilter.set(v);
+  setLeagueFilter(vOrEvent: LeagueFilter | Event) {
+    let value: LeagueFilter;
+    if (typeof vOrEvent === 'string') {
+      value = vOrEvent as LeagueFilter;
+    } else {
+      const target = vOrEvent?.target as HTMLSelectElement | null;
+      value = (target?.value as LeagueFilter) ?? 'all';
+    }
+    this.leagueFilter.set(value);
   }
 }
