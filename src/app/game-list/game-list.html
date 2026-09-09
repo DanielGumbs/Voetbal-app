@@ -7,8 +7,8 @@
     </a>
   } @else {
     <button
-      class="inline-flex items-center gap-2 bg-red-600 text-white font-semibold px-4 py-2 rounded opacity-50 cursor-not-allowed"
-      aria-disabled="true">
+      aria-disabled="true"
+      class="inline-flex items-center gap-2 bg-red-600 text-white font-semibold px-4 py-2 rounded opacity-50 cursor-not-allowed">
       Nieuwe wedstrijd
     </button>
   }
@@ -19,7 +19,7 @@
     <select #lg (change)="onLeagueChange(lg.value)"
             class="ml-1 rounded px-2 py-1 text-black">
       @for (league of leagues(); track league) {
-        <option [value]="league" [selected]="selectedLeague() === league">
+        <option [selected]="selectedLeague() === league" [value]="league">
           {{ league === 'all' ? 'Alle' : (league | titlecase) }}
         </option>
       }
@@ -31,14 +31,14 @@
   <div class="text-gray-300">Laden...</div>
 } @else {
   @let list = filteredSortedGames();
-  <div class="bg-white rounded shadow divide-y border-4 border-red-600">
+  <div class="bg-white rounded shadow max-h-[65vh] overflow-y-auto divide-y border-4 border-red-600">
     @if (!list.length) {
       <div class="p-4 text-gray-500">Geen wedstrijden voor deze filter.</div>
     }
 
     @for (g of list; track g.id ?? (g.opponent + g.date)) {
-      <a class="block p-3 px-4 hover:bg-gray-50" [routerLink]="g.id ? ['/games', g.id] : null"
-         [class.pointer-events-none]="!g.id">
+      <a [class.pointer-events-none]="!g.id" [routerLink]="g.id ? ['/games', g.id] : null"
+         class="block p-3 px-4 hover:bg-gray-50">
         <div class="flex items-center justify-between">
           <div>
             <div class="font-semibold">{{ g.opponent }}</div>
