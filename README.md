@@ -85,3 +85,15 @@ Notes:
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+## Seizoenen en beheer
+
+- Kies bovenaan een seizoen. Wedstrijden en de ranglijst worden op dit seizoen gefilterd.
+- Alleen het geverifieerde Google-account `daniel.r.gumbs@gmail.com` kan toevoegen.
+- Open de tab **Seizoenen**, vul bijvoorbeeld `2026/2027` in en voeg het seizoen toe. Firestore slaat het seizoen en de bijbehorende competitie en beker atomair op.
+- Voeg spelers toe aan het gekozen seizoen, met rugnummer en deelname aan competitie, beker of beide. Voeg daarna wedstrijden toe via **Nieuwe wedstrijd**.
+- Bestaande `games` en `players` zonder `seasonId` worden uitsluitend als **Vorig seizoen** gelezen. Hun documenten en statistieken worden niet overschreven. Bij het eerste nieuwe seizoen wordt ook het vorige seizoen als document vastgelegd. Historische wedstrijdlinks blijven werken.
+- Nieuwe spelers bevatten `seasonId` en `competitionIds`; nieuwe wedstrijden bevatten `seasonId` en `competitionId`. Speler-ID's zijn per seizoen apart, zodat oude statistieken behouden blijven.
+- Publiceer zowel de app als `firestore.rules` met `npm run deploy`. Zonder publicatie van de regels is de e-mailbeperking in de database nog niet actief. De regels staan lezen toe voor ingelogde gebruikers, toevoegen alleen voor de beheerder, en geen verwijderen. Bestaande gegevens blijven leesbaar.
+- Firebase CLI en een ingelogd account met deployrechten zijn vereist. De lokale productiebuild controleert de Angular-code; test de rechten en het opslaan daarnaast in Firebase voordat je de wijziging in gebruik neemt.
+

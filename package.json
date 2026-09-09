@@ -10,7 +10,7 @@
     "test": "ng test",
     "firebase:login": "firebase login",
     "firebase:use": "firebase use",
-    "deploy": "npm run build:prod && firebase deploy --only hosting"
+    "deploy": "npm run build:prod && firebase deploy --only hosting,firestore:rules"
   },
   "prettier": {
     "overrides": [
@@ -53,3 +53,4 @@
     "typescript": "~5.8.2"
   }
 }
+

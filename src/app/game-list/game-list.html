@@ -14,13 +14,14 @@
   }
 </div>
 
-<div class="flex items-center justify-end gap-3 mt-5 mb-3">
+<div class="flex flex-wrap items-center gap-3 mt-5 mb-3">
+  <app-season-selector></app-season-selector>
   <label class="text-white text-sm">
-    <select #lg (change)="onLeagueChange(lg.value)"
-            class="ml-1 rounded px-2 py-1 text-black">
+    <select #lg (change)="onLeagueChange(lg.value)" aria-label="Competitie"
+            class="bg-white text-gray-800 font-bold text-sm rounded px-2 py-1">
       @for (league of leagues(); track league) {
         <option [selected]="selectedLeague() === league" [value]="league">
-          {{ league === 'all' ? 'Alle' : (league | titlecase) }}
+          {{ league === 'all' ? 'Alle competities' : (league | titlecase) }}
         </option>
       }
     </select>
@@ -31,7 +32,7 @@
   <div class="text-gray-300">Laden...</div>
 } @else {
   @let list = filteredSortedGames();
-  <div class="bg-white rounded shadow max-h-[65vh] overflow-y-auto divide-y border-4 border-red-600">
+  <div class="bg-white rounded shadow max-h-[70vh] overflow-y-auto divide-y border-4 border-red-600">
     @if (!list.length) {
       <div class="p-4 text-gray-500">Geen wedstrijden voor deze filter.</div>
     }
@@ -57,3 +58,4 @@
     }
   </div>
 }
+

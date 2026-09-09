@@ -1,4 +1,4 @@
-﻿import {Component, computed, Signal} from '@angular/core';
+import {Component, computed, Signal} from '@angular/core';
 import {DatePipe} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
 import {Game, GameService} from '../../services/game.service';
@@ -34,10 +34,10 @@ export class GameDetailComponent {
 
   constructor(route: ActivatedRoute, gameService: GameService, playerService: PlayerService) {
     const id = route.snapshot.paramMap.get('id');
-    this.game = toSignal(gameService.getGames().pipe(
+    this.game = toSignal(gameService.getGames(true).pipe(
       map(list => list.find(g => g.id === id) ?? null)
     ));
-    this.players = toSignal(playerService.getPlayers());
+    this.players = toSignal(playerService.getPlayers(true));
   }
 
   nameFor(playerId: string): string {
@@ -46,3 +46,4 @@ export class GameDetailComponent {
     return p ? `${p.name} (#${p.number})` : playerId;
   }
 }
+

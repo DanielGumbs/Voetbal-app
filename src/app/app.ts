@@ -1,3 +1,4 @@
+
 import {Component, Signal, signal} from '@angular/core';
 import {LoginComponent} from './login/login';
 import {Navbar} from './navbar/navbar';
@@ -18,3 +19,6 @@ export class App {
     this.user = toSignal(user(this.auth));
   }
 }
+
+
+

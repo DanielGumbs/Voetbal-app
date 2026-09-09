@@ -1,6 +1,9 @@
-﻿<div class="max-w-2xl mx-auto px-2 sm:px-0">
+<div class="max-w-2xl mx-auto px-2 sm:px-0">
   <h2 class="text-xl font-bold text-white mb-4">Nieuwe wedstrijd</h2>
 
+  <div class="mb-4"><span class="text-white mr-2">Seizoen</span><app-season-selector></app-season-selector></div>
+  @if (selectedSeason() === 'previous-season') { <p class="text-amber-200 mb-3">Selecteer een nieuw seizoen of maak er een aan via de tab Seizoenen om een wedstrijd toe te voegen.</p> }
+  @if (error) { <p role="alert" class="text-red-300 mb-3">{{error}}</p> }
   <form (ngSubmit)="submit()" [formGroup]="form"
         class="bg-white border-4 border-red-600 rounded shadow p-2 pl-3 pt-6 space-y-4 sticky top-2 sm:top-4 sm:mb-16">
     <div class="max-h-[calc(100vh-20rem)] overflow-y-auto pr-2">
@@ -8,11 +11,17 @@
         <label class="block text-sm font-medium text-gray-700 mb-1">Tegenstander</label>
         <input class="w-full border rounded px-4 py-3 text-base" formControlName="opponent" placeholder="CTO '70 vv 22"
                type="text"/>
+        @if (form.get('opponent')?.touched && form.get('opponent')?.invalid) {
+          <p class="text-red-700 text-sm" role="alert">Vul een tegenstander in.</p>
+        }
       </div>
 
       <div class="mb-2">
         <label class="block text-sm font-medium text-gray-700 mb-1">Datum</label>
         <input class="w-full border rounded px-4 py-3 text-base" formControlName="date" type="date"/>
+        @if (form.get('date')?.touched && form.get('date')?.invalid) {
+          <p class="text-red-700 text-sm" role="alert">Vul een datum in.</p>
+        }
       </div>
 
       <div class="mb-2">
@@ -72,6 +81,9 @@
                     <option [value]="p.id">{{ p.number }} - {{ p.name }}</option>
                   }
                 </select>
+                @if (ctrl.get('playerId')?.touched && ctrl.get('playerId')?.invalid) {
+                  <p class="text-red-700 text-sm" role="alert">Selecteer een speler of verwijder deze regel.</p>
+                }
               </div>
               <div class="sm:col-span-4">
                 <select formControlName="type" class="w-full border rounded px-4 py-3 text-base">
@@ -93,8 +105,11 @@
       class="sticky bottom-0 left-0 right-0 bg-white pt-2 border-t z-20 flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2">
       <a class="px-3 py-2 text-sm border rounded text-center w-full sm:w-auto" routerLink="/games">Annuleren</a>
       <button class="bg-red-600 hover:bg-red-500 text-white font-semibold px-3 py-2 text-sm rounded w-full sm:w-auto"
-              type="submit">Opslaan
+              [disabled]="saving || selectedSeason() === 'previous-season'" type="submit">{{ saving ? 'Opslaan…' : 'Opslaan' }}
       </button>
     </div>
   </form>
 </div>
+
+
+

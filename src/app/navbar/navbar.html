@@ -13,6 +13,7 @@
         <a class="px-3 py-2 rounded-md font-medium text-white hover:bg-white/10" routerLink="/games">Games</a>
         <a class="px-3 py-2 rounded-md font-medium text-white hover:bg-white/10"
            routerLink="/leaderboard">Leaderboard</a>
+        @if (admin.isAdmin()) { <a class="px-3 py-2 rounded-md font-medium text-white hover:bg-white/10" routerLink="/seasons" routerLinkActive="bg-red-600" ariaCurrentWhenActive="page">Seizoenen</a> }
       </div>
 
       <div class="flex items-center gap-2">
@@ -55,6 +56,7 @@
              (click)="closeMenu()">Games</a>
           <a class="block px-4 py-3 rounded-md font-medium text-white hover:bg-white/10" routerLink="/leaderboard"
              (click)="closeMenu()">Leaderboard</a>
+          @if (admin.isAdmin()) { <a class="block px-4 py-3 rounded-md font-medium text-white hover:bg-white/10" routerLink="/seasons" routerLinkActive="bg-red-600" ariaCurrentWhenActive="page" (click)="closeMenu()">Seizoenen</a> }
           @if (user()) {
             <button
               class="mt-1 w-full text-left block px-4 py-3 rounded-md font-medium text-white hover:bg-white/10"
@@ -69,3 +71,4 @@
     }
   </div>
 </nav>
+

@@ -1,3 +1,4 @@
+import {SeasonSelector} from '../season-selector/season-selector';
 import {Component, computed, signal, Signal} from '@angular/core';
 import {DatePipe, TitleCasePipe} from '@angular/common';
 import {RouterLink} from '@angular/router';
@@ -8,7 +9,7 @@ import {Auth, user, User} from '@angular/fire/auth';
 @Component({
   selector: 'app-game-list',
   standalone: true,
-  imports: [RouterLink, DatePipe, TitleCasePipe],
+  imports: [SeasonSelector, RouterLink, DatePipe, TitleCasePipe],
   templateUrl: './game-list.html'
 })
 export class GameList {
@@ -35,3 +36,4 @@ export class GameList {
     }
   }
 }
+

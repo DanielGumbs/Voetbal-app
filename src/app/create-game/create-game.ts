@@ -1,4 +1,6 @@
-﻿import {Component, Signal} from '@angular/core';
+import {SeasonSelector} from '../season-selector/season-selector';
+import {Component, computed, effect, inject, Signal} from '@angular/core';
+import {competitionId, SeasonService} from '../../services/season.service';
 import {CommonModule} from '@angular/common';
 import {FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router, RouterLink} from '@angular/router';
@@ -9,10 +11,14 @@ import {toSignal} from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-create-game',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [SeasonSelector, CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './create-game.html'
 })
 export class CreateGame {
+  seasons = inject(SeasonService);
+  selectedSeason = toSignal(this.seasons.selected, {requireSync: true});
+  saving = false;
+  error = '';
   form!: FormGroup;
   players!: Signal<Player[] | undefined>;
 
@@ -32,10 +38,18 @@ export class CreateGame {
       events: this.fb.array([] as { playerId: string; type: 'goal' | 'assist' }[])
     });
 
-    // start with one empty event row by default
-    this.addEvent();
+    // A scoreless or scheduled game does not require events.
 
-    this.players = toSignal(this.playerService.getPlayers());
+
+    const allPlayers = toSignal(this.playerService.getPlayers());
+    const league = toSignal(this.form.get('league')!.valueChanges, {initialValue: 'competitie'});
+    this.players = computed(() => (allPlayers() ?? []).filter(p => p.competitionIds?.includes(competitionId(this.selectedSeason(), league()))));
+    effect(() => {
+      this.selectedSeason();
+      league();
+      this.form.get('players')?.setValue([]);
+      this.events.clear();
+    });
   }
 
   get events(): FormArray {
@@ -74,10 +88,7 @@ export class CreateGame {
   }
 
   async submit() {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
+    if (this.saving) return;
     type EventForm = { playerId: string; type: 'goal' | 'assist' };
     type CreateGameForm = {
       opponent: string;
@@ -101,7 +112,26 @@ export class CreateGame {
       league: raw.league,
     };
 
-    await this.gameService.addGame(payload);
-    await this.router.navigate(['/games']);
+    const allowed = new Set((this.players() ?? []).map(p => p.id));
+    if (payload.players?.some(id => !allowed.has(id)) || payload.events.some(e => !allowed.has(e.playerId) || !payload.players?.includes(e.playerId))) {
+      this.error = 'Selecteer bij ieder doelpunt of assist een speler die heeft meegedaan.';
+      return;
+    }
+    this.saving = true; this.error = '';
+    try { await this.gameService.addGame(payload); await this.router.navigate(['/games']); }
+    catch (error: unknown) {
+      const code = (error as {code?: string} | null)?.code;
+      if (code === 'permission-denied') {
+        this.error = 'Geen toestemming om deze wedstrijd op te slaan. Log in als daniel.r.gumbs@gmail.com. Als je al met dit account bent ingelogd, moeten de databasebeveiliging en het seizoen worden gecontroleerd.';
+      } else if (code === 'unavailable') {
+        this.error = 'De database is tijdelijk niet bereikbaar. Controleer je internetverbinding en probeer opnieuw.';
+      } else {
+        this.error = 'Opslaan mislukt. Probeer opnieuw. Je invoer blijft bewaard.';
+      }
+    }
+    finally { this.saving = false; }
   }
 }
+
+
+

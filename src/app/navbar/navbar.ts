@@ -1,16 +1,19 @@
+import {AdminService} from '../../services/admin.service';
+import {inject} from '@angular/core';
 import {Component, Signal, signal} from '@angular/core';
-import {RouterLink} from '@angular/router';
+import {RouterLink, RouterLinkActive} from '@angular/router';
 import {Auth, signOut, user, User} from '@angular/fire/auth';
 import {toSignal} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-navbar',
   imports: [
-    RouterLink,
+    RouterLink, RouterLinkActive,
   ],
   templateUrl: './navbar.html'
 })
 export class Navbar {
+  admin = inject(AdminService);
   public mobileOpen = signal(false);
   public user!: Signal<User | null | undefined>;
 
@@ -34,3 +37,4 @@ export class Navbar {
     }
   }
 }
+

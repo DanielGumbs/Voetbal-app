@@ -1,4 +1,5 @@
-﻿import {Component, computed, Signal, signal, WritableSignal} from '@angular/core';
+import {SeasonSelector} from '../season-selector/season-selector';
+import {Component, computed, Signal, signal, WritableSignal} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {Player, PlayerService} from '../../services/player.service';
 import {Game, GameService, LeagueType} from '../../services/game.service';
@@ -18,7 +19,7 @@ type LeagueFilter = 'all' | LeagueType;
 @Component({
   selector: 'app-leaderboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [SeasonSelector, CommonModule],
   templateUrl: './leaderboard.html'
 })
 export class LeaderboardComponent {
@@ -36,7 +37,7 @@ export class LeaderboardComponent {
 
     const filteredGames = league === 'all' ? games : games.filter(g => g.league === league);
 
-    const res: PlayerStats[] = players.map(p => {
+    const res: PlayerStats[] = players.filter(p => league === 'all' || !p.competitionIds || p.competitionIds.includes(p.seasonId + '_' + league)).map(p => {
       const pid = p.id!;
       let gamesPlayed = 0;
       let goals = 0;
@@ -92,3 +93,5 @@ export class LeaderboardComponent {
     this.leagueFilter.set(value);
   }
 }
+
+
