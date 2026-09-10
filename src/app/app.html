@@ -8,6 +8,21 @@
     </div>
   }
   <app-navbar></app-navbar>
+  @if (updates.available()) {
+    <div
+      role="status"
+      class="flex shrink-0 items-center justify-between gap-3 border-b border-accent/30 bg-surface px-3 py-2 text-sm text-ink"
+    >
+      <span>Nieuwe versie beschikbaar. Sla je invoer eerst op.</span>
+      <button
+        type="button"
+        class="min-h-11 shrink-0 rounded-xl bg-red-600 px-3 py-2 font-semibold text-white"
+        (click)="updates.reload()"
+      >
+        Bijwerken
+      </button>
+    </div>
+  }
   @if (user()) {
     <main
       class="mx-auto mb-[calc(64px+env(safe-area-inset-bottom))] flex min-h-0 w-full max-w-[960px] flex-1 flex-col overflow-hidden px-3 py-3 sm:mb-0 sm:px-6 sm:py-5 [&>router-outlet]:hidden"

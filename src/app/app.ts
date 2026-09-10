@@ -1,4 +1,5 @@
-import { Component, Signal, signal } from '@angular/core';
+import { Component, Signal, inject, signal } from '@angular/core';
+import { AppUpdateService } from '../services/app-update.service';
 import { LoginComponent } from './login/login';
 import { Navbar } from './navbar/navbar';
 import { Auth, user, User } from '../services/firebase';
@@ -13,6 +14,7 @@ import { environment } from '../environments/environment';
   templateUrl: './app.html',
 })
 export class App {
+  readonly updates = inject(AppUpdateService);
   readonly isTestEnvironment = !environment.production;
   public user!: Signal<User | null | undefined>;
   protected readonly title = signal('voetbal-app');
