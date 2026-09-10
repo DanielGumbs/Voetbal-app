@@ -11,6 +11,9 @@
     >
     @if (user(); as u) {
       <button
+        #accountButton
+        type="button"
+        aria-controls="account-panel"
         class="size-10 rounded-full border border-accent/40 bg-[#292e36] font-bold"
         (click)="toggleMenu()"
         [attr.aria-expanded]="mobileOpen()"
@@ -20,6 +23,9 @@
       </button>
       @if (mobileOpen()) {
         <div
+          #accountPanel
+          id="account-panel"
+          aria-label="Profiel"
           class="absolute right-5 top-[calc(50%+20px)] z-[60] mt-2 w-60 max-w-[calc(100vw-40px)] overflow-hidden break-words rounded-xl border border-accent/40 bg-surface p-1 text-ink shadow-lg"
         >
           <div class="border-b border-line px-3 py-2.5">
@@ -39,7 +45,7 @@
 </header>
 @if (user()) {
   <nav
-    class="order-3 flex shrink-0 justify-around border-t border-line bg-[#151216] px-3 pb-[calc(6px+env(safe-area-inset-bottom))] pt-1 sm:order-none sm:justify-center sm:gap-10 sm:border-b sm:border-t-0 [&_a]:flex [&_a]:min-h-12 [&_a]:flex-1 [&_a]:flex-col [&_a]:items-center [&_a]:justify-center [&_a]:gap-1 [&_a]:py-2 [&_a]:text-[10px] [&_a]:font-bold [&_a]:text-muted sm:[&_a]:flex-none sm:[&_a]:flex-row sm:[&_a]:gap-2 sm:[&_a]:text-sm [&_svg]:size-[22px] [&_a[aria-current=page]]:text-accent [&_a[aria-current=page]_svg]:rounded [&_a[aria-current=page]_svg]:bg-[#4a1b29]"
+    class="fixed inset-x-0 bottom-0 z-40 flex h-[calc(64px+env(safe-area-inset-bottom))] shrink-0 justify-around sm:static sm:h-auto border-t border-line bg-[#151216] px-3 pb-[calc(6px+env(safe-area-inset-bottom))] pt-1 sm:order-none sm:justify-center sm:gap-10 sm:border-b sm:border-t-0 [&_a]:flex [&_a]:min-h-12 [&_a]:flex-1 [&_a]:flex-col [&_a]:items-center [&_a]:justify-center [&_a]:gap-1 [&_a]:py-2 [&_a]:text-xs [&_a]:font-bold [&_a]:text-muted sm:[&_a]:flex-none sm:[&_a]:flex-row sm:[&_a]:gap-2 sm:[&_a]:text-sm [&_svg]:size-[22px] [&_a[aria-current=page]]:text-accent [&_a[aria-current=page]_svg]:rounded [&_a[aria-current=page]_svg]:bg-[#4a1b29]"
     aria-label="Hoofdnavigatie"
   >
     <a

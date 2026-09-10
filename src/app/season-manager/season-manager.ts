@@ -10,8 +10,10 @@ import { PlayerService } from '../../services/player.service';
   host: { class: 'flex min-h-0 min-w-0 flex-1 flex-col [&>*]:shrink-0' },
   standalone: true,
   imports: [SeasonSelector, FormsModule],
-  template: ` <h1 class="text-xl font-bold text-white mb-4">
-      Seizoenen beheren<span class="text-accent">.</span>
+  template: ` <h1
+      class="mb-3 flex h-11 shrink-0 items-center text-[23px] font-extrabold leading-tight tracking-tight text-white sm:text-[26px] max-[359px]:mb-[68px]"
+    >
+      <span>Seizoenen beheren<span class="text-accent">.</span></span>
     </h1>
     <div class="mb-3 flex shrink-0 items-center gap-3 [&_label]:text-xs [&_label]:text-muted">
       <label>Seizoen</label><app-season-selector></app-season-selector>
@@ -32,11 +34,11 @@ import { PlayerService } from '../../services/player.service';
               required
               maxlength="80"
               placeholder="Bijv. 2026/2027"
-              class="border rounded p-2 min-w-0 max-w-full border-line bg-[#171419] text-base text-ink placeholder:text-[#97929d]"
+              class="min-h-11 min-w-0 max-w-full flex-1 rounded-xl border border-line bg-[#171419] px-3 py-2.5 text-base text-ink placeholder:text-muted/60"
             />
             <button
               [disabled]="busy || !name.trim()"
-              class="bg-red-600 text-white rounded p-2 disabled:opacity-50"
+              class="min-h-11 rounded-xl border border-red-500 bg-red-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-red-500 disabled:opacity-50"
             >
               Seizoen toevoegen
             </button>
@@ -46,6 +48,9 @@ import { PlayerService } from '../../services/player.service';
             vorige seizoen.
           </p>
           @if (selected() !== legacy) {
+            <h2 class="mt-6 border-t border-line pt-5 font-semibold text-red-300">
+              Spelers beheren
+            </h2>
             <form (ngSubmit)="addPlayer()" class="flex flex-wrap items-center gap-2 my-3">
               <input
                 aria-label="Spelersnaam"
@@ -53,7 +58,7 @@ import { PlayerService } from '../../services/player.service';
                 [(ngModel)]="playerName"
                 required
                 placeholder="Naam speler"
-                class="border rounded p-2 min-w-0 max-w-full border-line bg-[#171419] text-base text-ink placeholder:text-[#97929d]"
+                class="min-h-11 min-w-0 max-w-full flex-1 rounded-xl border border-line bg-[#171419] px-3 py-2.5 text-base text-ink placeholder:text-muted/60"
               />
               <input
                 aria-label="Rugnummer"
@@ -64,20 +69,32 @@ import { PlayerService } from '../../services/player.service';
                 step="1"
                 required
                 placeholder="Rugnummer"
-                class="border rounded p-2 w-28 min-w-0 max-w-full border-line bg-[#171419] text-base text-ink placeholder:text-[#97929d]"
+                class="min-h-11 w-28 min-w-0 max-w-full rounded-xl border border-line bg-[#171419] px-3 py-2.5 text-base text-ink placeholder:text-muted/60"
               />
-              <label><input type="checkbox" name="league" [(ngModel)]="league" /> Competitie</label>
-              <label><input type="checkbox" name="cup" [(ngModel)]="cup" /> Beker</label>
+              <label
+                class="flex min-h-11 items-center gap-2 rounded-xl border border-line px-3 text-sm"
+                ><input class="size-4" type="checkbox" name="league" [(ngModel)]="league" />
+                Competitie</label
+              >
+              <label
+                class="flex min-h-11 items-center gap-2 rounded-xl border border-line px-3 text-sm"
+                ><input class="size-4" type="checkbox" name="cup" [(ngModel)]="cup" /> Beker</label
+              >
               <button
                 [disabled]="busy || !playerName.trim() || number === null || (!league && !cup)"
-                class="bg-red-600 text-white rounded p-2 disabled:opacity-50 min-w-0 max-w-full border-line bg-[#171419] text-base text-ink placeholder:text-[#97929d]"
+                class="min-h-11 rounded-xl border border-red-500 bg-red-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-red-500 disabled:opacity-50"
               >
                 Speler toevoegen
               </button>
             </form>
             <ul>
               @for (p of players(); track p.id) {
-                <li>{{ p.number }} — {{ p.name }}</li>
+                <li class="flex items-center gap-3">
+                  <span
+                    class="grid size-9 shrink-0 place-items-center rounded-lg bg-accent/10 font-bold tabular-nums text-red-200"
+                    >{{ p.number }}</span
+                  ><span class="min-w-0 break-words font-medium">{{ p.name }}</span>
+                </li>
               } @empty {
                 <li>Nog geen spelers toegevoegd.</li>
               }
@@ -86,7 +103,12 @@ import { PlayerService } from '../../services/player.service';
         </div>
       }
       @if (message) {
-        <p role="status" class="text-sm">{{ message }}</p>
+        <p
+          role="status"
+          class="rounded-xl border border-accent/30 bg-accent/10 px-3 py-3 text-sm leading-relaxed"
+        >
+          {{ message }}
+        </p>
       }
     </section>`,
 })

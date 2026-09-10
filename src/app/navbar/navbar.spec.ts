@@ -34,6 +34,12 @@ describe('Navbar access', () => {
       });
       const fixture = TestBed.createComponent(Navbar);
       fixture.detectChanges();
+      expect(fixture.nativeElement.querySelector('nav a[href="/games"]')?.textContent).toContain(
+        'Wedstrijden',
+      );
+      expect(
+        fixture.nativeElement.querySelector('nav a[href="/leaderboard"]')?.textContent,
+      ).toContain('Statistieken');
       expect(!!fixture.nativeElement.querySelector('a[href="/seasons"]')).toBe(allowed);
     });
   }

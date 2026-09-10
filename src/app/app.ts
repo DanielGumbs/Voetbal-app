@@ -4,6 +4,7 @@ import { Navbar } from './navbar/navbar';
 import { Auth, user, User } from '../services/firebase';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterOutlet } from '@angular/router';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +13,7 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './app.html',
 })
 export class App {
+  readonly isTestEnvironment = !environment.production;
   public user!: Signal<User | null | undefined>;
   protected readonly title = signal('voetbal-app');
 

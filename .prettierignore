@@ -3,3 +3,6 @@ dist/
 .angular/
 coverage/
 package-lock.json
+backups/
+firebase-debug.log
+.firebase/

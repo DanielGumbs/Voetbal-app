@@ -1,5 +1,5 @@
 import { AdminService } from '../../services/admin.service';
-import { inject } from '@angular/core';
+import { ElementRef, HostListener, inject, viewChild } from '@angular/core';
 import { Component, Signal, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Auth, signOut, user, User } from '../../services/firebase';
@@ -15,6 +15,25 @@ export class Navbar {
   admin = inject(AdminService);
   public mobileOpen = signal(false);
   public user!: Signal<User | null | undefined>;
+  accountButton = viewChild<ElementRef<HTMLButtonElement>>('accountButton');
+  accountPanel = viewChild<ElementRef<HTMLElement>>('accountPanel');
+
+  @HostListener('document:click', ['$event'])
+  dismissOutside(event: MouseEvent) {
+    const target = event.target as Node;
+    if (
+      !this.accountButton()?.nativeElement.contains(target) &&
+      !this.accountPanel()?.nativeElement.contains(target)
+    )
+      this.closeMenu();
+  }
+
+  @HostListener('document:keydown.escape')
+  dismissWithEscape() {
+    if (!this.mobileOpen()) return;
+    this.closeMenu();
+    this.accountButton()?.nativeElement.focus();
+  }
 
   constructor(private auth: Auth) {
     this.user = toSignal(user(this.auth));

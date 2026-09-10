@@ -1,6 +1,6 @@
 import { Component, computed, Signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Game, GameService } from '../../services/game.service';
 import { map } from 'rxjs/operators';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -10,7 +10,7 @@ import { Player, PlayerService } from '../../services/player.service';
   selector: 'app-game-detail',
   host: { class: 'flex min-h-0 min-w-0 flex-1 flex-col [&>*]:shrink-0' },
   standalone: true,
-  imports: [DatePipe],
+  imports: [DatePipe, RouterLink],
   templateUrl: './game-detail.html',
 })
 export class GameDetailComponent {

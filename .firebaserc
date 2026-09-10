@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "voetbal-app-6fa54"
+    "default": "voetbal-app-6fa54-test",
+    "production": "voetbal-app-6fa54",
+    "test": "voetbal-app-6fa54-test"
   }
 }

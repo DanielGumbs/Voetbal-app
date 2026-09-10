@@ -1,29 +1,32 @@
 <section
-  class="mb-3 flex shrink-0 items-center justify-between gap-2 [&>div]:min-w-0 [&_h1]:text-[23px] [&_h1]:font-extrabold [&_h1]:leading-tight [&_h1]:tracking-tight sm:[&_h1]:text-[26px] [&_p]:hidden"
+  class="mb-3 grid shrink-0 grid-cols-[minmax(0,1fr)_auto] auto-rows-[44px] items-center gap-3 max-[359px]:grid-cols-1 [&>div]:min-w-0 [&_h1]:text-[23px] [&_h1]:font-extrabold [&_h1]:leading-tight [&_h1]:tracking-tight sm:[&_h1]:text-[26px] [&_p]:hidden"
 >
   <div>
     <p class="mb-2 text-[10px] font-extrabold tracking-[2px] text-accent">ELKE BIJDRAGE TELT</p>
     <h1>Statistieken<span class="text-accent">.</span></h1>
     <p class="mt-2 text-sm text-muted">De spelers achter de cijfers.</p>
   </div>
+  @if (admin.isAdmin()) {
+    <span aria-hidden="true" class="hidden max-[359px]:block"></span>
+  }
 </section>
 <div class="mb-2 grid w-full max-w-[450px] shrink-0 grid-cols-2 gap-2">
   <app-season-selector></app-season-selector>
   <app-select-field
-    label="Competitie"
+    (ngModelChange)="setLeagueFilter($event)"
+    [ngModel]="leagueFilter()"
     [options]="[
       { value: 'all', label: 'Alle competities' },
       { value: 'competitie', label: 'Competitie' },
       { value: 'beker', label: 'Beker' },
     ]"
-    [ngModel]="leagueFilter()"
-    (ngModelChange)="setLeagueFilter($event)"
+    label="Competitie"
   ></app-select-field>
 </div>
 @if (filteredGames()?.length) {
   <div
     aria-label="Rangschikking"
-    class="flex max-w-[430px] shrink-0 gap-1 rounded-xl bg-[#211c23] p-1 [&_button]:min-h-10 [&_button]:flex-1 [&_button]:rounded-lg [&_button]:p-2 [&_button]:text-xs [&_button]:font-bold [&_button]:text-muted [&_button[aria-pressed=true]]:bg-surface [&_button[aria-pressed=true]]:text-ink"
+    class="flex max-w-[430px] shrink-0 gap-1 rounded-xl bg-[#211c23] p-1 [&_button]:min-h-10 [&_button]:flex-1 [&_button]:rounded-lg [&_button]:p-2 [&_button]:text-sm [&_button]:font-bold [&_button]:text-muted [&_button[aria-pressed=true]]:bg-accent/15 [&_button[aria-pressed=true]]:text-white"
   >
     <button (click)="selectTab('total')" [attr.aria-pressed]="tab() === 'total'">Totaal</button>
     <button (click)="selectTab('goals')" [attr.aria-pressed]="tab() === 'goals'">Goals</button>
@@ -31,15 +34,17 @@
       Assists
     </button>
   </div>
-  <div
-    class="my-2 flex shrink-0 items-center justify-between [&_h2]:text-sm [&_h2]:font-bold [&>span]:text-xs [&>span]:text-muted"
-  >
-    <h2>Spelersranglijst</h2>
+}
+<div
+  class="my-2 flex shrink-0 items-center justify-between [&_h2]:text-sm [&_h2]:font-bold [&>span]:text-xs [&>span]:text-muted"
+>
+  <h2>Spelersranglijst</h2>
+  @if (filteredGames()?.length) {
     <span>{{
       tab() === 'total' ? 'Goals + assists' : tab() === 'goals' ? 'Goals' : 'Assists'
     }}</span>
-  </div>
-}
+  }
+</div>
 @if (sorted() === undefined) {
   <div
     class="col-span-full shrink-0 rounded-2xl border border-line bg-surface px-4 py-6 text-center text-sm text-muted [&_h2]:mb-2 [&_h2]:mt-3 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-ink"
@@ -62,10 +67,10 @@
   </div>
 } @else {
   <div
-    class="min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain rounded-2xl border border-line bg-surface [scrollbar-width:thin]"
-    tabindex="0"
-    role="region"
     aria-label="Spelersranglijst"
+    class="min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain rounded-2xl border border-line bg-surface [scrollbar-width:thin]"
+    role="region"
+    tabindex="0"
   >
     @for (s of sorted(); let i = $index; track s.player.id) {
       <div

@@ -1,8 +1,35 @@
 # VoetbalApp
 
+## Branches en omgevingen
+
+- `main`: ontwikkelen en testen met `npm start` (aparte Firebase-testdatabase).
+- `production`: de versie die naar productie wordt gepubliceerd.
+- `npm run deploy:test`: publiceert naar het testproject.
+- `npm run deploy:prod`: publiceert uitsluitend vanaf een schone, gecommitte `production`-branch. De build wordt gecontroleerd op de productieconfiguratie.
+
+Een geteste versie promoveren:
+
+```bash
+git switch production
+git merge --ff-only main
+npm run deploy:prod
+git push origin main production
+git switch main
+```
+
+Deployen kopieert geen databasegegevens. Productie gebruikt `voetbal-app-6fa54`,
+test gebruikt `voetbal-app-6fa54-test`. De testdata is een eenmalige kopie;
+wijzigingen worden niet gesynchroniseerd. Lokale back-ups en Firebase-deploycache
+staan buiten Git. In test meld je je apart aan met Google.
+
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.1.1.
 
 ## Development server
+
+- `npm start` of `npm run start:test`: testomgeving op `http://localhost:4200`, met de aparte testdatabase.
+- `npm run start:production`: productieversie lokaal op `http://localhost:4201`, met de echte productiedatabase. Opgeslagen wijzigingen zijn dus echte productiewijzigingen.
+
+Deze startcommando's publiceren niets. Beide omgevingen kunnen tegelijk draaien dankzij de verschillende poorten.
 
 To start a local development server, run:
 

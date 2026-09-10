@@ -29,10 +29,14 @@ yarn-error.log
 .history/*
 
 # Miscellaneous
+/.firebase/
 /.angular/cache
 .sass-cache/
 /connect.lock
 /coverage
+/firebase-debug.log
+/firestore-debug.log
+/backups/
 /libpeerconnection.log
 testem.log
 /typings

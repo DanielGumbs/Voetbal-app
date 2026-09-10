@@ -1,5 +1,5 @@
 <section
-  class="mb-3 flex shrink-0 flex-wrap items-center justify-between gap-3 [&>div]:min-w-0 [&_h1]:text-[23px] [&_h1]:font-extrabold [&_h1]:leading-tight [&_h1]:tracking-tight sm:[&_h1]:text-[26px] [&_p]:hidden"
+  class="mb-3 grid shrink-0 grid-cols-[minmax(0,1fr)_auto] auto-rows-[44px] items-center gap-3 max-[359px]:grid-cols-1 [&>div]:min-w-0 [&_h1]:text-[23px] [&_h1]:font-extrabold [&_h1]:leading-tight [&_h1]:tracking-tight sm:[&_h1]:text-[26px] [&_p]:hidden"
 >
   <div>
     <p class="mb-2 text-[10px] font-extrabold tracking-[2px] text-accent">HET SEIZOEN IN BEELD</p>
@@ -51,7 +51,7 @@
     @for (g of list; track g.id) {
       <a
         [routerLink]="['/games', g.id]"
-        class="block rounded-xl border border-line bg-surface px-4 pt-4 hover:border-[#79303d]"
+        class="block rounded-2xl border border-line bg-surface px-4 pt-4 transition-colors hover:border-accent/50 hover:bg-[#272129] active:bg-accent/10"
       >
         <div class="flex items-center gap-2 text-[11px] text-muted">
           <span class="rounded-md bg-[#332730] px-2 py-1 text-[10px] font-bold text-[#efb4bd]">{{
@@ -60,32 +60,49 @@
           ><span>{{ g.date | date: 'dd-MM-yyyy' }}</span
           ><span aria-hidden="true" class="ml-auto text-lg">↗</span>
         </div>
-        <div class="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 py-3.5">
+        <div class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-3 py-4">
           <div
-            class="flex min-w-0 flex-row items-center gap-2 text-left max-[359px]:flex-col max-[359px]:text-center sm:flex-col sm:text-center [&_strong]:min-w-0 [&_strong]:text-[11px] [&_strong]:[overflow-wrap:anywhere] [&_img]:h-[42px] [&_img]:w-[27px] [&_img]:shrink-0 [&_img]:rounded-md [&_img]:border [&_img]:border-[#d83245] [&_img]:bg-white [&_img]:object-contain [&_img]:p-0.5"
+            class="col-span-2 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 rounded-xl border border-accent/30 bg-accent/10 px-3 py-2.5"
           >
-            <img alt="" src="/logo/vedette-logo.jpg" /><strong>Vedette</strong>
+            <div class="flex min-w-0 items-center gap-3">
+              <span class="grid size-9 shrink-0 place-items-center">
+                <img
+                  class="h-9 w-6 rounded border border-accent/50 bg-white object-contain p-0.5"
+                  alt=""
+                  src="/logo/vedette-logo.jpg"
+                />
+              </span>
+              <div class="min-w-0">
+                <span class="block text-[10px] font-bold uppercase tracking-wider text-red-300"
+                  >Jouw team</span
+                >
+                <strong class="block text-sm font-bold leading-snug text-white">Vedette</strong>
+              </div>
+            </div>
+            <span class="min-w-8 text-right text-2xl font-extrabold tabular-nums text-ink">{{
+              g.scoreTeam ?? '–'
+            }}</span>
           </div>
           <div
-            class="whitespace-nowrap text-[25px] font-extrabold tracking-tight [&_strong_span]:px-1 [&_strong_span]:text-[#c8cdd4]"
+            class="col-span-2 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 rounded-xl border border-transparent px-3 py-2.5"
           >
-            @if (g.scoreTeam != null && g.scoreOpponent != null) {
-              <strong>{{ g.scoreTeam }} <span>:</span> {{ g.scoreOpponent }}</strong>
-            } @else {
-              <span class="text-base tracking-widest text-muted">VS</span>
-            }
-          </div>
-          <div
-            class="flex min-w-0 flex-row items-center gap-2 text-left max-[359px]:flex-col max-[359px]:text-center sm:flex-col sm:text-center [&_strong]:min-w-0 [&_strong]:text-[11px] [&_strong]:[overflow-wrap:anywhere] [&_img]:h-[42px] [&_img]:w-[27px] [&_img]:shrink-0 [&_img]:rounded-md [&_img]:border [&_img]:border-[#d83245] [&_img]:bg-white [&_img]:object-contain [&_img]:p-0.5 !flex-row-reverse !text-right max-[359px]:!flex-col max-[359px]:!text-center sm:!flex-col sm:!text-center"
-          >
-            <span
-              aria-hidden="true"
-              class="grid h-9 w-8 shrink-0 place-items-center rounded-lg border border-line bg-[#332730] text-xl font-extrabold text-[#e6b9c1]"
-              >{{ g.opponent.charAt(0) }}</span
-            ><strong>{{ g.opponent }}</strong>
+            <div class="flex min-w-0 items-center gap-3">
+              <span
+                aria-hidden="true"
+                class="grid size-9 shrink-0 place-items-center rounded-lg border border-line bg-[#332730] text-sm font-bold text-[#e6b9c1]"
+                >{{ g.opponent.charAt(0) }}</span
+              >
+              <strong
+                class="min-w-0 break-words text-sm font-semibold leading-snug text-ink [overflow-wrap:anywhere]"
+                >{{ g.opponent }}</strong
+              >
+            </div>
+            <span class="min-w-8 text-right text-2xl font-extrabold tabular-nums text-ink">{{
+              g.scoreOpponent ?? '–'
+            }}</span>
           </div>
         </div>
-        <div class="flex justify-between border-t border-line py-2 text-[10px] text-muted">
+        <div class="flex justify-between border-t border-line py-2.5 text-xs text-muted">
           <span>{{ g.players?.length ?? 0 }} spelers</span
           ><span>{{
             g.scoreTeam != null && g.scoreOpponent != null ? 'Uitslag' : 'Nog geen uitslag'
