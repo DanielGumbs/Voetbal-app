@@ -1,16 +1,15 @@
-import {AdminService} from '../../services/admin.service';
-import {inject} from '@angular/core';
-import {Component, Signal, signal} from '@angular/core';
-import {RouterLink, RouterLinkActive} from '@angular/router';
-import {Auth, signOut, user, User} from '@angular/fire/auth';
-import {toSignal} from '@angular/core/rxjs-interop';
+import { AdminService } from '../../services/admin.service';
+import { inject } from '@angular/core';
+import { Component, Signal, signal } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Auth, signOut, user, User } from '../../services/firebase';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-navbar',
-  imports: [
-    RouterLink, RouterLinkActive,
-  ],
-  templateUrl: './navbar.html'
+  host: { class: 'contents' },
+  imports: [RouterLink, RouterLinkActive],
+  templateUrl: './navbar.html',
 })
 export class Navbar {
   admin = inject(AdminService);
@@ -22,7 +21,7 @@ export class Navbar {
   }
 
   toggleMenu() {
-    this.mobileOpen.update(v => !v);
+    this.mobileOpen.update((v) => !v);
   }
 
   closeMenu() {
@@ -37,4 +36,3 @@ export class Navbar {
     }
   }
 }
-

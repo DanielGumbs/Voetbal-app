@@ -1,98 +1,157 @@
-<div class="max-w-2xl mx-auto px-2 sm:px-0">
-  <h2 class="text-xl font-bold text-white mb-4">Nieuwe wedstrijd</h2>
+<div
+  class="mx-auto flex min-h-0 w-full max-w-2xl flex-1 flex-col [&>h2]:mb-3 [&>h2]:shrink-0 [&>h2]:text-2xl [&>p]:shrink-0"
+>
+  <h2 class="text-xl font-bold text-white mb-4">
+    Nieuwe wedstrijd<span class="text-accent">.</span>
+  </h2>
 
-  <div class="mb-4"><span class="text-white mr-2">Seizoen</span><app-season-selector></app-season-selector></div>
-  @if (selectedSeason() === 'previous-season') { <p class="text-amber-200 mb-3">Selecteer een nieuw seizoen of maak er een aan via de tab Seizoenen om een wedstrijd toe te voegen.</p> }
-  @if (error) { <p role="alert" class="text-red-300 mb-3">{{error}}</p> }
-  <form (ngSubmit)="submit()" [formGroup]="form"
-        class="bg-white border-4 border-red-600 rounded shadow p-2 pl-3 pt-6 space-y-4 sticky top-2 sm:top-4 sm:mb-16">
-    <div class="max-h-[calc(100vh-20rem)] overflow-y-auto pr-2">
+  <div class="mb-4">
+    <span class="text-white mr-2">Seizoen</span><app-season-selector></app-season-selector>
+  </div>
+  @if (selectedSeason() === 'previous-season') {
+    <p class="text-amber-200 mb-3">
+      Selecteer een nieuw seizoen of maak er een aan via de tab Seizoenen om een wedstrijd toe te
+      voegen.
+    </p>
+  }
+  @if (error) {
+    <p role="alert" class="text-red-300 mb-3">{{ error }}</p>
+  }
+  <form
+    (ngSubmit)="submit()"
+    [formGroup]="form"
+    class="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-line bg-surface"
+  >
+    <div
+      class="min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain [scrollbar-width:thin] [scrollbar-color:#79323e_#201d23] p-4 [scroll-padding-block:16px]"
+      tabindex="0"
+      role="region"
+      aria-label="Wedstrijdgegevens"
+    >
       <div class="mb-2">
-        <label class="block text-sm font-medium text-gray-700 mb-1">Tegenstander</label>
-        <input class="w-full border rounded px-4 py-3 text-base" formControlName="opponent" placeholder="CTO '70 vv 22"
-               type="text"/>
+        <label class="block text-sm font-medium text-ink mb-1">Tegenstander</label>
+        <input
+          class="w-full border rounded px-4 py-3 text-base min-w-0 max-w-full border-line bg-[#171419] text-base text-ink placeholder:text-[#97929d]"
+          formControlName="opponent"
+          placeholder="CTO '70 vv 22"
+          type="text"
+        />
         @if (form.get('opponent')?.touched && form.get('opponent')?.invalid) {
-          <p class="text-red-700 text-sm" role="alert">Vul een tegenstander in.</p>
+          <p class="text-red-300 text-sm" role="alert">Vul een tegenstander in.</p>
         }
       </div>
 
       <div class="mb-2">
-        <label class="block text-sm font-medium text-gray-700 mb-1">Datum</label>
-        <input class="w-full border rounded px-4 py-3 text-base" formControlName="date" type="date"/>
+        <label class="block text-sm font-medium text-ink mb-1">Datum</label>
+        <input
+          class="w-full border rounded px-4 py-3 text-base min-w-0 max-w-full border-line bg-[#171419] text-base text-ink placeholder:text-[#97929d]"
+          formControlName="date"
+          type="date"
+        />
         @if (form.get('date')?.touched && form.get('date')?.invalid) {
-          <p class="text-red-700 text-sm" role="alert">Vul een datum in.</p>
+          <p class="text-red-300 text-sm" role="alert">Vul een datum in.</p>
         }
       </div>
 
       <div class="mb-2">
-        <label class="block text-sm font-medium text-gray-700 mb-1">Type wedstrijd</label>
-        <select class="w-full border rounded px-4 py-3 text-base" formControlName="league">
-          <option value="competitie">Competitie</option>
-          <option value="beker">Beker</option>
-        </select>
+        <label class="block text-sm font-medium text-ink mb-1">Type wedstrijd</label>
+        <app-select-field
+          label="Type wedstrijd"
+          formControlName="league"
+          [options]="[
+            { value: 'competitie', label: 'Competitie' },
+            { value: 'beker', label: 'Beker' },
+          ]"
+        ></app-select-field>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-2">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Score Thuis Team</label>
-          <input class="w-full border rounded px-4 py-3 text-base" formControlName="scoreTeam" inputmode="numeric"
-                 min="0"
-                 type="number"/>
+          <label class="block text-sm font-medium text-ink mb-1">Score Thuis Team</label>
+          <input
+            class="w-full border rounded px-4 py-3 text-base min-w-0 max-w-full border-line bg-[#171419] text-base text-ink placeholder:text-[#97929d]"
+            formControlName="scoreTeam"
+            inputmode="numeric"
+            min="0"
+            type="number"
+          />
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Score Tegenstander</label>
-          <input class="w-full border rounded px-4 py-3 text-base" formControlName="scoreOpponent" inputmode="numeric"
-                 min="0"
-                 type="number"/>
+          <label class="block text-sm font-medium text-ink mb-1">Score Tegenstander</label>
+          <input
+            class="w-full border rounded px-4 py-3 text-base min-w-0 max-w-full border-line bg-[#171419] text-base text-ink placeholder:text-[#97929d]"
+            formControlName="scoreOpponent"
+            inputmode="numeric"
+            min="0"
+            type="number"
+          />
         </div>
       </div>
 
       <div class="mb-4">
-        <label class="block text-sm font-medium text-gray-700 mb-2">Spelers die speelden</label>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 overflow-auto pr-1">
-          @for (p of (players() || []); track p.id) {
-            <label class="flex items-center gap-3 p-2 border rounded cursor-pointer active:bg-gray-50">
-              <input type="checkbox"
-                     class="h-5 w-5"
-                     [checked]="isPlayerSelected(p.id!)"
-                     (change)="onTogglePlayer(p.id!, $any($event.target).checked)"/>
+        <label class="block text-sm font-medium text-ink mb-2">Spelers die speelden</label>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pr-1">
+          @for (p of players() || []; track p.id) {
+            <label
+              class="flex items-center gap-3 p-2 border rounded cursor-pointer active:bg-[#482c38]"
+            >
+              <input
+                type="checkbox"
+                class="h-5 w-5 min-w-0 max-w-full border-line bg-[#171419] text-base text-ink placeholder:text-[#97929d]"
+                [checked]="isPlayerSelected(p.id!)"
+                (change)="onTogglePlayer(p.id!, $any($event.target).checked)"
+              />
               <span class="text-sm">{{ p.number }} - {{ p.name }}</span>
             </label>
           }
         </div>
-        <p class="text-xs text-gray-500 mt-1">Selecteer de spelers die hebben meegedaan.</p>
+        <p class="text-xs text-muted mt-1">Selecteer de spelers die hebben meegedaan.</p>
       </div>
 
       <div>
         <div class="flex items-center justify-between mb-2">
-          <label class="block text-sm font-medium text-gray-700">Spelers (Goals/Assists)</label>
-          <button (click)="addEvent()" class="text-sm bg-gray-100 hover:bg-gray-200 border rounded px-3 py-2"
-                  type="button">Voeg Toe
+          <label class="block text-sm font-medium text-ink">Spelers (Goals/Assists)</label>
+          <button
+            (click)="addEvent()"
+            class="text-sm bg-[#3b2630] hover:bg-[#482c38] border rounded px-3 py-2"
+            type="button"
+          >
+            Voeg Toe
           </button>
         </div>
 
         <div class="space-y-2" formArrayName="events">
           @for (ctrl of events.controls; let i = $index; track i) {
             <div [formGroupName]="i" class="grid grid-cols-1 sm:grid-cols-12 gap-2 items-center">
-              <div class="sm:col-span-7">
-                <select formControlName="playerId" class="w-full border rounded px-4 py-3 text-base">
-                  <option value="">Selecteer speler</option>
-                  @for (p of (players() || []); track p.id) {
-                    <option [value]="p.id">{{ p.number }} - {{ p.name }}</option>
-                  }
-                </select>
+              <div class="sm:col-span-6">
+                <app-select-field
+                  label="Speler"
+                  formControlName="playerId"
+                  [options]="playerOptions()"
+                ></app-select-field>
                 @if (ctrl.get('playerId')?.touched && ctrl.get('playerId')?.invalid) {
-                  <p class="text-red-700 text-sm" role="alert">Selecteer een speler of verwijder deze regel.</p>
+                  <p class="text-red-300 text-sm" role="alert">
+                    Selecteer een speler of verwijder deze regel.
+                  </p>
                 }
               </div>
-              <div class="sm:col-span-4">
-                <select formControlName="type" class="w-full border rounded px-4 py-3 text-base">
-                  <option value="goal">Goal</option>
-                  <option value="assist">Assist</option>
-                </select>
+              <div class="sm:col-span-3">
+                <app-select-field
+                  label="Gebeurtenis"
+                  formControlName="type"
+                  [options]="[
+                    { value: 'goal', label: 'Goal' },
+                    { value: 'assist', label: 'Assist' },
+                  ]"
+                ></app-select-field>
               </div>
-              <div class="sm:col-span-1 sm:text-right">
-                <button type="button" (click)="removeEvent(i)" class="text-red-600 hover:underline px-3 py-2">Verwijder
+              <div class="sm:col-span-3 sm:text-right">
+                <button
+                  type="button"
+                  (click)="removeEvent(i)"
+                  class="text-red-600 hover:underline px-3 py-2"
+                >
+                  Verwijder
                 </button>
               </div>
             </div>
@@ -102,14 +161,18 @@
     </div>
 
     <div
-      class="sticky bottom-0 left-0 right-0 bg-white pt-2 border-t z-20 flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2">
-      <a class="px-3 py-2 text-sm border rounded text-center w-full sm:w-auto" routerLink="/games">Annuleren</a>
-      <button class="bg-red-600 hover:bg-red-500 text-white font-semibold px-3 py-2 text-sm rounded w-full sm:w-auto"
-              [disabled]="saving || selectedSeason() === 'previous-season'" type="submit">{{ saving ? 'Opslaan…' : 'Opslaan' }}
+      class="flex shrink-0 items-center gap-2 border-t border-line px-4 py-3 [&>*]:flex [&>*]:min-h-11 [&>*]:min-w-0 [&>*]:flex-1 [&>*]:items-center [&>*]:justify-center"
+    >
+      <a class="px-3 py-2 text-sm border rounded text-center w-full sm:w-auto" routerLink="/games"
+        >Annuleren</a
+      >
+      <button
+        class="bg-red-600 hover:bg-red-500 text-white font-semibold px-3 py-2 text-sm rounded w-full sm:w-auto"
+        [disabled]="saving || selectedSeason() === 'previous-season'"
+        type="submit"
+      >
+        {{ saving ? 'Opslaan…' : 'Opslaan' }}
       </button>
     </div>
   </form>
 </div>
-
-
-

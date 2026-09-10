@@ -1,74 +1,99 @@
-<nav class="bg-neutral-900 text-white border-b-4 border-red-600 shadow-lg sticky top-0 z-50">
-  <div class="max-w-6xl mx-auto px-4">
-    <div class="flex h-20 items-center justify-between gap-4">
-      <a class="flex items-center gap-3 select-none" routerLink="/">
-        <img alt="Club logo" class="h-16 w-auto border-2 border-red-600 p-1 rounded" src="/logo/vedette-logo.jpg"/>
-        <div class="leading-tight">
-          <span class="block font-extrabold tracking-wide">ZVV Vedette</span>
-          <span class="block text-[11px] text-gray-300 uppercase tracking-wider">De Remise</span>
-        </div>
-      </a>
-
-      <div class="hidden sm:flex items-center gap-1">
-        <a class="px-3 py-2 rounded-md font-medium text-white hover:bg-white/10" routerLink="/games">Games</a>
-        <a class="px-3 py-2 rounded-md font-medium text-white hover:bg-white/10"
-           routerLink="/leaderboard">Leaderboard</a>
-        @if (admin.isAdmin()) { <a class="px-3 py-2 rounded-md font-medium text-white hover:bg-white/10" routerLink="/seasons" routerLinkActive="bg-red-600" ariaCurrentWhenActive="page">Seizoenen</a> }
-      </div>
-
-      <div class="flex items-center gap-2">
-        @if (user()) {
+<header
+  class="shrink-0 border-b-2 border-[#c9253b] bg-[#151216] pt-[env(safe-area-inset-top)] text-white"
+>
+  <div class="relative mx-auto flex h-16 max-w-[1000px] items-center justify-between px-5 sm:h-20">
+    <a
+      class="flex items-center gap-3 text-[15px] font-extrabold tracking-[2px] [&_img]:h-[50px] [&_img]:w-8 [&_img]:object-contain [&_img]:rounded-lg [&_img]:border-2 [&_img]:border-[#e63649] [&_img]:bg-white [&_img]:p-0.5 [&_small]:mt-1 [&_small]:block [&_small]:text-[9px] [&_small]:tracking-[3px] [&_small]:text-muted"
+      routerLink="/games"
+      ><img src="/logo/vedette-logo.jpg" alt="ZVV Vedette" /><span
+        >VEDETTE<small>DE REMISE</small></span
+      ></a
+    >
+    @if (user(); as u) {
+      <button
+        class="size-10 rounded-full border border-accent/40 bg-[#292e36] font-bold"
+        (click)="toggleMenu()"
+        [attr.aria-expanded]="mobileOpen()"
+        aria-label="Accountmenu"
+      >
+        {{ (u.displayName || 'V').charAt(0) }}
+      </button>
+      @if (mobileOpen()) {
+        <div
+          class="absolute right-5 top-[calc(50%+20px)] z-[60] mt-2 w-60 max-w-[calc(100vw-40px)] overflow-hidden break-words rounded-xl border border-accent/40 bg-surface p-1 text-ink shadow-lg"
+        >
+          <div class="border-b border-line px-3 py-2.5">
+            <strong class="block text-sm font-semibold">{{ u.displayName }}</strong>
+            <small class="mt-1 block text-xs leading-relaxed text-muted">{{ u.email }}</small>
+          </div>
           <button
-            class="sm:hidden inline-flex items-center justify-center rounded-md p-2 text-white/80 hover:text-white hover:bg-white/10 focus:outline-none"
-            aria-label="Toggle menu"
-            [attr.aria-expanded]="mobileOpen()"
-            aria-controls="mobile-menu"
-            (click)="toggleMenu()"
-            title="Menu"
+            class="mt-1 flex min-h-11 w-full items-center rounded-lg px-3 py-2 text-left text-sm font-medium text-accent transition-colors hover:bg-accent/15 focus-visible:bg-accent/15"
+            (click)="logout(); closeMenu()"
           >
-            @if (!mobileOpen()) {
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                   stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
-              </svg>
-            } @else {
-              <!-- X icon when open -->
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                   stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-              </svg>
-            }
+            Uitloggen
           </button>
-        }
-      </div>
-    </div>
-
-    @if (mobileOpen() && user()) {
-      <div class="sm:hidden">
-        <!-- Backdrop -->
-        <div class="fixed inset-0 z-[60]" (click)="closeMenu()" aria-hidden="true">
-          <div class="absolute inset-0 bg-black/40"></div>
         </div>
-        <!-- Overlay menu panel positioned below the navbar (h-20 ~ 5rem) -->
-        <div id="mobile-menu"
-             class="fixed z-[61] top-20 left-0 right-0 bg-neutral-900 border-b-4 border-red-600 shadow-2xl pt-2 pb-3">
-          <a class="block px-4 py-3 rounded-md font-medium text-white hover:bg-white/10" routerLink="/games"
-             (click)="closeMenu()">Games</a>
-          <a class="block px-4 py-3 rounded-md font-medium text-white hover:bg-white/10" routerLink="/leaderboard"
-             (click)="closeMenu()">Leaderboard</a>
-          @if (admin.isAdmin()) { <a class="block px-4 py-3 rounded-md font-medium text-white hover:bg-white/10" routerLink="/seasons" routerLinkActive="bg-red-600" ariaCurrentWhenActive="page" (click)="closeMenu()">Seizoenen</a> }
-          @if (user()) {
-            <button
-              class="mt-1 w-full text-left block px-4 py-3 rounded-md font-medium text-white hover:bg-white/10"
-              (click)="logout(); closeMenu()"
-              aria-label="Logout"
-              title="Logout"
-            >Logout
-            </button>
-          }
-        </div>
-      </div>
+      }
     }
   </div>
-</nav>
-
+</header>
+@if (user()) {
+  <nav
+    class="order-3 flex shrink-0 justify-around border-t border-line bg-[#151216] px-3 pb-[calc(6px+env(safe-area-inset-bottom))] pt-1 sm:order-none sm:justify-center sm:gap-10 sm:border-b sm:border-t-0 [&_a]:flex [&_a]:min-h-12 [&_a]:flex-1 [&_a]:flex-col [&_a]:items-center [&_a]:justify-center [&_a]:gap-1 [&_a]:py-2 [&_a]:text-[10px] [&_a]:font-bold [&_a]:text-muted sm:[&_a]:flex-none sm:[&_a]:flex-row sm:[&_a]:gap-2 sm:[&_a]:text-sm [&_svg]:size-[22px] [&_a[aria-current=page]]:text-accent [&_a[aria-current=page]_svg]:rounded [&_a[aria-current=page]_svg]:bg-[#4a1b29]"
+    aria-label="Hoofdnavigatie"
+  >
+    <a
+      routerLink="/games"
+      routerLinkActive="!text-accent"
+      ariaCurrentWhenActive="page"
+      (click)="closeMenu()"
+      ><svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.7"
+        aria-hidden="true"
+      >
+        <rect x="4" y="5" width="16" height="16" rx="3" />
+        <path d="M8 3v4m8-4v4M4 11h16m-11 5h6" /></svg
+      ><span>Wedstrijden</span></a
+    >
+    <a
+      routerLink="/leaderboard"
+      routerLinkActive="!text-accent"
+      ariaCurrentWhenActive="page"
+      (click)="closeMenu()"
+      ><svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.7"
+        aria-hidden="true"
+      >
+        <path
+          d="M8 3h8v6a4 4 0 0 1-8 0V3Zm0 2H4v3a4 4 0 0 0 4 4m8-7h4v3a4 4 0 0 1-4 4m-4 1v5m-4 3h8m-6-3h4"
+        /></svg
+      ><span>Statistieken</span></a
+    >
+    @if (admin.isAdmin()) {
+      <a
+        routerLink="/seasons"
+        routerLinkActive="!text-accent"
+        ariaCurrentWhenActive="page"
+        (click)="closeMenu()"
+        ><svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.7"
+          aria-hidden="true"
+        >
+          <rect x="4" y="4" width="6" height="6" rx="1.5" />
+          <rect x="14" y="4" width="6" height="6" rx="1.5" />
+          <rect x="4" y="14" width="6" height="6" rx="1.5" />
+          <path d="M17 14v6m-3-3h6" /></svg
+        ><span>Beheer</span></a
+      >
+    }
+  </nav>
+}

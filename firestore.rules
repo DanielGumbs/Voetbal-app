@@ -3,8 +3,21 @@ service cloud.firestore {
   match /databases/{database}/documents {
     function admin() {
       return request.auth != null
-        && request.auth.token.email == 'daniel.r.gumbs@gmail.com'
-        && request.auth.token.email_verified == true;
+        && request.auth.token.email_verified == true
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+    }
+    match /users/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow create: if request.auth != null && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['email', 'isAdmin'])
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.isAdmin is bool
+        && request.resource.data.isAdmin == (
+          request.auth.token.email == 'daniel.r.gumbs@gmail.com'
+          && request.auth.token.email_verified == true
+        );
+      // Role changes are made through the trusted Firebase console/Admin SDK.
+      allow update, delete: if false;
     }
     function validSeason(data) {
       return data.seasonId is string && data.seasonId != 'previous-season'

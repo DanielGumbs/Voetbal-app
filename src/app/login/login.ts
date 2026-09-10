@@ -1,24 +1,36 @@
-import {Component, Signal} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {Auth, GoogleAuthProvider, signInWithPopup, signOut, user, User} from '@angular/fire/auth';
-import {toSignal} from '@angular/core/rxjs-interop';
+import { Component, Signal } from '@angular/core';
+
+import {
+  Auth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  user,
+  User,
+} from '../../services/firebase';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule],
-  templateUrl: './login.html'
+  imports: [],
+  templateUrl: './login.html',
 })
 export class LoginComponent {
   user!: Signal<User | null | undefined>;
 
-  constructor(private auth: Auth) {
+  constructor(
+    private auth: Auth,
+    private router: Router,
+  ) {
     this.user = toSignal(user(this.auth));
   }
 
   async login() {
     try {
       await signInWithPopup(this.auth, new GoogleAuthProvider());
+      await this.router.navigateByUrl('/games', { replaceUrl: true });
     } catch (err) {
       console.error('Login error:', err);
     }

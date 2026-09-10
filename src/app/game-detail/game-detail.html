@@ -1,64 +1,77 @@
-﻿@if (game() === undefined) {
-  <div class="text-gray-300">Laden...</div>
+@if (game() === undefined) {
+  <div
+    class="col-span-full shrink-0 rounded-2xl border border-line bg-surface px-4 py-6 text-center text-sm text-muted [&_h2]:mb-2 [&_h2]:mt-3 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-ink"
+    role="status"
+  >
+    Wedstrijd laden…
+  </div>
 } @else if (!game()) {
-  <div class="text-gray-300">Wedstrijd niet gevonden.</div>
+  <div
+    class="col-span-full shrink-0 rounded-2xl border border-line bg-surface px-4 py-6 text-center text-sm text-muted [&_h2]:mb-2 [&_h2]:mt-3 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-ink"
+  >
+    Wedstrijd niet gevonden.
+  </div>
 } @else {
   @let g = game()!;
-
-  <div class="mb-4 flex items-center justify-between mx-2 pr-2">
-    <div>
-      <div class="font-semibold text-xl text-white">{{ g.opponent }}</div>
-      <div class="text-xs text-gray-300">{{ g.date | date:'medium' }}</div>
-    </div>
-    <div class="text-right">
+  <section
+    class="mb-3 shrink-0 rounded-2xl bg-gradient-to-br from-[#3c1822] to-[#19161c] px-5 py-4 text-white [&_h1]:text-[22px] [&_h1]:font-extrabold [&_h1]:break-words"
+  >
+    <p class="mb-2 text-[10px] font-extrabold tracking-[2px] text-accent">
+      {{ g.league === 'beker' ? 'BEKER' : 'COMPETITIE' }}
+    </p>
+    <h1>Vedette — {{ g.opponent }}</h1>
+    <p class="mt-1 text-xs text-muted">{{ g.date | date: 'dd-MM-yyyy' }}</p>
+    <div class="my-2 text-4xl font-extrabold">
       @if (g.scoreTeam != null && g.scoreOpponent != null) {
-        <div class="font-bold text-2xl text-white">{{ g.scoreTeam }} - {{ g.scoreOpponent }}</div>
+        {{ g.scoreTeam }} : {{ g.scoreOpponent }}
       } @else {
-        <div class="text-gray-400">Geen stand</div>
+        VS
       }
-      <div class="text-xs text-gray-300">Aanwezige Spelers: {{ (g.players?.length ?? 0) }}</div>
     </div>
-  </div>
-
-  <div class="flex items-start justify-start gap-4 pt-3 overflow-hidden max-h-[calc(100vh-16rem)]">
-    <div class="w-full">
-      <div class="max-h-[36rem] overflow-y-auto rounded border border-gray-700/50">
-        <div class="flex items-center sticky py-2 top-0 z-10 bg-gray-900/80 backdrop-blur border-b border-gray-700/50">
-          <div class="pl-1">⚽</div>
-          <h3 class="font-semibold text-white px-3">Goals</h3>
+    <p class="text-xs text-muted">
+      {{ g.players?.length ?? 0 }} spelers ·
+      {{ g.scoreTeam != null ? 'Wedstrijduitslag' : 'Nog geen uitslag' }}
+    </p>
+  </section>
+  <div
+    class="min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain [scrollbar-width:thin] [scrollbar-color:#79323e_#201d23] grid content-start grid-cols-1 gap-4 pb-2 sm:grid-cols-2"
+    tabindex="0"
+    role="region"
+    aria-label="Goals en assists"
+  >
+    <section
+      class="rounded-2xl border border-line bg-surface p-4 [&_h2]:mb-4 [&_h2]:text-base [&_h2]:font-bold [&_p]:text-sm [&_p]:text-muted"
+    >
+      <h2>
+        Goals <span class="text-accent">{{ goals().length }}</span>
+      </h2>
+      @for (event of goalCounts(); track event.playerId) {
+        <div
+          class="flex justify-between gap-2 border-t border-line py-3 text-xs [&_span]:break-words [&_strong]:text-accent"
+        >
+          <span>{{ nameFor(event.playerId) }}</span
+          ><strong>{{ event.count }}</strong>
         </div>
-        @if (!(goals().length)) {
-          <div class="text-gray-300 text-sm px-3 py-2">Geen Goals geregistreerd.</div>
-        } @else {
-          <div>
-            @for (g of goalCounts(); track g.playerId) {
-              <div class="border-t border-gray-700/50 odd:bg-gray-800/20 px-3 flex items-center justify-between">
-                <div class="py-2 font-medium text-white">{{ nameFor(g.playerId) }}</div>
-                <div class="py-1 px-2 text-xs font-semibold bg-gray-700/60 text-white rounded">{{ g.count }}x</div>
-              </div>
-            }
-          </div>
-        }
-      </div>
-    </div>
-
-    <div class="w-full">
-      <div class="max-h-[calc(100vh-16rem)] overflow-y-auto rounded border border-gray-700/50">
-        <div class="flex items-center sticky py-2 top-0 z-10 bg-gray-900/80 backdrop-blur border-b border-gray-700/50">
-          <div class="pl-1">🅰️️</div>
-          <h3 class="font-semibold text-white">Assists</h3>
+      } @empty {
+        <p>Geen goals geregistreerd.</p>
+      }
+    </section>
+    <section
+      class="rounded-2xl border border-line bg-surface p-4 [&_h2]:mb-4 [&_h2]:text-base [&_h2]:font-bold [&_p]:text-sm [&_p]:text-muted"
+    >
+      <h2>
+        Assists <span class="text-accent">{{ assists().length }}</span>
+      </h2>
+      @for (event of assistCounts(); track event.playerId) {
+        <div
+          class="flex justify-between gap-2 border-t border-line py-3 text-xs [&_span]:break-words [&_strong]:text-accent"
+        >
+          <span>{{ nameFor(event.playerId) }}</span
+          ><strong>{{ event.count }}</strong>
         </div>
-        @if (!(assists().length)) {
-          <div class="text-gray-300 text-sm px-3 py-2">Geen assists geregistreerd.</div>
-        } @else {
-          @for (a of assistCounts(); track a.playerId) {
-            <div class="border-t border-gray-700/50 odd:bg-gray-800/20 px-3 flex items-center justify-between">
-              <div class="py-2 font-medium text-white">{{ nameFor(a.playerId) }}</div>
-              <div class="py-1 px-2 text-xs font-semibold bg-gray-700/60 text-white rounded">{{ a.count }}x</div>
-            </div>
-          }
-        }
-      </div>
-    </div>
+      } @empty {
+        <p>Geen assists geregistreerd.</p>
+      }
+    </section>
   </div>
 }

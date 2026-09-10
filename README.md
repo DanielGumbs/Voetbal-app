@@ -97,3 +97,23 @@ For more information on using the Angular CLI, including detailed command refere
 - Publiceer zowel de app als `firestore.rules` met `npm run deploy`. Zonder publicatie van de regels is de e-mailbeperking in de database nog niet actief. De regels staan lezen toe voor ingelogde gebruikers, toevoegen alleen voor de beheerder, en geen verwijderen. Bestaande gegevens blijven leesbaar.
 - Firebase CLI en een ingelogd account met deployrechten zijn vereist. De lokale productiebuild controleert de Angular-code; test de rechten en het opslaan daarnaast in Firebase voordat je de wijziging in gebruik neemt.
 
+## Styling en formatteren
+
+Alle styling staat in Tailwind-utilities in de templates en component-hostklassen. Er is geen eigen CSS-bestand en geen `@apply`. De clubkleuren staan in `tailwind.config.js`. Angular compileert het standaard `tailwindcss/tailwind.css`-bestand uit node_modules.
+
+- `npm run format`: formatteert het project met Prettier.
+- `npm run format:check`: controleert de formattering zonder bestanden te wijzigen.
+- `npm run test:ci`: voert tests eenmalig uit in Chrome Headless.
+
+Angular is bijgewerkt naar versie 21 met TypeScript 5.9. Firebase gebruikt de officiële SDK via `src/services/firebase.ts`; AngularFire is verwijderd omdat versie 20 geen Angular 21 ondersteunt. De bootstrapconfiguratie staat centraal in `src/app/app.config.ts`.
+
+# Gebruikersrechten
+
+Gebruikers krijgen bij aanmelden een Firestore-document `users/{uid}` met `email` en
+`isAdmin` (boolean). Het geverifieerde account `daniel.r.gumbs@gmail.com` krijgt bij
+de eerste aanmaak `isAdmin: true`; andere accounts krijgen `false`. Bestaande rollen
+worden niet overschreven. Wijzig rollen via de Firebase-console of een vertrouwde
+Admin SDK. Gebruikers kunnen hun eigen rol niet wijzigen.
+
+De app, routebeveiliging en Firestore-regels controleren `isAdmin`. Publiceer de
+regels uit `firestore.rules` voordat je deze versie gebruikt.

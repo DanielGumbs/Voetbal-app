@@ -1,61 +1,110 @@
-<div class="flex items-center justify-between mb-2">
-  <h2 class="text-xl font-bold text-white">Wedstrijden</h2>
-  @if (user()?.email === 'daniel.r.gumbs@gmail.com') {
-    <a class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-500 text-white font-semibold px-4 py-2 rounded"
-       routerLink="/games/new">
-      Nieuwe wedstrijd
-    </a>
-  } @else {
-    <button
-      aria-disabled="true"
-      class="inline-flex items-center gap-2 bg-red-600 text-white font-semibold px-4 py-2 rounded opacity-50 cursor-not-allowed">
-      Nieuwe wedstrijd
-    </button>
+<section
+  class="mb-3 flex shrink-0 flex-wrap items-center justify-between gap-3 [&>div]:min-w-0 [&_h1]:text-[23px] [&_h1]:font-extrabold [&_h1]:leading-tight [&_h1]:tracking-tight sm:[&_h1]:text-[26px] [&_p]:hidden"
+>
+  <div>
+    <p class="mb-2 text-[10px] font-extrabold tracking-[2px] text-accent">HET SEIZOEN IN BEELD</p>
+    <h1>Wedstrijden<span class="text-accent">.</span></h1>
+    <p class="mt-2 text-sm text-muted">Samen het veld op. Alles op één plek.</p>
+  </div>
+  @if (admin.isAdmin()) {
+    <a
+      class="inline-flex min-h-11 shrink-0 items-center justify-center whitespace-nowrap rounded-xl border border-red-500 bg-red-600 px-4 py-2.5 text-sm font-semibold leading-5 text-white shadow-sm transition-colors hover:bg-red-500 active:bg-red-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#100f12] max-[359px]:w-full sm:px-5 sm:text-base"
+      routerLink="/games/new"
+      ><span>Nieuwe wedstrijd</span></a
+    >
   }
-</div>
-
-<div class="flex flex-wrap items-center gap-3 mt-5 mb-3">
+</section>
+<div class="mb-2 grid w-full max-w-[450px] shrink-0 grid-cols-2 gap-2">
   <app-season-selector></app-season-selector>
-  <label class="text-white text-sm">
-    <select #lg (change)="onLeagueChange(lg.value)" aria-label="Competitie"
-            class="bg-white text-gray-800 font-bold text-sm rounded px-2 py-1">
-      @for (league of leagues(); track league) {
-        <option [selected]="selectedLeague() === league" [value]="league">
-          {{ league === 'all' ? 'Alle competities' : (league | titlecase) }}
-        </option>
-      }
-    </select>
-  </label>
+  <app-select-field
+    (ngModelChange)="onLeagueChange($event)"
+    [ngModel]="selectedLeague()"
+    [options]="[
+      { value: 'all', label: 'Alle competities' },
+      { value: 'competitie', label: 'Competitie' },
+      { value: 'beker', label: 'Beker' },
+    ]"
+    label="Competitie"
+  ></app-select-field>
 </div>
-
 @if (games() === undefined) {
-  <div class="text-gray-300">Laden...</div>
+  <div
+    class="col-span-full shrink-0 rounded-2xl border border-line bg-surface px-4 py-6 text-center text-sm text-muted [&_h2]:mb-2 [&_h2]:mt-3 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-ink"
+    role="status"
+  >
+    Wedstrijden laden…
+  </div>
 } @else {
   @let list = filteredSortedGames();
-  <div class="bg-white rounded shadow max-h-[70vh] overflow-y-auto divide-y border-4 border-red-600">
-    @if (!list.length) {
-      <div class="p-4 text-gray-500">Geen wedstrijden voor deze filter.</div>
-    }
-
-    @for (g of list; track g.id ?? (g.opponent + g.date)) {
-      <a [class.pointer-events-none]="!g.id" [routerLink]="g.id ? ['/games', g.id] : null"
-         class="block p-3 px-4 hover:bg-gray-50">
-        <div class="flex items-center justify-between">
-          <div>
-            <div class="font-semibold">{{ g.opponent }}</div>
-            <div class="text-sm text-gray-500">{{ g.date | date:'mediumDate' }}</div>
+  <div
+    class="my-2 flex shrink-0 items-center justify-between [&_h2]:text-sm [&_h2]:font-bold [&>span]:text-xs [&>span]:text-muted"
+  >
+    <h2>Wedstrijdoverzicht</h2>
+    <span>{{ list.length }} wedstrijden</span>
+  </div>
+  <div
+    aria-label="Wedstrijdoverzicht"
+    class="min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain [scrollbar-width:thin] [scrollbar-color:#79323e_#201d23] grid content-start grid-cols-1 gap-2.5 p-0.5 pb-2 sm:grid-cols-2"
+    role="region"
+    tabindex="0"
+  >
+    @for (g of list; track g.id) {
+      <a
+        [routerLink]="['/games', g.id]"
+        class="block rounded-xl border border-line bg-surface px-4 pt-4 hover:border-[#79303d]"
+      >
+        <div class="flex items-center gap-2 text-[11px] text-muted">
+          <span class="rounded-md bg-[#332730] px-2 py-1 text-[10px] font-bold text-[#efb4bd]">{{
+            g.league === 'beker' ? 'Beker' : 'Competitie'
+          }}</span
+          ><span>{{ g.date | date: 'dd-MM-yyyy' }}</span
+          ><span aria-hidden="true" class="ml-auto text-lg">↗</span>
+        </div>
+        <div class="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 py-3.5">
+          <div
+            class="flex min-w-0 flex-row items-center gap-2 text-left max-[359px]:flex-col max-[359px]:text-center sm:flex-col sm:text-center [&_strong]:min-w-0 [&_strong]:text-[11px] [&_strong]:[overflow-wrap:anywhere] [&_img]:h-[42px] [&_img]:w-[27px] [&_img]:shrink-0 [&_img]:rounded-md [&_img]:border [&_img]:border-[#d83245] [&_img]:bg-white [&_img]:object-contain [&_img]:p-0.5"
+          >
+            <img alt="" src="/logo/vedette-logo.jpg" /><strong>Vedette</strong>
           </div>
-          <div class="text-right">
+          <div
+            class="whitespace-nowrap text-[25px] font-extrabold tracking-tight [&_strong_span]:px-1 [&_strong_span]:text-[#c8cdd4]"
+          >
             @if (g.scoreTeam != null && g.scoreOpponent != null) {
-              <div class="font-bold">{{ g.scoreTeam }} - {{ g.scoreOpponent }}</div>
+              <strong>{{ g.scoreTeam }} <span>:</span> {{ g.scoreOpponent }}</strong>
             } @else {
-              <div class="text-gray-400">Geen stand</div>
+              <span class="text-base tracking-widest text-muted">VS</span>
             }
-            <div class="text-xs text-gray-500">Spelers: {{ (g.players?.length ?? 0) }}</div>
+          </div>
+          <div
+            class="flex min-w-0 flex-row items-center gap-2 text-left max-[359px]:flex-col max-[359px]:text-center sm:flex-col sm:text-center [&_strong]:min-w-0 [&_strong]:text-[11px] [&_strong]:[overflow-wrap:anywhere] [&_img]:h-[42px] [&_img]:w-[27px] [&_img]:shrink-0 [&_img]:rounded-md [&_img]:border [&_img]:border-[#d83245] [&_img]:bg-white [&_img]:object-contain [&_img]:p-0.5 !flex-row-reverse !text-right max-[359px]:!flex-col max-[359px]:!text-center sm:!flex-col sm:!text-center"
+          >
+            <span
+              aria-hidden="true"
+              class="grid h-9 w-8 shrink-0 place-items-center rounded-lg border border-line bg-[#332730] text-xl font-extrabold text-[#e6b9c1]"
+              >{{ g.opponent.charAt(0) }}</span
+            ><strong>{{ g.opponent }}</strong>
           </div>
         </div>
+        <div class="flex justify-between border-t border-line py-2 text-[10px] text-muted">
+          <span>{{ g.players?.length ?? 0 }} spelers</span
+          ><span>{{
+            g.scoreTeam != null && g.scoreOpponent != null ? 'Uitslag' : 'Nog geen uitslag'
+          }}</span>
+        </div>
       </a>
+    } @empty {
+      <div
+        class="col-span-full shrink-0 rounded-2xl border border-line bg-surface px-4 py-6 text-center text-sm text-muted [&_h2]:mb-2 [&_h2]:mt-3 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-ink"
+      >
+        <div aria-hidden="true" class="text-[32px]">⚽</div>
+        <h2>Klaar voor de aftrap</h2>
+        <p>Er zijn nog geen wedstrijden voor deze selectie.</p>
+        @if (admin.isAdmin()) {
+          <a class="mt-5 inline-block font-bold text-accent" routerLink="/games/new"
+            >Voeg de eerste wedstrijd toe →</a
+          >
+        }
+      </div>
     }
   </div>
 }
-

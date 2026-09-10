@@ -1,23 +1,40 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { UserProfileService } from '../../services/user-profile.service';
+import { of } from 'rxjs';
+import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { Navbar } from './navbar';
-
-describe('Navbar', () => {
-  let component: Navbar;
-  let fixture: ComponentFixture<Navbar>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [Navbar]
-    })
-    .compileComponents();
-
-    fixture = TestBed.createComponent(Navbar);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+import { Auth, User } from '../../services/firebase';
+import { ADMIN_EMAIL } from '../../services/admin.service';
+describe('Navbar access', () => {
+  for (const [email, allowed] of [
+    [ADMIN_EMAIL, true],
+    ['other@example.com', false],
+  ] as const) {
+    it(`shows management only to the verified admin: ${email}`, () => {
+      const notify = (next: (value: User) => void) => {
+        next({ email, emailVerified: true, displayName: 'Test' } as User);
+        return () => {};
+      };
+      TestBed.configureTestingModule({
+        imports: [Navbar],
+        providers: [
+          {
+            provide: UserProfileService,
+            useValue: {
+              watch: (account: { email: string }) =>
+                of({ email: account.email, isAdmin: account.email === 'daniel.r.gumbs@gmail.com' }),
+            },
+          },
+          provideRouter([]),
+          {
+            provide: Auth,
+            useValue: { onIdTokenChanged: notify, onAuthStateChanged: notify },
+          },
+        ],
+      });
+      const fixture = TestBed.createComponent(Navbar);
+      fixture.detectChanges();
+      expect(!!fixture.nativeElement.querySelector('a[href="/seasons"]')).toBe(allowed);
+    });
+  }
 });

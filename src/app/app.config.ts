@@ -1,19 +1,20 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
+import {
+  ApplicationConfig,
+  provideBrowserGlobalErrorListeners,
+  provideZoneChangeDetection,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
+import { initializeApp } from 'firebase/app';
+import { Auth, Firestore, getAuth, getFirestore } from '../services/firebase';
 import { routes } from './app.routes';
-
-import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
-import { provideAuth, getAuth } from '@angular/fire/auth';
-import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { firebaseConfig } from '../../firebase.config';
-
+const firebaseApp = initializeApp(firebaseConfig);
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideFirebaseApp(() => initializeApp(firebaseConfig)),
-    provideAuth(() => getAuth()),
-    provideFirestore(() => getFirestore())
-  ]
+    { provide: Auth, useFactory: () => getAuth(firebaseApp) },
+    { provide: Firestore, useFactory: () => getFirestore(firebaseApp) },
+  ],
 };

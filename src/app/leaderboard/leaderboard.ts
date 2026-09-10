@@ -1,9 +1,13 @@
-import {SeasonSelector} from '../season-selector/season-selector';
-import {Component, computed, Signal, signal, WritableSignal} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {Player, PlayerService} from '../../services/player.service';
-import {Game, GameService, LeagueType} from '../../services/game.service';
-import {toSignal} from '@angular/core/rxjs-interop';
+import { FormsModule } from '@angular/forms';
+import { SelectField } from '../select-field/select-field';
+import { SeasonSelector } from '../season-selector/season-selector';
+import { Component, computed, inject, Signal, signal, WritableSignal } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { AdminService } from '../../services/admin.service';
+
+import { Player, PlayerService } from '../../services/player.service';
+import { Game, GameService, LeagueType } from '../../services/game.service';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 interface PlayerStats {
   player: Player;
@@ -18,47 +22,62 @@ type LeagueFilter = 'all' | LeagueType;
 
 @Component({
   selector: 'app-leaderboard',
+  host: { class: 'flex min-h-0 min-w-0 flex-1 flex-col [&>*]:shrink-0' },
   standalone: true,
-  imports: [SeasonSelector, CommonModule],
-  templateUrl: './leaderboard.html'
+  imports: [SelectField, FormsModule, SeasonSelector, RouterLink],
+  templateUrl: './leaderboard.html',
 })
 export class LeaderboardComponent {
+  admin = inject(AdminService);
   players!: Signal<Player[] | undefined>;
   games!: Signal<Game[] | undefined>;
 
   tab: WritableSignal<TabKey> = signal<TabKey>('total');
   leagueFilter = signal<LeagueFilter>('all');
 
+  filteredGames = computed(() => {
+    const games = this.games();
+    const league = this.leagueFilter();
+    return league === 'all' ? games : games?.filter((g) => g.league === league);
+  });
+
   stats = computed<PlayerStats[] | undefined>(() => {
     const players = this.players();
-    const games = this.games();
+    const games = this.filteredGames();
     const league = this.leagueFilter();
     if (!players || !games) return undefined;
 
-    const filteredGames = league === 'all' ? games : games.filter(g => g.league === league);
+    const filteredGames = games;
 
-    const res: PlayerStats[] = players.filter(p => league === 'all' || !p.competitionIds || p.competitionIds.includes(p.seasonId + '_' + league)).map(p => {
-      const pid = p.id!;
-      let gamesPlayed = 0;
-      let goals = 0;
-      let assists = 0;
+    const res: PlayerStats[] = players
+      .filter(
+        (p) =>
+          league === 'all' ||
+          !p.competitionIds ||
+          p.competitionIds.includes(p.seasonId + '_' + league),
+      )
+      .map((p) => {
+        const pid = p.id!;
+        let gamesPlayed = 0;
+        let goals = 0;
+        let assists = 0;
 
-      for (const g of filteredGames) {
-        if (g.players && g.players.includes(pid)) {
-          gamesPlayed++;
-        }
-        if (g.events) {
-          for (const ev of g.events) {
-            if (ev.playerId === pid) {
-              if (ev.type === 'goal') goals++;
-              if (ev.type === 'assist') assists++;
+        for (const g of filteredGames) {
+          if (g.players && g.players.includes(pid)) {
+            gamesPlayed++;
+          }
+          if (g.events) {
+            for (const ev of g.events) {
+              if (ev.playerId === pid) {
+                if (ev.type === 'goal') goals++;
+                if (ev.type === 'assist') assists++;
+              }
             }
           }
         }
-      }
 
-      return {player: p, games: gamesPlayed, goals, assists};
-    });
+        return { player: p, games: gamesPlayed, goals, assists };
+      });
 
     return res;
   });
@@ -68,12 +87,15 @@ export class LeaderboardComponent {
     if (!s) return undefined;
     const key = this.tab();
     if (key === 'total') {
-      return [...s].sort((a, b) => (b.goals + b.assists) - (a.goals + a.assists));
+      return [...s].sort((a, b) => b.goals + b.assists - (a.goals + a.assists));
     }
     return [...s].sort((a, b) => (b[key] ?? 0) - (a[key] ?? 0));
   });
 
-  constructor(private playerService: PlayerService, private gameService: GameService) {
+  constructor(
+    private playerService: PlayerService,
+    private gameService: GameService,
+  ) {
     this.players = toSignal(this.playerService.getPlayers());
     this.games = toSignal(this.gameService.getGames());
   }
@@ -93,5 +115,3 @@ export class LeaderboardComponent {
     this.leagueFilter.set(value);
   }
 }
-
-

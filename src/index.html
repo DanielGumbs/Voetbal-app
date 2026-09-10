@@ -1,22 +1,28 @@
 <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>VoetbalApp</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0066cc">
-  <link rel="icon" href="/logo/vedette-192x192.jpeg" type="image/jpeg">
-  <link rel="manifest" href="/manifest.json">
-</head>
-<body>
-<app-root></app-root>
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then(reg => console.log('Service Worker registered', reg))
-      .catch(err => console.error('Service Worker registration failed', err));
-  }
-</script>
-</body>
+<html lang="nl" class="h-full overflow-hidden [color-scheme:dark]">
+  <head>
+    <meta charset="utf-8" />
+    <title>VoetbalApp</title>
+    <base href="/" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content"
+    />
+    <meta name="theme-color" content="#151216" />
+    <link rel="icon" href="/logo/vedette-192x192.jpeg" type="image/jpeg" />
+    <link rel="manifest" href="/manifest.json" />
+  </head>
+  <body
+    class="m-0 h-full overflow-hidden bg-[#100f12] font-sans text-ink antialiased [&_*]:box-border [&_button]:cursor-pointer [&_button:disabled]:cursor-not-allowed [&_button:disabled]:opacity-50 [&_input[type=checkbox]]:accent-accent [&_:focus-visible]:outline [&_:focus-visible]:outline-2 [&_:focus-visible]:outline-accent [&_:focus-visible]:outline-offset-2 motion-reduce:[&_*]:!transition-none"
+  >
+    <app-root></app-root>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker
+          .register('/service-worker.js')
+          .then((reg) => console.log('Service Worker registered', reg))
+          .catch((err) => console.error('Service Worker registration failed', err));
+      }
+    </script>
+  </body>
 </html>
