@@ -1,15 +1,9 @@
-import { Component, Signal, signal } from '@angular/core';
+import { Component, inject, Signal, signal } from '@angular/core';
 
-import {
-  Auth,
-  GoogleAuthProvider,
-  signInWithPopup,
-  signOut,
-  user,
-  User,
-} from '../../services/firebase';
+import { Auth, signOut, user, User } from '../../services/firebase';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
+import { GOOGLE_SIGN_IN } from '../../services/google-sign-in';
 
 @Component({
   selector: 'app-login',
@@ -18,6 +12,7 @@ import { Router } from '@angular/router';
   templateUrl: './login.html',
 })
 export class LoginComponent {
+  private readonly signIn = inject(GOOGLE_SIGN_IN);
   user!: Signal<User | null | undefined>;
   readonly signingIn = signal(false);
   readonly error = signal('');
@@ -34,7 +29,7 @@ export class LoginComponent {
     this.signingIn.set(true);
     this.error.set('');
     try {
-      await signInWithPopup(this.auth, new GoogleAuthProvider());
+      await this.signIn();
       await this.router.navigateByUrl('/games', { replaceUrl: true });
     } catch (err) {
       this.error.set(

@@ -1,4 +1,5 @@
 import {
+  afterRenderEffect,
   Component,
   DestroyRef,
   ElementRef,
@@ -96,16 +97,36 @@ export class SelectField implements ControlValueAccessor {
   onChange: (value: string) => void = () => {};
   onTouched: () => void = () => {};
   constructor() {
+    afterRenderEffect(() => {
+      const panel = this.panel()?.nativeElement;
+      if (!this.opened() || !panel) return;
+      this.positionPanel();
+      if (!panel.matches(':popover-open')) {
+        panel.showPopover();
+        panel.focus({ preventScroll: true });
+      }
+    });
     const onScroll = (event: Event) => {
       if (this.opened() && !this.panel()?.nativeElement.contains(event.target as Node)) {
-        this.opened.set(false);
+        this.positionPanel();
       }
     };
     const onResize = () => this.opened.set(false);
+    const onPointerDown = (event: PointerEvent) => {
+      const target = event.target as Node;
+      if (
+        !this.panel()?.nativeElement.contains(target) &&
+        !this.trigger()?.nativeElement.contains(target)
+      ) {
+        this.opened.set(false);
+      }
+    };
     document.addEventListener('scroll', onScroll, true);
+    document.addEventListener('pointerdown', onPointerDown);
     window.addEventListener('resize', onResize);
     inject(DestroyRef).onDestroy(() => {
       document.removeEventListener('scroll', onScroll, true);
+      document.removeEventListener('pointerdown', onPointerDown);
       window.removeEventListener('resize', onResize);
     });
   }
@@ -135,22 +156,18 @@ export class SelectField implements ControlValueAccessor {
           this.options().findIndex((o) => o.value === this.value()),
         ),
       );
-      setTimeout(() => {
-        if (this.opened()) {
-          const panel = this.panel()?.nativeElement;
-          const rect = this.trigger()?.nativeElement.getBoundingClientRect();
-          if (!panel || !rect) return;
-          Object.assign(panel.style, {
-            top: `${rect.bottom + 4}px`,
-            left: `${rect.left}px`,
-            width: `${rect.width}px`,
-            maxHeight: `${Math.max(0, Math.min(192, window.innerHeight - rect.bottom - 12))}px`,
-          });
-          panel.showPopover();
-          panel.focus({ preventScroll: true });
-        }
-      });
     }
+  }
+  private positionPanel() {
+    const panel = this.panel()?.nativeElement;
+    const rect = this.trigger()?.nativeElement.getBoundingClientRect();
+    if (!panel || !rect) return;
+    Object.assign(panel.style, {
+      top: `${rect.bottom + 4}px`,
+      left: `${rect.left}px`,
+      width: `${rect.width}px`,
+      maxHeight: `${Math.max(0, Math.min(192, window.innerHeight - rect.bottom - 12))}px`,
+    });
   }
   choose(value: string) {
     this.value.set(value);

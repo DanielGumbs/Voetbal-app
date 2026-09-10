@@ -29,6 +29,11 @@ yarn-error.log
 .history/*
 
 # Miscellaneous
+/.tools/
+/test-results/
+/playwright-report/
+/ui-debug.log
+/database-debug.log
 /.firebase/
 /.angular/cache
 .sass-cache/

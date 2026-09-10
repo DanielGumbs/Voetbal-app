@@ -16,6 +16,10 @@ const forbidden =
   mode === 'production'
     ? '1:381274041149:web:0d8856660fca146344b354'
     : '1:847097436854:web:4ffef09f7b17be3165e417';
-if (!code.includes(required) || code.includes(forbidden))
+if (
+  !code.includes(required) ||
+  code.includes(forbidden) ||
+  /demo-voetbal-e2e|e2e-role|demo-only-api-key/.test(code)
+)
   throw new Error(`Build configuration does not match ${mode}. Deployment stopped.`);
 console.log(`Verified ${mode} build: only the intended Firebase app configuration is bundled.`);

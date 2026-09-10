@@ -30,6 +30,18 @@
             "styles": ["node_modules/tailwindcss/tailwind.css"]
           },
           "configurations": {
+            "e2e": {
+              "optimization": true,
+              "sourceMap": false,
+              "outputHashing": "all",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.e2e.ts"
+                },
+                { "replace": "src/app/app.config.ts", "with": "src/app/app.config.e2e.ts" }
+              ]
+            },
             "production": {
               "fileReplacements": [
                 {
@@ -62,6 +74,7 @@
         "serve": {
           "builder": "@angular/build:dev-server",
           "configurations": {
+            "e2e": { "buildTarget": "voetbal-app:build:e2e" },
             "production": {
               "buildTarget": "voetbal-app:build:production"
             },

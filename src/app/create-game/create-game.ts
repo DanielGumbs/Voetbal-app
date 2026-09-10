@@ -100,6 +100,12 @@ export class CreateGame {
 
   async submit() {
     if (this.saving) return;
+    this.form.markAllAsTouched();
+    if (this.form.invalid) {
+      this.error =
+        'Controleer de verplichte velden en selecteer bij iedere gebeurtenis een speler.';
+      return;
+    }
     type EventForm = { playerId: string; type: 'goal' | 'assist' };
     type CreateGameForm = {
       opponent: string;

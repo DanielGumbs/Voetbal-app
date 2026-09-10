@@ -6,3 +6,7 @@ package-lock.json
 backups/
 firebase-debug.log
 .firebase/
+.tools/
+test-results/
+playwright-report/
+*-debug.log
