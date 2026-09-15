@@ -66,8 +66,9 @@ README beschrijft een eerdere kopie naar Supabase: 2 seizoenen, 4 competities, 1
 
 - Gevonden: 8 spec-bestanden voor app/loginweergave, navbar, selectveld, adminservice/guard, Firebase-authadapter, Supabase-authadapter en update-detectie. Geen unit-tests voor game/player/season-services of statistiekaggregatie, geen volledige invoer/correctie-E2E en geen Firestore emulatorregeltests gevonden.
 - `supabase/tests/team_smoke.sql` bevat transactionele opslag/rechtentests; README meldt eerder live geslaagd. Niet opnieuw uitgevoerd hier.
-- `npm run test:ci` geprobeerd: bundler faalt door sandboxtoegang (`Access is denied`, modules onoplosbaar). Verzoek om buiten sandbox te draaien is afgewezen. Dus geen geslaagde testclaim en geen uitspraak dat dit een applicatiefout is.
-- Geen applicatiecode gewijzigd voor dit onderzoek. Beide builds, live mobiele QA en backend-integratietests blijven vereiste implementatiechecks.
+- Hercontrole 15 september 2026 na opheffen sandboxbeperking: `npm run test:ci` slaagt met **27/27 tests**. De eerdere bundlerfout bleek omgevingsgebonden.
+- `npm run build:test` en `npm run build:prod` slagen; `verify-build-environment.cjs` bevestigt respectievelijk Supabase en Firebase. Productie heeft een bestaande bundlegroottewaarschuwing (671,76 kB tegenover 500 kB waarschuwingsbudget, onder 1 MB foutgrens).
+- Geen applicatiecode gewijzigd voor het onderzoek. De aanwezige backendbasis is apart beoordeeld en wordt afzonderlijk gecommit/in main geïntegreerd vóór VOET-3. Live mobiele QA en backend-integratietests blijven expliciete implementatiechecks; builds/unit-tests bewijzen geen live databasewerking.
 
 ## Gemeenschappelijke Definition of Done
 
