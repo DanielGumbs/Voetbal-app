@@ -3,7 +3,7 @@ import { of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { Navbar } from './navbar';
-import { Auth, User } from '../../services/firebase';
+import { Auth, User } from '../../services/supabase';
 import { ADMIN_EMAIL } from '../../services/admin.service';
 describe('Navbar access', () => {
   for (const [email, allowed] of [

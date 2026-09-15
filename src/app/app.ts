@@ -2,7 +2,7 @@ import { Component, Signal, inject, signal } from '@angular/core';
 import { AppUpdateService } from '../services/app-update.service';
 import { LoginComponent } from './login/login';
 import { Navbar } from './navbar/navbar';
-import { Auth, user, User } from '../services/firebase';
+import { Auth, user, User } from '../services/supabase';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterOutlet } from '@angular/router';
 import { environment } from '../environments/environment';

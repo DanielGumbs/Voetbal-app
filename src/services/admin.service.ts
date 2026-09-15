@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { Auth, authState } from './firebase';
+import { Auth, authState } from './supabase';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CanActivateFn, Router } from '@angular/router';
 import { catchError, filter, map, of, shareReplay, startWith, switchMap, take } from 'rxjs';

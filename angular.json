@@ -33,6 +33,18 @@
             "production": {
               "fileReplacements": [
                 {
+                  "replace": "src/app/app.config.ts",
+                  "with": "src/app/app.config.production.ts"
+                },
+                {
+                  "replace": "src/services/supabase.ts",
+                  "with": "src/services/backend.production.ts"
+                },
+                {
+                  "replace": "src/services/user-profile.service.ts",
+                  "with": "src/services/user-profile.service.production.ts"
+                },
+                {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.production.ts"
                 }

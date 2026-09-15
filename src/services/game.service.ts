@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { addDoc, collection, collectionData, Firestore } from './firebase';
+import { Database } from './supabase';
 import { combineLatest, map, Observable } from 'rxjs';
 import { AdminService } from './admin.service';
 import { competitionId, LEGACY_SEASON, SeasonService } from './season.service';
@@ -23,14 +23,12 @@ export interface Game {
 @Injectable({ providedIn: 'root' })
 export class GameService {
   constructor(
-    private firestore: Firestore,
+    private database: Database,
     private seasons: SeasonService,
     private admin: AdminService,
   ) {}
   getGames(all = false): Observable<Game[]> {
-    const rows = collectionData(collection(this.firestore, 'games'), {
-      idField: 'id',
-    }) as Observable<Game[]>;
+    const rows = this.database.watch<Game>('games');
     return all
       ? rows
       : combineLatest([rows, this.seasons.selected]).pipe(
@@ -42,7 +40,7 @@ export class GameService {
     const seasonId = this.seasons.selected.value;
     if (seasonId === LEGACY_SEASON) throw new Error('Selecteer eerst een nieuw seizoen.');
     const clean = Object.fromEntries(Object.entries(game).filter(([, v]) => v !== undefined));
-    return addDoc(collection(this.firestore, 'games'), {
+    return this.database.add('games', {
       ...clean,
       seasonId,
       competitionId: competitionId(seasonId, game.league),

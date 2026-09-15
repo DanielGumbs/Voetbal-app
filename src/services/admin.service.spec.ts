@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { BehaviorSubject, throwError } from 'rxjs';
 import { AdminService } from './admin.service';
-import { Auth, User } from './firebase';
+import { Auth, User } from './supabase';
 import { UserProfile, UserProfileService } from './user-profile.service';
 
 describe('Database admin permissions', () => {

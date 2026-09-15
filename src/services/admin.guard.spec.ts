@@ -5,7 +5,7 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { ADMIN_EMAIL, adminGuard } from './admin.service';
-import { Auth, User } from './firebase';
+import { Auth, User } from './supabase';
 
 @Component({ template: 'Wedstrijden' })
 class GamesPage {}

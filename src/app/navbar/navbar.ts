@@ -2,7 +2,7 @@ import { AdminService } from '../../services/admin.service';
 import { ElementRef, HostListener, inject, viewChild } from '@angular/core';
 import { Component, Signal, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { Auth, signOut, user, User } from '../../services/firebase';
+import { Auth, signOut, user, User } from '../../services/supabase';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
