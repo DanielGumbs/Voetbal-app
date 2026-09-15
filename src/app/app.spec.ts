@@ -3,7 +3,7 @@ import { of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { App } from './app';
-import { Auth } from '../services/firebase';
+import { Auth } from '../services/supabase';
 const signedOutAuth = {
   onIdTokenChanged: (next: (user: null) => void) => {
     next(null);

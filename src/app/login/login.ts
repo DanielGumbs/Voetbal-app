@@ -2,12 +2,11 @@ import { Component, Signal, signal } from '@angular/core';
 
 import {
   Auth,
-  GoogleAuthProvider,
-  signInWithPopup,
+  signIn,
   signOut,
   user,
   User,
-} from '../../services/firebase';
+} from '../../services/supabase';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 
@@ -34,11 +33,11 @@ export class LoginComponent {
     this.signingIn.set(true);
     this.error.set('');
     try {
-      await signInWithPopup(this.auth, new GoogleAuthProvider());
+      await signIn(this.auth);
       await this.router.navigateByUrl('/games', { replaceUrl: true });
     } catch (err) {
       this.error.set(
-        'Inloggen is niet gelukt. Sta het Google-inlogvenster toe en probeer opnieuw.',
+        'Inloggen is niet gelukt. Probeer opnieuw met Google.',
       );
       console.error('Login error:', err);
     } finally {

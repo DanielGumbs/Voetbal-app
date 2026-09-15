@@ -2,6 +2,7 @@ import { UserProfileService } from './user-profile.service';
 import { of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
 import { Auth, authState, user, User } from './firebase';
+import { Auth as AppAuth } from './supabase';
 import { AdminService, ADMIN_EMAIL } from './admin.service';
 
 describe('Firebase authentication adapter', () => {
@@ -59,7 +60,7 @@ describe('Firebase authentication adapter', () => {
                 of({ email: account.email, isAdmin: account.email === 'daniel.r.gumbs@gmail.com' }),
             },
           },
-          { provide: Auth, useValue: auth },
+          { provide: AppAuth, useValue: auth },
         ],
       });
       expect(TestBed.inject(AdminService).isAdmin()).toBe(allowed);

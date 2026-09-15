@@ -1,11 +1,50 @@
 # VoetbalApp
 
-## Branches en omgevingen
+## Omgevingen
 
-- `main`: ontwikkelen en testen met `npm start` (aparte Firebase-testdatabase).
-- `production`: de versie die naar productie wordt gepubliceerd.
-- `npm run deploy:test`: publiceert naar het testproject.
-- `npm run deploy:prod`: publiceert uitsluitend vanaf een schone, gecommitte `production`-branch. De build wordt gecontroleerd op de productieconfiguratie.
+- `main` / development: **Supabase** voor Google-login, gebruikersrechten en teamgegevens.
+- `production` / productiebuild: **Firebase** voor Google-login, Firestore en hosting.
+- Angular kiest de backend via `fileReplacements` in `angular.json`. De productieconfiguratie vervangt de Supabase-adapter en gebruikersprofielen door de Firebase-implementatie. Ook een productiebuild vanaf main gebruikt dus Firebase.
+- Er wordt geen data automatisch gekopieerd of gesynchroniseerd tussen de omgevingen.
+
+## Supabase-testomgeving instellen
+
+Het bestaande testproject `voetbal-app-supabase-test` (`jfjjsvmqvpghknytydac`) is gekoppeld in de developmentconfiguratie. Beide SQL-migraties zijn daar op 15 september 2026 succesvol uitgevoerd; voer die niet nogmaals uit. De bestaande `pilot_*`-tabellen zijn behouden. Site URL is `http://localhost:4200`, met `http://localhost:4200/games` als toegestane redirect.
+
+Google-login is live gecontroleerd met het beheeraccount, inclusief de beheerpagina en realtime rolupdates. De Google-testclient is `Voetbal Supabase test`; de callback is `https://jfjjsvmqvpghknytydac.supabase.co/auth/v1/callback`. De secret staat uitsluitend in Supabase. De profieltrigger wacht op e-mailbevestiging: Google schrijft die na de eerste accountaanmaak. Bestaande rollen worden vervolgens behouden.
+
+De SQL-controle `supabase/tests/team_smoke.sql` test de opslag van seizoenen, competities, spelers en wedstrijden met beheerdersrechten, weigering van seizoensaanmaak zonder beheerdersrol en de tabelrechten. Deze controle is live geslaagd en draait alle testgegevens terug.
+
+Voor een nieuw, leeg testproject:
+
+1. Maak een apart Supabase-testproject aan.
+2. Voer de SQL-bestanden in `supabase/migrations` eenmalig in bestandsnaamvolgorde uit in de SQL Editor. Dit maakt de tabellen, toegangsregels, profieltrigger, seizoensfunctie en Realtime-publicatie aan.
+3. Vul de project-URL en publieke publishable/anon-key in bij `supabase` in `src/environments/environment.ts`. Gebruik nooit een service-role-key of secret key in de frontend. Er is bewust geen terugval naar Firebase als deze gegevens ontbreken.
+4. Schakel Google in onder Authentication / Providers. Configureer de Google OAuth-client met de callback-URL die Supabase toont. Voeg `http://localhost:4200/games` toe aan de toegestane redirect-URL's en stel de Site URL in op `http://localhost:4200`. Voeg bij hosting ook de werkelijke test-URL toe.
+5. Start met `npm start` en meld je aan met Google. Supabase gebruikt een redirect voor aanmelden.
+
+Documentatie: [Google-login](https://supabase.com/docs/guides/auth/social-login/auth-google) en [databasebeveiliging](https://supabase.com/docs/guides/database/postgres/row-level-security).
+
+Op 15 september 2026 is een eenmalige kopie van de Firebase-productiedata naar Supabase uitgevoerd: **2 seizoenen, 4 competities, 18 spelers en 25 wedstrijden**, inclusief **167 goal-events en 126 assist-events**. Alle 25 wedstrijden vallen onder **Vorig seizoen**; selecteer dat seizoen en **Alles** bij competitie om ze te zien. De bestaande ID's, scores en gebeurtenissen zijn behouden en met de bron vergeleken. Firebase-productie is daarbij uitsluitend gelezen. Firebase-logins zijn niet gekopieerd; aanmelden verloopt via Supabase.
+
+De lokale bronkopie staat onder `backups/supabase-source-2026-09-15T17-30-10-526Z.json` (buiten Git). Voor een nieuwe kopie leest `node scripts/export-firestore-team.cjs` de vier teamcollecties met de bestaande Firebase CLI-login. `node scripts/prepare-supabase-import.cjs <bronbestand.json>` genereert een SQL-import naast het bronbestand. Deze import is bedoeld voor historische wedstrijden zonder seizoen-ID en weigert onbekende velden. Voer de gegenereerde SQL uitsluitend in de Supabase-testomgeving uit: de transactie controleert de bronchecksum en alle geïmporteerde rijen, en breekt af als bestaande rijen afwijken. Er is geen automatische synchronisatie.
+
+## Starten en bouwen
+
+- `npm start` / `npm run start:test`: Supabase-testomgeving op `http://localhost:4200`.
+- `npm run start:production`: Firebase-productieomgeving lokaal op `http://localhost:4201`; writes gaan naar de echte productiedatabase.
+- `npm run build:test`: geoptimaliseerde testbuild met controle dat Firebase niet gebundeld is.
+- `npm run build:prod`: Firebase-productiebuild.
+- `npm run test:ci`: unit-tests in Chrome Headless.
+- `npm run format` / `npm run format:check`: formatteren/controleren met Prettier.
+
+`npm run deploy:test` stopt met een uitleg: de oude Firebase-testdeployment is uitgeschakeld. Supabase verzorgt Auth en database; voor de Angular-testsite moet nog een statische host worden ingesteld. Publiceer daar de bestanden uit `dist/voetbal-app/browser` met een SPA-fallback naar `index.html`.
+
+## Productie publiceren (Firebase)
+
+Productie blijft project `voetbal-app-6fa54` gebruiken, met de bestaande configuratie in `firebase.config.ts`, hosting in `firebase.json` en regels in `firestore.rules`.
+
+`npm run deploy:prod` vereist een schone, gecommitte `production`-branch, bouwt de app, controleert dat de Firebase-productieconfiguratie aanwezig is en publiceert hosting en Firestore-regels. Log zo nodig eerst in met `npm run firebase:login`.
 
 Een geteste versie promoveren:
 
@@ -17,130 +56,18 @@ git push origin main production
 git switch main
 ```
 
-Deployen kopieert geen databasegegevens. Productie gebruikt `voetbal-app-6fa54`,
-test gebruikt `voetbal-app-6fa54-test`. De testdata is een eenmalige kopie;
-wijzigingen worden niet gesynchroniseerd. Lokale back-ups en Firebase-deploycache
-staan buiten Git. In test meld je je apart aan met Google.
+## Seizoenen en rechten
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.1.1.
+- Kies bovenaan een seizoen. Wedstrijden en statistieken volgen deze keuze.
+- Maak via **Seizoenen** een nieuw seizoen aan; de backend maakt competitie en beker in dezelfde transactie aan.
+- Voeg spelers toe aan het gekozen seizoen, daarna wedstrijden via **Nieuwe wedstrijd**.
+- Alleen ingelogde gebruikers kunnen teamgegevens lezen. Alleen geverifieerde beheerders kunnen toevoegen.
+- In Supabase maakt een database-trigger bij de eerste aanmelding een profiel in `public.users`. Het geverifieerde account `daniel.r.gumbs@gmail.com` krijgt aanvankelijk `isAdmin: true`; andere accounts krijgen `false`. Rollen kunnen uitsluitend via vertrouwd databasebeheer worden aangepast. De browser kan geen rollen schrijven. Bestaande rollen blijven behouden.
+- In productie blijven de bestaande Firestore-profielen en regels gelden.
+- Verwijderen is niet beschikbaar vanuit de app. Historische data wordt niet overschreven.
 
-## Development server
+De scripts `copy-production-to-test.cjs` en `configure-test-auth.cjs` betreffen uitsluitend het oude Firebase-testproject; ze configureren of vullen Supabase niet.
 
-- `npm start` of `npm run start:test`: testomgeving op `http://localhost:4200`, met de aparte testdatabase.
-- `npm run start:production`: productieversie lokaal op `http://localhost:4201`, met de echte productiedatabase. Opgeslagen wijzigingen zijn dus echte productiewijzigingen.
+## Techniek
 
-Deze startcommando's publiceren niets. Beide omgevingen kunnen tegelijk draaien dankzij de verschillende poorten.
-
-To start a local development server, run:
-
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Deploying to Firebase Hosting
-
-Follow these steps to deploy a new version to Firebase Hosting.
-
-Prerequisites:
-
-- Install Firebase CLI (one time):
-  npm install -g firebase-tools
-- Log in to Firebase (one time per machine):
-  npm run firebase:login
-- Make sure your project is selected or set a default project (replace YOUR_PROJECT_ID):
-  firebase use YOUR_PROJECT_ID
-  or run:
-  npm run firebase:use
-
-Build and deploy:
-
-1. Build a production bundle:
-   npm run build:prod
-2. Deploy to Firebase Hosting:
-   npm run deploy
-
-Notes:
-
-- The Firebase Hosting config is in firebase.json and points to dist/voetbal-app/browser which is where Angular outputs the app.
-- If you haven’t initialized hosting locally before, you can run firebase init hosting and choose “Configure files for Firebase Hosting”. This repo already includes a working firebase.json.
-- If you prefer CI/CD later, you can add GitHub Actions with firebase/cli-action to build and deploy on push to main.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
-
-## Seizoenen en beheer
-
-- Kies bovenaan een seizoen. Wedstrijden en de ranglijst worden op dit seizoen gefilterd.
-- Alleen het geverifieerde Google-account `daniel.r.gumbs@gmail.com` kan toevoegen.
-- Open de tab **Seizoenen**, vul bijvoorbeeld `2026/2027` in en voeg het seizoen toe. Firestore slaat het seizoen en de bijbehorende competitie en beker atomair op.
-- Voeg spelers toe aan het gekozen seizoen, met rugnummer en deelname aan competitie, beker of beide. Voeg daarna wedstrijden toe via **Nieuwe wedstrijd**.
-- Bestaande `games` en `players` zonder `seasonId` worden uitsluitend als **Vorig seizoen** gelezen. Hun documenten en statistieken worden niet overschreven. Bij het eerste nieuwe seizoen wordt ook het vorige seizoen als document vastgelegd. Historische wedstrijdlinks blijven werken.
-- Nieuwe spelers bevatten `seasonId` en `competitionIds`; nieuwe wedstrijden bevatten `seasonId` en `competitionId`. Speler-ID's zijn per seizoen apart, zodat oude statistieken behouden blijven.
-- Publiceer zowel de app als `firestore.rules` met `npm run deploy`. Zonder publicatie van de regels is de e-mailbeperking in de database nog niet actief. De regels staan lezen toe voor ingelogde gebruikers, toevoegen alleen voor de beheerder, en geen verwijderen. Bestaande gegevens blijven leesbaar.
-- Firebase CLI en een ingelogd account met deployrechten zijn vereist. De lokale productiebuild controleert de Angular-code; test de rechten en het opslaan daarnaast in Firebase voordat je de wijziging in gebruik neemt.
-
-## Styling en formatteren
-
-Alle styling staat in Tailwind-utilities in de templates en component-hostklassen. Er is geen eigen CSS-bestand en geen `@apply`. De clubkleuren staan in `tailwind.config.js`. Angular compileert het standaard `tailwindcss/tailwind.css`-bestand uit node_modules.
-
-- `npm run format`: formatteert het project met Prettier.
-- `npm run format:check`: controleert de formattering zonder bestanden te wijzigen.
-- `npm run test:ci`: voert tests eenmalig uit in Chrome Headless.
-
-Angular is bijgewerkt naar versie 21 met TypeScript 5.9. Firebase gebruikt de officiële SDK via `src/services/firebase.ts`; AngularFire is verwijderd omdat versie 20 geen Angular 21 ondersteunt. De bootstrapconfiguratie staat centraal in `src/app/app.config.ts`.
-
-# Gebruikersrechten
-
-Gebruikers krijgen bij aanmelden een Firestore-document `users/{uid}` met `email` en
-`isAdmin` (boolean). Het geverifieerde account `daniel.r.gumbs@gmail.com` krijgt bij
-de eerste aanmaak `isAdmin: true`; andere accounts krijgen `false`. Bestaande rollen
-worden niet overschreven. Wijzig rollen via de Firebase-console of een vertrouwde
-Admin SDK. Gebruikers kunnen hun eigen rol niet wijzigen.
-
-De app, routebeveiliging en Firestore-regels controleren `isAdmin`. Publiceer de
-regels uit `firestore.rules` voordat je deze versie gebruikt.
+Angular 21, TypeScript 5.9, Tailwind-utilities en officiële Firebase- en Supabase-SDK's. De clubkleuren staan in `tailwind.config.js`. Elke build bevat alleen zijn eigen backend. Lokale back-ups en deploymentcache staan buiten Git.
