@@ -1,8 +1,8 @@
+import { TranslationService } from '../../i18n/translation.service';
 import { FormsModule } from '@angular/forms';
 import { SelectField } from '../select-field/select-field';
 import { SeasonSelector } from '../season-selector/season-selector';
 import { Component, computed, inject, signal, Signal } from '@angular/core';
-import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Game, GameService, LeagueType } from '../../services/game.service';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -12,10 +12,11 @@ import { AdminService } from '../../services/admin.service';
   selector: 'app-game-list',
   host: { class: 'flex min-h-0 min-w-0 flex-1 flex-col [&>*]:shrink-0' },
   standalone: true,
-  imports: [SelectField, FormsModule, SeasonSelector, RouterLink, DatePipe],
+  imports: [SelectField, FormsModule, SeasonSelector, RouterLink],
   templateUrl: './game-list.html',
 })
 export class GameList {
+  readonly i18n = inject(TranslationService);
   games!: Signal<Game[] | undefined>;
   readonly admin = inject(AdminService);
   readonly leagues = signal<(LeagueType | 'all')[]>(['all', 'competitie', 'beker']);

@@ -9,44 +9,52 @@
         >VEDETTE<small>DE REMISE</small></span
       ></a
     >
-    @if (user(); as u) {
-      <button
-        #accountButton
-        type="button"
-        aria-controls="account-panel"
-        class="size-10 rounded-full border border-accent/40 bg-[#292e36] font-bold"
-        (click)="toggleMenu()"
-        [attr.aria-expanded]="mobileOpen()"
-        aria-label="Accountmenu"
-      >
-        {{ (u.displayName || 'V').charAt(0) }}
-      </button>
-      @if (mobileOpen()) {
-        <div
-          #accountPanel
-          id="account-panel"
-          aria-label="Profiel"
-          class="absolute right-5 top-[calc(50%+20px)] z-[60] mt-2 w-60 max-w-[calc(100vw-40px)] overflow-hidden break-words rounded-xl border border-accent/40 bg-surface p-1 text-ink shadow-lg"
+    <div class="flex items-center gap-2">
+      <app-language-settings />
+      @if (user(); as u) {
+        <button
+          #accountButton
+          type="button"
+          aria-controls="account-panel"
+          class="size-10 rounded-full border border-accent/40 bg-[#292e36] font-bold"
+          (click)="toggleMenu()"
+          [attr.aria-expanded]="mobileOpen()"
+          [attr.aria-label]="i18n.t('Accountmenu')"
         >
-          <div class="border-b border-line px-3 py-2.5">
-            <strong class="block text-sm font-semibold">{{ u.displayName }}</strong>
-            <small class="mt-1 block text-xs leading-relaxed text-muted">{{ u.email }}</small>
-          </div>
-          <button
-            class="mt-1 flex min-h-11 w-full items-center rounded-lg px-3 py-2 text-left text-sm font-medium text-accent transition-colors hover:bg-accent/15 focus-visible:bg-accent/15"
-            (click)="logout(); closeMenu()"
+          {{ (u.displayName || 'V').charAt(0) }}
+        </button>
+        @if (mobileOpen()) {
+          <div
+            #accountPanel
+            id="account-panel"
+            [attr.aria-label]="i18n.t('Profiel')"
+            class="absolute right-5 top-[calc(50%+20px)] z-[60] mt-2 w-60 max-w-[calc(100vw-40px)] overflow-hidden break-words rounded-xl border border-accent/40 bg-surface p-1 text-ink shadow-lg"
           >
-            Uitloggen
-          </button>
-        </div>
+            <div class="border-b border-line px-3 py-2.5">
+              <strong class="block text-sm font-semibold">{{ u.displayName }}</strong>
+              <small class="mt-1 block text-xs leading-relaxed text-muted">{{ u.email }}</small>
+            </div>
+            <button
+              class="mt-1 flex min-h-11 w-full items-center rounded-lg px-3 py-2 text-left text-sm font-medium text-accent transition-colors hover:bg-accent/15 focus-visible:bg-accent/15"
+              (click)="logout(); closeMenu()"
+            >
+              {{ i18n.t('Uitloggen') }}
+            </button>
+          </div>
+        }
       }
-    }
+    </div>
   </div>
+  @if (logoutError()) {
+    <p role="alert" class="px-3 py-2 text-sm text-red-300">
+      {{ i18n.t('Uitloggen is niet gelukt. Probeer opnieuw.') }}
+    </p>
+  }
 </header>
 @if (user()) {
   <nav
     class="fixed inset-x-0 bottom-0 z-40 flex h-[calc(64px+env(safe-area-inset-bottom))] shrink-0 justify-around sm:static sm:h-auto border-t border-line bg-[#151216] px-3 pb-[calc(6px+env(safe-area-inset-bottom))] pt-1 sm:order-none sm:justify-center sm:gap-10 sm:border-b sm:border-t-0 [&_a]:flex [&_a]:min-h-12 [&_a]:flex-1 [&_a]:flex-col [&_a]:items-center [&_a]:justify-center [&_a]:gap-1 [&_a]:py-2 [&_a]:text-xs [&_a]:font-bold [&_a]:text-muted sm:[&_a]:flex-none sm:[&_a]:flex-row sm:[&_a]:gap-2 sm:[&_a]:text-sm [&_svg]:size-[22px] [&_a[aria-current=page]]:text-accent [&_a[aria-current=page]_svg]:rounded [&_a[aria-current=page]_svg]:bg-[#4a1b29]"
-    aria-label="Hoofdnavigatie"
+    [attr.aria-label]="i18n.t('Hoofdnavigatie')"
   >
     <a
       routerLink="/games"
@@ -62,7 +70,7 @@
       >
         <rect x="4" y="5" width="16" height="16" rx="3" />
         <path d="M8 3v4m8-4v4M4 11h16m-11 5h6" /></svg
-      ><span>Wedstrijden</span></a
+      ><span>{{ i18n.t('Wedstrijden') }}</span></a
     >
     <a
       routerLink="/leaderboard"
@@ -79,7 +87,7 @@
         <path
           d="M8 3h8v6a4 4 0 0 1-8 0V3Zm0 2H4v3a4 4 0 0 0 4 4m8-7h4v3a4 4 0 0 1-4 4m-4 1v5m-4 3h8m-6-3h4"
         /></svg
-      ><span>Statistieken</span></a
+      ><span>{{ i18n.t('Statistieken') }}</span></a
     >
     @if (admin.isAdmin()) {
       <a
@@ -98,7 +106,7 @@
           <rect x="14" y="4" width="6" height="6" rx="1.5" />
           <rect x="4" y="14" width="6" height="6" rx="1.5" />
           <path d="M17 14v6m-3-3h6" /></svg
-        ><span>Beheer</span></a
+        ><span>{{ i18n.t('Beheer') }}</span></a
       >
     }
   </nav>

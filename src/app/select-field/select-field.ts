@@ -1,3 +1,4 @@
+import { TranslationService } from '../../i18n/translation.service';
 import {
   Component,
   DestroyRef,
@@ -27,7 +28,7 @@ export interface SelectOption {
       type="button"
       class="flex min-h-11 w-full items-center justify-between gap-2 rounded-xl border border-line bg-surface px-3 py-2 text-left text-sm text-ink disabled:opacity-50"
       [disabled]="disabled"
-      [attr.aria-label]="label()"
+      [attr.aria-label]="label() || i18n.t('Selecteer')"
       aria-haspopup="listbox"
       [attr.aria-expanded]="opened()"
       [attr.aria-controls]="opened() ? listId : null"
@@ -54,7 +55,7 @@ export interface SelectOption {
         popover="manual"
         [id]="listId"
         role="listbox"
-        [attr.aria-label]="label()"
+        [attr.aria-label]="label() || i18n.t('Selecteer')"
         tabindex="0"
         [attr.aria-activedescendant]="options().length ? listId + '-' + active() : null"
         class="fixed inset-auto m-0 box-border overflow-y-auto overscroll-contain rounded-xl border border-accent/40 bg-surface p-1 shadow-lg outline-none focus-visible:ring-2 focus-visible:ring-accent"
@@ -76,17 +77,18 @@ export interface SelectOption {
             }
           </div>
         } @empty {
-          <p class="px-3 py-2 text-sm text-muted">Geen opties beschikbaar.</p>
+          <p class="px-3 py-2 text-sm text-muted">{{ i18n.t('Geen opties beschikbaar.') }}</p>
         }
       </div>
     }
   </div>`,
 })
 export class SelectField implements ControlValueAccessor {
+  readonly i18n = inject(TranslationService);
   private static nextId = 0;
   readonly listId = `select-options-${SelectField.nextId++}`;
   options = input<SelectOption[]>([]);
-  label = input('Selecteer');
+  label = input('');
   value = signal('');
   opened = signal(false);
   active = signal(0);
@@ -110,7 +112,10 @@ export class SelectField implements ControlValueAccessor {
     });
   }
   selectedLabel() {
-    return this.options().find((o) => o.value === this.value())?.label ?? this.label();
+    return (
+      this.options().find((o) => o.value === this.value())?.label ??
+      (this.label() || this.i18n.t('Selecteer'))
+    );
   }
   writeValue(value: string | null) {
     this.value.set(value ?? '');

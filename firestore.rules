@@ -17,7 +17,10 @@ service cloud.firestore {
           && request.auth.token.email_verified == true
         );
       // Role changes are made through the trusted Firebase console/Admin SDK.
-      allow update, delete: if false;
+      allow update: if request.auth != null && request.auth.uid == uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['language'])
+        && request.resource.data.language in ['nl', 'en'];
+      allow delete: if false;
     }
     function validSeason(data) {
       return data.seasonId is string && data.seasonId != 'previous-season'

@@ -1,20 +1,20 @@
 <a
   routerLink="/games"
   class="mb-2 inline-flex min-h-11 w-fit items-center gap-2 rounded-lg px-2 text-sm font-semibold text-muted hover:bg-white/5 hover:text-white"
-  ><span aria-hidden="true">←</span> Wedstrijden</a
+  ><span aria-hidden="true">←</span> {{ i18n.t('Wedstrijden') }}</a
 >
 @if (game() === undefined) {
   <div
     class="col-span-full shrink-0 rounded-2xl border border-line bg-surface px-4 py-6 text-center text-sm text-muted [&_h2]:mb-2 [&_h2]:mt-3 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-ink"
     role="status"
   >
-    Wedstrijd laden…
+    {{ i18n.t('Wedstrijd laden…') }}
   </div>
 } @else if (!game()) {
   <div
     class="col-span-full shrink-0 rounded-2xl border border-line bg-surface px-4 py-6 text-center text-sm text-muted [&_h2]:mb-2 [&_h2]:mt-3 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-ink"
   >
-    Wedstrijd niet gevonden.
+    {{ i18n.t('Wedstrijd niet gevonden.') }}
   </div>
 } @else {
   @let g = game()!;
@@ -22,60 +22,60 @@
     class="mb-3 shrink-0 rounded-2xl bg-gradient-to-br from-[#3c1822] to-[#19161c] px-5 py-4 text-white [&_h1]:text-[22px] [&_h1]:font-extrabold [&_h1]:break-words"
   >
     <p class="mb-2 text-[10px] font-extrabold tracking-[2px] text-accent">
-      {{ g.league === 'beker' ? 'BEKER' : 'COMPETITIE' }}
+      {{ g.league === 'beker' ? i18n.t('BEKER') : i18n.t('COMPETITIE') }}
     </p>
     <h1>Vedette — {{ g.opponent }}</h1>
-    <p class="mt-1 text-xs text-muted">{{ g.date | date: 'dd-MM-yyyy' }}</p>
+    <p class="mt-1 text-xs text-muted">{{ i18n.date(g.date) }}</p>
     <div class="my-3 text-5xl font-extrabold tabular-nums tracking-tight">
       @if (g.scoreTeam != null && g.scoreOpponent != null) {
-        {{ g.scoreTeam }} : {{ g.scoreOpponent }}
+        {{ i18n.number(g.scoreTeam) }} : {{ i18n.number(g.scoreOpponent) }}
       } @else {
         VS
       }
     </div>
     <p class="text-xs text-muted">
-      {{ g.players?.length ?? 0 }} spelers ·
-      {{ g.scoreTeam != null ? 'Wedstrijduitslag' : 'Nog geen uitslag' }}
+      {{ i18n.number(g.players?.length ?? 0) }} {{ i18n.t('spelers') }} ·
+      {{ g.scoreTeam != null ? i18n.t('Wedstrijduitslag') : i18n.t('Nog geen uitslag') }}
     </p>
   </section>
   <div
     class="min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain [scrollbar-width:thin] [scrollbar-color:#79323e_#201d23] grid content-start grid-cols-1 gap-4 pb-2 sm:grid-cols-2"
     tabindex="0"
     role="region"
-    aria-label="Goals en assists"
+    [attr.aria-label]="i18n.t('Goals en assists')"
   >
     <section
       class="rounded-2xl border border-line bg-surface p-4 [&_h2]:mb-4 [&_h2]:text-base [&_h2]:font-bold [&_p]:text-sm [&_p]:text-muted"
     >
       <h2>
-        Goals <span class="text-accent">{{ goals().length }}</span>
+        {{ i18n.t('Goals') }} <span class="text-accent">{{ i18n.number(goals().length) }}</span>
       </h2>
       @for (event of goalCounts(); track event.playerId) {
         <div
           class="flex justify-between gap-2 border-t border-line py-3 text-xs [&_span]:break-words [&_strong]:text-accent"
         >
           <span>{{ nameFor(event.playerId) }}</span
-          ><strong>{{ event.count }}</strong>
+          ><strong>{{ i18n.number(event.count) }}</strong>
         </div>
       } @empty {
-        <p>Geen goals geregistreerd.</p>
+        <p>{{ i18n.t('Geen goals geregistreerd.') }}</p>
       }
     </section>
     <section
       class="rounded-2xl border border-line bg-surface p-4 [&_h2]:mb-4 [&_h2]:text-base [&_h2]:font-bold [&_p]:text-sm [&_p]:text-muted"
     >
       <h2>
-        Assists <span class="text-accent">{{ assists().length }}</span>
+        {{ i18n.t('Assists') }} <span class="text-accent">{{ i18n.number(assists().length) }}</span>
       </h2>
       @for (event of assistCounts(); track event.playerId) {
         <div
           class="flex justify-between gap-2 border-t border-line py-3 text-xs [&_span]:break-words [&_strong]:text-accent"
         >
           <span>{{ nameFor(event.playerId) }}</span
-          ><strong>{{ event.count }}</strong>
+          ><strong>{{ i18n.number(event.count) }}</strong>
         </div>
       } @empty {
-        <p>Geen assists geregistreerd.</p>
+        <p>{{ i18n.t('Geen assists geregistreerd.') }}</p>
       }
     </section>
   </div>

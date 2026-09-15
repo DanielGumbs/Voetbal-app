@@ -1,3 +1,5 @@
+import { LanguageSettings } from '../language-settings/language-settings';
+import { TranslationService } from '../../i18n/translation.service';
 import { AdminService } from '../../services/admin.service';
 import { ElementRef, HostListener, inject, viewChild } from '@angular/core';
 import { Component, Signal, signal } from '@angular/core';
@@ -8,12 +10,14 @@ import { toSignal } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-navbar',
   host: { class: 'contents' },
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, LanguageSettings],
   templateUrl: './navbar.html',
 })
 export class Navbar {
+  readonly i18n = inject(TranslationService);
   admin = inject(AdminService);
   public mobileOpen = signal(false);
+  readonly logoutError = signal(false);
   public user!: Signal<User | null | undefined>;
   accountButton = viewChild<ElementRef<HTMLButtonElement>>('accountButton');
   accountPanel = viewChild<ElementRef<HTMLElement>>('accountPanel');
@@ -48,9 +52,11 @@ export class Navbar {
   }
 
   async logout() {
+    this.logoutError.set(false);
     try {
       await signOut(this.auth);
     } catch (err) {
+      this.logoutError.set(true);
       console.error('Logout error:', err);
     }
   }

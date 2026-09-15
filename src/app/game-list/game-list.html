@@ -2,15 +2,17 @@
   class="mb-3 grid shrink-0 grid-cols-[minmax(0,1fr)_auto] auto-rows-[44px] items-center gap-3 max-[359px]:grid-cols-1 [&>div]:min-w-0 [&_h1]:text-[23px] [&_h1]:font-extrabold [&_h1]:leading-tight [&_h1]:tracking-tight sm:[&_h1]:text-[26px] [&_p]:hidden"
 >
   <div>
-    <p class="mb-2 text-[10px] font-extrabold tracking-[2px] text-accent">HET SEIZOEN IN BEELD</p>
-    <h1>Wedstrijden<span class="text-accent">.</span></h1>
-    <p class="mt-2 text-sm text-muted">Samen het veld op. Alles op één plek.</p>
+    <p class="mb-2 text-[10px] font-extrabold tracking-[2px] text-accent">
+      {{ i18n.t('HET SEIZOEN IN BEELD') }}
+    </p>
+    <h1>{{ i18n.t('Wedstrijden') }}<span class="text-accent">.</span></h1>
+    <p class="mt-2 text-sm text-muted">{{ i18n.t('Samen het veld op. Alles op één plek.') }}</p>
   </div>
   @if (admin.isAdmin()) {
     <a
       class="inline-flex min-h-11 shrink-0 items-center justify-center whitespace-nowrap rounded-xl border border-red-500 bg-red-600 px-4 py-2.5 text-sm font-semibold leading-5 text-white shadow-sm transition-colors hover:bg-red-500 active:bg-red-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#100f12] max-[359px]:w-full sm:px-5 sm:text-base"
       routerLink="/games/new"
-      ><span>Nieuwe wedstrijd</span></a
+      ><span>{{ i18n.t('Nieuwe wedstrijd') }}</span></a
     >
   }
 </section>
@@ -20,11 +22,11 @@
     (ngModelChange)="onLeagueChange($event)"
     [ngModel]="selectedLeague()"
     [options]="[
-      { value: 'all', label: 'Alle competities' },
-      { value: 'competitie', label: 'Competitie' },
-      { value: 'beker', label: 'Beker' },
+      { value: 'all', label: i18n.t('Alle competities') },
+      { value: 'competitie', label: i18n.t('Competitie') },
+      { value: 'beker', label: i18n.t('Beker') },
     ]"
-    label="Competitie"
+    [label]="i18n.t('Competitie')"
   ></app-select-field>
 </div>
 @if (games() === undefined) {
@@ -32,18 +34,18 @@
     class="col-span-full shrink-0 rounded-2xl border border-line bg-surface px-4 py-6 text-center text-sm text-muted [&_h2]:mb-2 [&_h2]:mt-3 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-ink"
     role="status"
   >
-    Wedstrijden laden…
+    {{ i18n.t('Wedstrijden laden…') }}
   </div>
 } @else {
   @let list = filteredSortedGames();
   <div
     class="my-2 flex shrink-0 items-center justify-between [&_h2]:text-sm [&_h2]:font-bold [&>span]:text-xs [&>span]:text-muted"
   >
-    <h2>Wedstrijdoverzicht</h2>
-    <span>{{ list.length }} wedstrijden</span>
+    <h2>{{ i18n.t('Wedstrijdoverzicht') }}</h2>
+    <span>{{ i18n.number(list.length) }} {{ i18n.t('wedstrijden') }}</span>
   </div>
   <div
-    aria-label="Wedstrijdoverzicht"
+    [attr.aria-label]="i18n.t('Wedstrijdoverzicht')"
     class="min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain [scrollbar-width:thin] [scrollbar-color:#79323e_#201d23] grid content-start grid-cols-1 gap-2.5 p-0.5 pb-2 sm:grid-cols-2"
     role="region"
     tabindex="0"
@@ -55,9 +57,9 @@
       >
         <div class="flex items-center gap-2 text-[11px] text-muted">
           <span class="rounded-md bg-[#332730] px-2 py-1 text-[10px] font-bold text-[#efb4bd]">{{
-            g.league === 'beker' ? 'Beker' : 'Competitie'
+            g.league === 'beker' ? i18n.t('Beker') : i18n.t('Competitie')
           }}</span
-          ><span>{{ g.date | date: 'dd-MM-yyyy' }}</span
+          ><span>{{ i18n.date(g.date) }}</span
           ><span aria-hidden="true" class="ml-auto text-lg">↗</span>
         </div>
         <div class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-3 py-4">
@@ -73,14 +75,14 @@
                 />
               </span>
               <div class="min-w-0">
-                <span class="block text-[10px] font-bold uppercase tracking-wider text-red-300"
-                  >Jouw team</span
-                >
+                <span class="block text-[10px] font-bold uppercase tracking-wider text-red-300">{{
+                  i18n.t('Jouw team')
+                }}</span>
                 <strong class="block text-sm font-bold leading-snug text-white">Vedette</strong>
               </div>
             </div>
             <span class="min-w-8 text-right text-2xl font-extrabold tabular-nums text-ink">{{
-              g.scoreTeam ?? '–'
+              i18n.number(g.scoreTeam)
             }}</span>
           </div>
           <div
@@ -98,14 +100,16 @@
               >
             </div>
             <span class="min-w-8 text-right text-2xl font-extrabold tabular-nums text-ink">{{
-              g.scoreOpponent ?? '–'
+              i18n.number(g.scoreOpponent)
             }}</span>
           </div>
         </div>
         <div class="flex justify-between border-t border-line py-2.5 text-xs text-muted">
-          <span>{{ g.players?.length ?? 0 }} spelers</span
+          <span>{{ i18n.number(g.players?.length ?? 0) }} {{ i18n.t('spelers') }}</span
           ><span>{{
-            g.scoreTeam != null && g.scoreOpponent != null ? 'Uitslag' : 'Nog geen uitslag'
+            g.scoreTeam != null && g.scoreOpponent != null
+              ? i18n.t('Uitslag')
+              : i18n.t('Nog geen uitslag')
           }}</span>
         </div>
       </a>
@@ -114,12 +118,12 @@
         class="col-span-full shrink-0 rounded-2xl border border-line bg-surface px-4 py-6 text-center text-sm text-muted [&_h2]:mb-2 [&_h2]:mt-3 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-ink"
       >
         <div aria-hidden="true" class="text-[32px]">⚽</div>
-        <h2>Klaar voor de aftrap</h2>
-        <p>Er zijn nog geen wedstrijden voor deze selectie.</p>
+        <h2>{{ i18n.t('Klaar voor de aftrap') }}</h2>
+        <p>{{ i18n.t('Er zijn nog geen wedstrijden voor deze selectie.') }}</p>
         @if (admin.isAdmin()) {
-          <a class="mt-5 inline-block font-bold text-accent" routerLink="/games/new"
-            >Voeg de eerste wedstrijd toe →</a
-          >
+          <a class="mt-5 inline-block font-bold text-accent" routerLink="/games/new">{{
+            i18n.t('Voeg de eerste wedstrijd toe →')
+          }}</a>
         }
       </div>
     }

@@ -1,3 +1,4 @@
+import { TranslationService } from '../../i18n/translation.service';
 import { FormsModule } from '@angular/forms';
 import { SelectField } from '../select-field/select-field';
 import { SeasonSelector } from '../season-selector/season-selector';
@@ -28,6 +29,7 @@ type LeagueFilter = 'all' | LeagueType;
   templateUrl: './leaderboard.html',
 })
 export class LeaderboardComponent {
+  readonly i18n = inject(TranslationService);
   admin = inject(AdminService);
   players!: Signal<Player[] | undefined>;
   games!: Signal<Game[] | undefined>;

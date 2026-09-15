@@ -32,6 +32,7 @@ describe('App', () => {
     }).compileComponents();
   });
   it('shows the login screen when signed out', () => {
+    localStorage.setItem('voetbal.language', 'nl');
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector('h1').textContent).toContain('Jouw team.');

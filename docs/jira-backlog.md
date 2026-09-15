@@ -6,25 +6,32 @@ Onderzocht op 15 september 2026. De epic en negen issues zijn op dezelfde dag vi
 
 Epic: [VOET-1 — Meerdere teams, wedstrijdregistratie en tweetalige chat](https://danielrgumbs.atlassian.net/browse/VOET-1).
 
-| Volgorde | Backlogreferentie | Jira | Branch bij featurestart |
-| --- | --- | --- | --- |
-| 1 | FEATURE-01 | [VOET-2 — Projectonderzoek](https://danielrgumbs.atlassian.net/browse/VOET-2) | `codex/VOET-2-projectonderzoek` |
-| 2 | FEATURE-09 | [VOET-3 — Nederlandse en Engelse vertaalbasis](https://danielrgumbs.atlassian.net/browse/VOET-3) | `codex/VOET-3-nederlands-engels` |
-| 3 | FEATURE-02 | [VOET-4 — Teams en teamtoegang](https://danielrgumbs.atlassian.net/browse/VOET-4) | `codex/VOET-4-meerdere-teams` |
-| 4 | FEATURE-03 | [VOET-5 — Seizoenen, selecties en bijnamen](https://danielrgumbs.atlassian.net/browse/VOET-5) | `codex/VOET-5-seizoenen-selecties` |
-| 5 | FEATURE-04 | [VOET-6 — Gebeurtenissen en kaarten](https://danielrgumbs.atlassian.net/browse/VOET-6) | `codex/VOET-6-wedstrijdgebeurtenissen` |
-| 6 | FEATURE-05 | [VOET-7 — Tweetalige chatinvoer](https://danielrgumbs.atlassian.net/browse/VOET-7) | `codex/VOET-7-chatinvoer` |
-| 7 | FEATURE-06 | [VOET-8 — Chatcorrecties](https://danielrgumbs.atlassian.net/browse/VOET-8) | `codex/VOET-8-chatcorrecties` |
-| 8 | FEATURE-07 | [VOET-9 — Statistieken](https://danielrgumbs.atlassian.net/browse/VOET-9) | `codex/VOET-9-statistieken` |
-| 9 | FEATURE-08 | [VOET-10 — Beheer, export en oplevering](https://danielrgumbs.atlassian.net/browse/VOET-10) | `codex/VOET-10-beheer-export-oplevering` |
+| Volgorde | Backlogreferentie | Jira                                                                                             | Branch bij featurestart                  |
+| -------- | ----------------- | ------------------------------------------------------------------------------------------------ | ---------------------------------------- |
+| 1        | FEATURE-01        | [VOET-2 — Projectonderzoek](https://danielrgumbs.atlassian.net/browse/VOET-2)                    | `codex/VOET-2-projectonderzoek`          |
+| 2        | FEATURE-09        | [VOET-3 — Nederlandse en Engelse vertaalbasis](https://danielrgumbs.atlassian.net/browse/VOET-3) | `codex/VOET-3-nederlands-engels`         |
+| 3        | FEATURE-02        | [VOET-4 — Teams en teamtoegang](https://danielrgumbs.atlassian.net/browse/VOET-4)                | `codex/VOET-4-meerdere-teams`            |
+| 4        | FEATURE-03        | [VOET-5 — Seizoenen, selecties en bijnamen](https://danielrgumbs.atlassian.net/browse/VOET-5)    | `codex/VOET-5-seizoenen-selecties`       |
+| 5        | FEATURE-04        | [VOET-6 — Gebeurtenissen en kaarten](https://danielrgumbs.atlassian.net/browse/VOET-6)           | `codex/VOET-6-wedstrijdgebeurtenissen`   |
+| 6        | FEATURE-05        | [VOET-7 — Tweetalige chatinvoer](https://danielrgumbs.atlassian.net/browse/VOET-7)               | `codex/VOET-7-chatinvoer`                |
+| 7        | FEATURE-06        | [VOET-8 — Chatcorrecties](https://danielrgumbs.atlassian.net/browse/VOET-8)                      | `codex/VOET-8-chatcorrecties`            |
+| 8        | FEATURE-07        | [VOET-9 — Statistieken](https://danielrgumbs.atlassian.net/browse/VOET-9)                        | `codex/VOET-9-statistieken`              |
+| 9        | FEATURE-08        | [VOET-10 — Beheer, export en oplevering](https://danielrgumbs.atlassian.net/browse/VOET-10)      | `codex/VOET-10-beheer-export-oplevering` |
 
-Alle negen stories hebben VOET-1 als parent. Afhankelijkheden staan expliciet in de issuebeschrijvingen; nog geen afzonderlijke Jira-blocks-links aangemaakt. De oorspronkelijke FEATURE-nummers hieronder blijven stabiele documentreferenties. De bestaande gepushte onderzoeksbranch `codex/feature-01-projectonderzoek` blijft behouden; bovenstaande nieuwe branchnamen zijn nog niet aangemaakt. Volgende branches ontstaan pas bij featurestart vanaf dan actuele main, na merge van de voorganger.
+Alle negen stories hebben VOET-1 als parent. Epic en stories staan op naam van Daniel in VOET Sprint 1 (nog niet gestart). Afhankelijkheden staan expliciet in de issuebeschrijvingen; nog geen afzonderlijke Jira-blocks-links aangemaakt. De oorspronkelijke FEATURE-nummers hieronder blijven stabiele documentreferenties. De oude gepushte onderzoeksbranch blijft behouden. Volgende branches ontstaan pas bij featurestart vanaf dan actuele main, na merge van de voorganger.
+
+### Uitvoeringsstatus
+
+- VOET-2 is Done: onderzoeks-[PR #2](https://github.com/DanielGumbs/Voetbal-app/pull/2) is gemerged. De aanwezige backendwijzigingen zijn apart beoordeeld, getest en behouden in [PR #3](https://github.com/DanielGumbs/Voetbal-app/pull/3), ook gemerged.
+- Main na beide merges: `478662dd427e3ea3e04382f05cf0b1a292612f5c`. De oorspronkelijke werkmapwijzigingen zijn daarmee vastgelegd; geen bestanden weggegooid.
+- VOET-3 is In Progress op `codex/VOET-3-nederlands-engels`, gestart vanaf die main. Runtime catalogi, instellingen, profieladapters en additieve migratie zijn geïmplementeerd. 39 unit-/componenttests slagen, waaronder conceptbehoud en profielraces.
+- Nog nodig voor afronding VOET-3: Supabase-taalmigratie uitvoeren en rechtentests draaien in development; Firestore-regels in emulator toetsen; volledige schermcontrole in beide talen. Live profielopslag werkt pas na de backendwijziging. Productie is niet gepubliceerd. Teams (VOET-4) starten pas na afronding en merge van VOET-3.
 
 ## Baseline en werkwijze
 
-- Actuele `main` en opgehaalde `origin/main`: `7511c3928d5ef66f70386bb38ddc9d53aa9af466`.
-- De werkmap bevat bij aanvang 21 gewijzigde tracked bestanden plus nieuwe Supabase-adapters, migraties en importscripts. Deze bestaande wijzigingen zijn behouden. De backendwissel is nog niet gecommit op main; onderstaande analyse beschrijft expliciet de werkmap.
-- Onderzoeksbranch: `codex/feature-01-projectonderzoek`. Alleen onderzoeksdocumentatie hoort in de onderzoeks-PR; bestaande wijzigingen niet stilzwijgend meeleveren.
+- Main bij aanvang: `7511c3928d5ef66f70386bb38ddc9d53aa9af466`.
+- De werkmap bevatte bij aanvang 21 gewijzigde tracked bestanden plus nieuwe Supabase-adapters, migraties en importscripts. Onderstaande inventaris beschrijft die baseline, inmiddels afzonderlijk behouden in PR #3.
+- Onderzoeksbranch: `codex/VOET-2-projectonderzoek`. Alleen onderzoeksdocumentatie is in de onderzoeks-PR opgenomen.
 - Eén feature tegelijk: onderzoek → vertaalbasis → teams → selecties → gebeurtenissen → chatinvoer → chatcorrecties → statistieken → beheer/export/oplevering. Elke voorganger moet in main staan voordat afhankelijke implementatie start.
 - Maak iedere volgende branch op dat moment vanaf opnieuw opgehaalde actuele main. De namen hieronder zijn gereserveerde branchnamen, geen verklaring dat ze al bestaan. Vervang bij beschikbare Jira-key `feature-NN` door die key.
 - De bestaande backendwissel moet als gecontroleerde baseline in main staan voordat de vertaalbasis beide adapters kan uitbreiden. Leg de review/merge daarvan afzonderlijk vast; neem geen wijzigingen van de gebruiker ongemerkt over in een featurecommit.
@@ -32,18 +39,18 @@ Alle negen stories hebben VOET-1 als parent. Afhankelijkheden staan expliciet in
 
 ## Daadwerkelijke implementatie
 
-| Onderdeel | Aanwezig en hergebruik | Ontbreekt / uitbreiding |
-| --- | --- | --- |
-| Angular en navigatie | Angular 21, standalone componenten, reactive forms/signals; routes `/games`, `/games/new`, `/games/:id`, `/seasons`, `/leaderboard` in `src/app/app.routes.ts` | Instellingen, teamselectie en chat ontbreken. Bestaande componentstructuur behouden. |
-| Login en rollen | Google-login; development redirect via `supabase.ts`, productie popup via `backend.production.ts`; `AdminService` volgt geverifieerde profielrol; guard voor wedstrijd/seizoen aanmaken | Globale boolean `isAdmin`, geen teamlidmaatschap of rollenbeheer in UI. Alle ingelogden lezen momenteel alle teamgegevens. |
-| Seizoenen | `SeasonService`, `SeasonSelector`, `SeasonManager`; seizoen plus competitie/beker atomair via SQL RPC of Firestore batch; selectie blijft bij navigeren bestaan | Geen teamcontext of selectieopslag per team. `previous-season` is expliciete legacy-fallback voor ontbrekend seasonId. |
-| Spelers | `PlayerService`: naam, rugnummer, seasonId, competitionIds; selectie in seizoenbeheer en deelnemerslijst bij wedstrijd | Geen alias, stabiele persoon over seizoenen, spelersovername, teamId of bewerken. |
-| Wedstrijden | `CreateGame`, `GameList`, `GameDetailComponent`; tegenstander, datum, optionele scores, deelnemers, competitie en gebeurtenissen | Alleen toevoegen/lezen. Geen opgeslagen wedstrijd wijzigen. Geen kaarten, chat, audit, event-ID, revision of idempotentie. |
-| Goals en assists | `GameEvent = {playerId, type: 'goal' \| 'assist'}`; array per wedstrijd, één item per goal/assist; detail groepeert per speler | Geen geel/direct rood/tweede geel. Scores en eventaantallen worden niet vergeleken. Historische events hebben geen identiteit. |
-| Klassement | `LeaderboardComponent` telt wedstrijden via `players`, goals/assists via `events`; tabs totaal/goals/assists, seizoen- en competitiefilter | Topscorers bestaan al! Uitbreiden met kaarten, W/G/V, voor/tegen/doelsaldo, teamfilter en volledigheid. Geen nieuw klassement bouwen. |
-| Talen | Nederlandse teksten in HTML én TypeScript; vaste `dd-MM-yyyy` en `localeCompare(..., 'nl')`; extract-i18n builder aanwezig | Geen runtime vertaalondersteuning, vertaalbestanden, taalkeuze of profielveld. De builder alleen levert geen live taalwisseling. |
-| Mobiel | Tailwind breakpoints, scrollregio's, touchknoppen en herbruikbare `SelectField` met toetsenbordtests | Nieuwe flows moeten bij smalle schermen en mobiel toetsenbord getest worden; huidige visuele werking niet live bevestigd in dit onderzoek. |
-| Export | Importscripts/back-ups voor technische migratie | Geen gebruikers-CSV van wedstrijden/statistieken. |
+| Onderdeel            | Aanwezig en hergebruik                                                                                                                                                                  | Ontbreekt / uitbreiding                                                                                                                    |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Angular en navigatie | Angular 21, standalone componenten, reactive forms/signals; routes `/games`, `/games/new`, `/games/:id`, `/seasons`, `/leaderboard` in `src/app/app.routes.ts`                          | Instellingen, teamselectie en chat ontbreken. Bestaande componentstructuur behouden.                                                       |
+| Login en rollen      | Google-login; development redirect via `supabase.ts`, productie popup via `backend.production.ts`; `AdminService` volgt geverifieerde profielrol; guard voor wedstrijd/seizoen aanmaken | Globale boolean `isAdmin`, geen teamlidmaatschap of rollenbeheer in UI. Alle ingelogden lezen momenteel alle teamgegevens.                 |
+| Seizoenen            | `SeasonService`, `SeasonSelector`, `SeasonManager`; seizoen plus competitie/beker atomair via SQL RPC of Firestore batch; selectie blijft bij navigeren bestaan                         | Geen teamcontext of selectieopslag per team. `previous-season` is expliciete legacy-fallback voor ontbrekend seasonId.                     |
+| Spelers              | `PlayerService`: naam, rugnummer, seasonId, competitionIds; selectie in seizoenbeheer en deelnemerslijst bij wedstrijd                                                                  | Geen alias, stabiele persoon over seizoenen, spelersovername, teamId of bewerken.                                                          |
+| Wedstrijden          | `CreateGame`, `GameList`, `GameDetailComponent`; tegenstander, datum, optionele scores, deelnemers, competitie en gebeurtenissen                                                        | Alleen toevoegen/lezen. Geen opgeslagen wedstrijd wijzigen. Geen kaarten, chat, audit, event-ID, revision of idempotentie.                 |
+| Goals en assists     | `GameEvent = {playerId, type: 'goal' \| 'assist'}`; array per wedstrijd, één item per goal/assist; detail groepeert per speler                                                          | Geen geel/direct rood/tweede geel. Scores en eventaantallen worden niet vergeleken. Historische events hebben geen identiteit.             |
+| Klassement           | `LeaderboardComponent` telt wedstrijden via `players`, goals/assists via `events`; tabs totaal/goals/assists, seizoen- en competitiefilter                                              | Topscorers bestaan al! Uitbreiden met kaarten, W/G/V, voor/tegen/doelsaldo, teamfilter en volledigheid. Geen nieuw klassement bouwen.      |
+| Talen                | Nederlandse teksten in HTML én TypeScript; vaste `dd-MM-yyyy` en `localeCompare(..., 'nl')`; extract-i18n builder aanwezig                                                              | Geen runtime vertaalondersteuning, vertaalbestanden, taalkeuze of profielveld. De builder alleen levert geen live taalwisseling.           |
+| Mobiel               | Tailwind breakpoints, scrollregio's, touchknoppen en herbruikbare `SelectField` met toetsenbordtests                                                                                    | Nieuwe flows moeten bij smalle schermen en mobiel toetsenbord getest worden; huidige visuele werking niet live bevestigd in dit onderzoek. |
+| Export               | Importscripts/back-ups voor technische migratie                                                                                                                                         | Geen gebruikers-CSV van wedstrijden/statistieken.                                                                                          |
 
 ### Opslag, beveiliging en concrete aandachtspunten
 
@@ -68,7 +75,7 @@ README beschrijft een eerdere kopie naar Supabase: 2 seizoenen, 4 competities, 1
 - `supabase/tests/team_smoke.sql` bevat transactionele opslag/rechtentests; README meldt eerder live geslaagd. Niet opnieuw uitgevoerd hier.
 - Hercontrole 15 september 2026 na opheffen sandboxbeperking: `npm run test:ci` slaagt met **27/27 tests**. De eerdere bundlerfout bleek omgevingsgebonden.
 - `npm run build:test` en `npm run build:prod` slagen; `verify-build-environment.cjs` bevestigt respectievelijk Supabase en Firebase. Productie heeft een bestaande bundlegroottewaarschuwing (671,76 kB tegenover 500 kB waarschuwingsbudget, onder 1 MB foutgrens).
-- Geen applicatiecode gewijzigd voor het onderzoek. De aanwezige backendbasis is apart beoordeeld en wordt afzonderlijk gecommit/in main geïntegreerd vóór VOET-3. Live mobiele QA en backend-integratietests blijven expliciete implementatiechecks; builds/unit-tests bewijzen geen live databasewerking.
+- Geen applicatiecode gewijzigd voor het onderzoek. De aanwezige backendbasis is apart beoordeeld en via PR #3 in main geïntegreerd vóór VOET-3. Live mobiele QA en backend-integratietests blijven expliciete implementatiechecks; builds/unit-tests bewijzen geen live databasewerking.
 
 ## Gemeenschappelijke Definition of Done
 

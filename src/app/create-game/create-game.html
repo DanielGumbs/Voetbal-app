@@ -2,20 +2,24 @@
   <h1
     class="mb-3 flex h-11 shrink-0 items-center text-[23px] font-extrabold leading-tight tracking-tight text-white sm:text-[26px] max-[359px]:mb-[68px]"
   >
-    <span>Nieuwe wedstrijd<span class="text-accent">.</span></span>
+    <span>{{ i18n.t('Nieuwe wedstrijd') }}<span class="text-accent">.</span></span>
   </h1>
 
   <div class="mb-3 flex shrink-0 items-center gap-3">
-    <span class="text-xs text-muted">Seizoen</span><app-season-selector></app-season-selector>
+    <span class="text-xs text-muted">{{ i18n.t('Seizoen') }}</span
+    ><app-season-selector></app-season-selector>
   </div>
   @if (selectedSeason() === 'previous-season') {
     <p class="text-amber-200 mb-3">
-      Selecteer een nieuw seizoen of maak er een aan via de tab Seizoenen om een wedstrijd toe te
-      voegen.
+      {{
+        i18n.t(
+          'Selecteer een nieuw seizoen of maak er een aan via de tab Seizoenen om een wedstrijd toe te voegen.'
+        )
+      }}
     </p>
   }
   @if (error) {
-    <p role="alert" class="text-red-300 mb-3">{{ error }}</p>
+    <p role="alert" class="text-red-300 mb-3">{{ i18n.t(error) }}</p>
   }
   <form
     (ngSubmit)="submit()"
@@ -26,10 +30,12 @@
       class="min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain [scrollbar-width:thin] [scrollbar-color:#79323e_#201d23] p-4 [scroll-padding-block:16px]"
       tabindex="0"
       role="region"
-      aria-label="Wedstrijdgegevens"
+      [attr.aria-label]="i18n.t('Wedstrijdgegevens')"
     >
       <div class="mb-4">
-        <label for="opponent" class="block text-sm font-medium text-ink mb-1">Tegenstander</label>
+        <label for="opponent" class="block text-sm font-medium text-ink mb-1">{{
+          i18n.t('Tegenstander')
+        }}</label>
         <input
           class="min-h-11 w-full min-w-0 max-w-full rounded-xl border border-line bg-[#171419] px-3 py-2.5 text-base text-ink placeholder:text-muted/60 transition-colors focus:border-accent"
           id="opponent"
@@ -38,12 +44,14 @@
           type="text"
         />
         @if (form.get('opponent')?.touched && form.get('opponent')?.invalid) {
-          <p class="text-red-300 text-sm" role="alert">Vul een tegenstander in.</p>
+          <p class="text-red-300 text-sm" role="alert">{{ i18n.t('Vul een tegenstander in.') }}</p>
         }
       </div>
 
       <div class="mb-4">
-        <label for="date" class="block text-sm font-medium text-ink mb-1">Datum</label>
+        <label for="date" class="block text-sm font-medium text-ink mb-1">{{
+          i18n.t('Datum')
+        }}</label>
         <input
           class="min-h-11 w-full min-w-0 max-w-full rounded-xl border border-line bg-[#171419] px-3 py-2.5 text-base text-ink placeholder:text-muted/60 transition-colors focus:border-accent"
           id="date"
@@ -51,27 +59,29 @@
           type="date"
         />
         @if (form.get('date')?.touched && form.get('date')?.invalid) {
-          <p class="text-red-300 text-sm" role="alert">Vul een datum in.</p>
+          <p class="text-red-300 text-sm" role="alert">{{ i18n.t('Vul een datum in.') }}</p>
         }
       </div>
 
       <div class="mb-4">
-        <label class="block text-sm font-medium text-ink mb-1">Type wedstrijd</label>
+        <label class="block text-sm font-medium text-ink mb-1">{{
+          i18n.t('Type wedstrijd')
+        }}</label>
         <app-select-field
-          label="Type wedstrijd"
+          [label]="i18n.t('Type wedstrijd')"
           formControlName="league"
           [options]="[
-            { value: 'competitie', label: 'Competitie' },
-            { value: 'beker', label: 'Beker' },
+            { value: 'competitie', label: i18n.t('Competitie') },
+            { value: 'beker', label: i18n.t('Beker') },
           ]"
         ></app-select-field>
       </div>
 
       <div class="grid grid-cols-2 gap-3 mb-4">
         <div>
-          <label for="scoreTeam" class="block text-sm font-medium text-ink mb-1"
-            >Score Vedette</label
-          >
+          <label for="scoreTeam" class="block text-sm font-medium text-ink mb-1">{{
+            i18n.t('Score Vedette')
+          }}</label>
           <input
             class="min-h-11 w-full min-w-0 max-w-full rounded-xl border border-line bg-[#171419] px-3 py-2.5 text-base text-ink placeholder:text-muted/60 transition-colors focus:border-accent"
             id="scoreTeam"
@@ -82,9 +92,9 @@
           />
         </div>
         <div>
-          <label for="scoreOpponent" class="block text-sm font-medium text-ink mb-1"
-            >Score tegenstander</label
-          >
+          <label for="scoreOpponent" class="block text-sm font-medium text-ink mb-1">{{
+            i18n.t('Score tegenstander')
+          }}</label>
           <input
             class="min-h-11 w-full min-w-0 max-w-full rounded-xl border border-line bg-[#171419] px-3 py-2.5 text-base text-ink placeholder:text-muted/60 transition-colors focus:border-accent"
             id="scoreOpponent"
@@ -97,7 +107,9 @@
       </div>
 
       <div class="mb-4">
-        <label class="block text-sm font-medium text-ink mb-2">Spelers die speelden</label>
+        <label class="block text-sm font-medium text-ink mb-2">{{
+          i18n.t('Spelers die speelden')
+        }}</label>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pr-1">
           @for (p of players() || []; track p.id) {
             <label
@@ -109,22 +121,24 @@
                 [checked]="isPlayerSelected(p.id!)"
                 (change)="onTogglePlayer(p.id!, $any($event.target).checked)"
               />
-              <span class="text-sm">{{ p.number }} - {{ p.name }}</span>
+              <span class="text-sm">{{ i18n.number(p.number) }} - {{ p.name }}</span>
             </label>
           }
         </div>
-        <p class="text-xs text-muted mt-1">Selecteer de spelers die hebben meegedaan.</p>
+        <p class="text-xs text-muted mt-1">
+          {{ i18n.t('Selecteer de spelers die hebben meegedaan.') }}
+        </p>
       </div>
 
       <div>
         <div class="flex items-center justify-between mb-2">
-          <label class="block text-sm font-medium text-ink">Goals en assists</label>
+          <label class="block text-sm font-medium text-ink">{{ i18n.t('Goals en assists') }}</label>
           <button
             (click)="addEvent()"
             class="min-h-11 rounded-xl border border-accent/40 bg-accent/10 px-3 py-2 text-sm font-semibold text-ink hover:bg-accent/20"
             type="button"
           >
-            Toevoegen
+            {{ i18n.t('Toevoegen') }}
           </button>
         </div>
 
@@ -136,23 +150,23 @@
             >
               <div class="sm:col-span-6">
                 <app-select-field
-                  label="Speler"
+                  [label]="i18n.t('Speler')"
                   formControlName="playerId"
                   [options]="playerOptions()"
                 ></app-select-field>
                 @if (ctrl.get('playerId')?.touched && ctrl.get('playerId')?.invalid) {
                   <p class="text-red-300 text-sm" role="alert">
-                    Selecteer een speler of verwijder deze regel.
+                    {{ i18n.t('Selecteer een speler of verwijder deze regel.') }}
                   </p>
                 }
               </div>
               <div class="sm:col-span-3">
                 <app-select-field
-                  label="Gebeurtenis"
+                  [label]="i18n.t('Gebeurtenis')"
                   formControlName="type"
                   [options]="[
-                    { value: 'goal', label: 'Goal' },
-                    { value: 'assist', label: 'Assist' },
+                    { value: 'goal', label: i18n.t('Goal') },
+                    { value: 'assist', label: i18n.t('Assist') },
                   ]"
                 ></app-select-field>
               </div>
@@ -162,7 +176,7 @@
                   (click)="removeEvent(i)"
                   class="min-h-11 rounded-lg px-3 py-2 text-sm text-red-300 hover:bg-accent/10"
                 >
-                  Verwijder
+                  {{ i18n.t('Verwijder') }}
                 </button>
               </div>
             </div>
@@ -177,14 +191,14 @@
       <a
         class="rounded-xl border border-line px-3 py-2 text-center text-sm font-semibold text-muted hover:bg-white/5"
         routerLink="/games"
-        >Annuleren</a
+        >{{ i18n.t('Annuleren') }}</a
       >
       <button
         class="rounded-xl border border-red-500 bg-red-600 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-red-500"
         [disabled]="saving || selectedSeason() === 'previous-season'"
         type="submit"
       >
-        {{ saving ? 'Opslaan…' : 'Opslaan' }}
+        {{ saving ? i18n.t('Opslaan…') : i18n.t('Opslaan') }}
       </button>
     </div>
   </form>

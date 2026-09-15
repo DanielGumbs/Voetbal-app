@@ -1,6 +1,8 @@
 @if (user(); as u) {
-  <p>Ingelogd als {{ u.displayName }}</p>
-  <button class="mt-5 inline-block font-bold text-accent" (click)="logout()">Uitloggen</button>
+  <p>{{ i18n.t('Ingelogd als') }} {{ u.displayName }}</p>
+  <button class="mt-5 inline-block font-bold text-accent" (click)="logout()">
+    {{ i18n.t('Uitloggen') }}
+  </button>
 } @else {
   <button
     class="inline-flex min-h-11 items-center justify-center rounded-xl bg-accent px-4 py-2 text-sm font-bold text-white"
@@ -17,9 +19,9 @@
       aria-hidden="true"
     >
       <path d="M20 12h-8m8 0c0 5-3 8-8 8a8 8 0 1 1 5-14" /></svg
-    >{{ signingIn() ? 'Inloggen…' : 'Doorgaan met Google' }}
+    >{{ signingIn() ? i18n.t('Inloggen…') : i18n.t('Doorgaan met Google') }}
   </button>
-  @if (error()) {
-    <p role="alert" class="mt-3 text-sm text-red-300">{{ error() }}</p>
-  }
+}
+@if (error()) {
+  <p role="alert" class="mt-3 text-sm text-red-300">{{ i18n.t(error()) }}</p>
 }

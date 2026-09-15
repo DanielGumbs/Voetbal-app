@@ -1,12 +1,8 @@
+import { inject } from '@angular/core';
+import { TranslationService } from '../../i18n/translation.service';
 import { Component, Signal, signal } from '@angular/core';
 
-import {
-  Auth,
-  signIn,
-  signOut,
-  user,
-  User,
-} from '../../services/supabase';
+import { Auth, signIn, signOut, user, User } from '../../services/supabase';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 
@@ -17,6 +13,7 @@ import { Router } from '@angular/router';
   templateUrl: './login.html',
 })
 export class LoginComponent {
+  readonly i18n = inject(TranslationService);
   user!: Signal<User | null | undefined>;
   readonly signingIn = signal(false);
   readonly error = signal('');
@@ -36,9 +33,7 @@ export class LoginComponent {
       await signIn(this.auth);
       await this.router.navigateByUrl('/games', { replaceUrl: true });
     } catch (err) {
-      this.error.set(
-        'Inloggen is niet gelukt. Probeer opnieuw met Google.',
-      );
+      this.error.set('Inloggen is niet gelukt. Probeer opnieuw met Google.');
       console.error('Login error:', err);
     } finally {
       this.signingIn.set(false);
@@ -49,6 +44,7 @@ export class LoginComponent {
     try {
       await signOut(this.auth);
     } catch (err) {
+      this.error.set('Uitloggen is niet gelukt. Probeer opnieuw.');
       console.error('Logout error:', err);
     }
   }

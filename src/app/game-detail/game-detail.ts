@@ -1,5 +1,6 @@
+import { inject } from '@angular/core';
+import { TranslationService } from '../../i18n/translation.service';
 import { Component, computed, Signal } from '@angular/core';
-import { DatePipe } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Game, GameService } from '../../services/game.service';
 import { map } from 'rxjs/operators';
@@ -10,10 +11,11 @@ import { Player, PlayerService } from '../../services/player.service';
   selector: 'app-game-detail',
   host: { class: 'flex min-h-0 min-w-0 flex-1 flex-col [&>*]:shrink-0' },
   standalone: true,
-  imports: [DatePipe, RouterLink],
+  imports: [RouterLink],
   templateUrl: './game-detail.html',
 })
 export class GameDetailComponent {
+  readonly i18n = inject(TranslationService);
   game!: Signal<Game | undefined | null>;
   players!: Signal<Player[] | undefined>;
   goals = computed(() => (this.game()?.events ?? []).filter((e) => e.type === 'goal'));

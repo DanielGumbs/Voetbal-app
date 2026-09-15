@@ -1,3 +1,4 @@
+import { TranslationService } from '../../i18n/translation.service';
 import { SelectField } from '../select-field/select-field';
 import { SeasonSelector } from '../season-selector/season-selector';
 import { Component, computed, effect, inject, Signal } from '@angular/core';
@@ -17,6 +18,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
   templateUrl: './create-game.html',
 })
 export class CreateGame {
+  readonly i18n = inject(TranslationService);
   seasons = inject(SeasonService);
   selectedSeason = toSignal(this.seasons.selected, { requireSync: true });
   saving = false;
@@ -24,7 +26,7 @@ export class CreateGame {
   form!: FormGroup;
   players!: Signal<Player[] | undefined>;
   playerOptions = computed(() => [
-    { value: '', label: 'Selecteer speler' },
+    { value: '', label: this.i18n.t('Selecteer speler') },
     ...(this.players() ?? []).map((p) => ({ value: p.id!, label: p.number + ' - ' + p.name })),
   ]);
 

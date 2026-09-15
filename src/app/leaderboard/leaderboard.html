@@ -2,9 +2,11 @@
   class="mb-3 grid shrink-0 grid-cols-[minmax(0,1fr)_auto] auto-rows-[44px] items-center gap-3 max-[359px]:grid-cols-1 [&>div]:min-w-0 [&_h1]:text-[23px] [&_h1]:font-extrabold [&_h1]:leading-tight [&_h1]:tracking-tight sm:[&_h1]:text-[26px] [&_p]:hidden"
 >
   <div>
-    <p class="mb-2 text-[10px] font-extrabold tracking-[2px] text-accent">ELKE BIJDRAGE TELT</p>
-    <h1>Statistieken<span class="text-accent">.</span></h1>
-    <p class="mt-2 text-sm text-muted">De spelers achter de cijfers.</p>
+    <p class="mb-2 text-[10px] font-extrabold tracking-[2px] text-accent">
+      {{ i18n.t('ELKE BIJDRAGE TELT') }}
+    </p>
+    <h1>{{ i18n.t('Statistieken') }}<span class="text-accent">.</span></h1>
+    <p class="mt-2 text-sm text-muted">{{ i18n.t('De spelers achter de cijfers.') }}</p>
   </div>
   @if (admin.isAdmin()) {
     <span aria-hidden="true" class="hidden max-[359px]:block"></span>
@@ -16,32 +18,40 @@
     (ngModelChange)="setLeagueFilter($event)"
     [ngModel]="leagueFilter()"
     [options]="[
-      { value: 'all', label: 'Alle competities' },
-      { value: 'competitie', label: 'Competitie' },
-      { value: 'beker', label: 'Beker' },
+      { value: 'all', label: i18n.t('Alle competities') },
+      { value: 'competitie', label: i18n.t('Competitie') },
+      { value: 'beker', label: i18n.t('Beker') },
     ]"
-    label="Competitie"
+    [label]="i18n.t('Competitie')"
   ></app-select-field>
 </div>
 @if (filteredGames()?.length) {
   <div
-    aria-label="Rangschikking"
+    [attr.aria-label]="i18n.t('Rangschikking')"
     class="flex max-w-[430px] shrink-0 gap-1 rounded-xl bg-[#211c23] p-1 [&_button]:min-h-10 [&_button]:flex-1 [&_button]:rounded-lg [&_button]:p-2 [&_button]:text-sm [&_button]:font-bold [&_button]:text-muted [&_button[aria-pressed=true]]:bg-accent/15 [&_button[aria-pressed=true]]:text-white"
   >
-    <button (click)="selectTab('total')" [attr.aria-pressed]="tab() === 'total'">Totaal</button>
-    <button (click)="selectTab('goals')" [attr.aria-pressed]="tab() === 'goals'">Goals</button>
+    <button (click)="selectTab('total')" [attr.aria-pressed]="tab() === 'total'">
+      {{ i18n.t('Totaal') }}
+    </button>
+    <button (click)="selectTab('goals')" [attr.aria-pressed]="tab() === 'goals'">
+      {{ i18n.t('Goals') }}
+    </button>
     <button (click)="selectTab('assists')" [attr.aria-pressed]="tab() === 'assists'">
-      Assists
+      {{ i18n.t('Assists') }}
     </button>
   </div>
 }
 <div
   class="my-2 flex shrink-0 items-center justify-between [&_h2]:text-sm [&_h2]:font-bold [&>span]:text-xs [&>span]:text-muted"
 >
-  <h2>Spelersranglijst</h2>
+  <h2>{{ i18n.t('Spelersranglijst') }}</h2>
   @if (filteredGames()?.length) {
     <span>{{
-      tab() === 'total' ? 'Goals + assists' : tab() === 'goals' ? 'Goals' : 'Assists'
+      tab() === 'total'
+        ? i18n.t('Goals + assists')
+        : tab() === 'goals'
+          ? i18n.t('Goals')
+          : i18n.t('Assists')
     }}</span>
   }
 </div>
@@ -50,24 +60,24 @@
     class="col-span-full shrink-0 rounded-2xl border border-line bg-surface px-4 py-6 text-center text-sm text-muted [&_h2]:mb-2 [&_h2]:mt-3 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-ink"
     role="status"
   >
-    Statistieken laden…
+    {{ i18n.t('Statistieken laden…') }}
   </div>
 } @else if (filteredGames()?.length === 0) {
   <div
     class="col-span-full shrink-0 rounded-2xl border border-line bg-surface px-4 py-6 text-center text-sm text-muted [&_h2]:mb-2 [&_h2]:mt-3 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-ink"
   >
     <div aria-hidden="true" class="text-[32px]">⚽</div>
-    <h2>Klaar voor de aftrap</h2>
-    <p>Er zijn nog geen wedstrijden voor deze selectie.</p>
+    <h2>{{ i18n.t('Klaar voor de aftrap') }}</h2>
+    <p>{{ i18n.t('Er zijn nog geen wedstrijden voor deze selectie.') }}</p>
     @if (admin.isAdmin()) {
-      <a class="mt-5 inline-block font-bold text-accent" routerLink="/games/new"
-        >Voeg de eerste wedstrijd toe →</a
-      >
+      <a class="mt-5 inline-block font-bold text-accent" routerLink="/games/new">{{
+        i18n.t('Voeg de eerste wedstrijd toe →')
+      }}</a>
     }
   </div>
 } @else {
   <div
-    aria-label="Spelersranglijst"
+    [attr.aria-label]="i18n.t('Spelersranglijst')"
     class="min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain rounded-2xl border border-line bg-surface [scrollbar-width:thin]"
     role="region"
     tabindex="0"
@@ -77,22 +87,25 @@
         [attr.data-leader]="i === 0 && s.goals + s.assists > 0"
         class="group flex items-center gap-2.5 border-b border-line px-2.5 py-3 last:border-0 data-[leader=true]:bg-gradient-to-r data-[leader=true]:from-[#481d29] data-[leader=true]:to-surface"
       >
-        <span class="min-w-4 text-xs font-bold text-[#8b94a2]">{{ i + 1 }}</span
+        <span class="min-w-4 text-xs font-bold text-[#8b94a2]">{{ i18n.number(i + 1) }}</span
         ><span
           class="grid h-[34px] w-[35px] shrink-0 place-items-center rounded-lg bg-[#332730] text-sm font-extrabold text-[#e6b9c1] group-data-[leader=true]:bg-[#d52c3b] group-data-[leader=true]:text-white"
-          >{{ s.player.number }}</span
+          >{{ i18n.number(s.player.number) }}</span
         >
         <div
           class="min-w-0 flex-1 [&_h3]:text-[13px] [&_h3]:font-bold [&_p]:mt-1 [&_p]:text-[10px] [&_p]:text-muted [&_span]:px-px"
         >
           <h3>{{ s.player.name }}</h3>
           <p>
-            {{ s.games }} wedstrijden <span>·</span> {{ s.goals }} goals <span>·</span>
-            {{ s.assists }} assists
+            {{ i18n.number(s.games) }} {{ i18n.t('wedstrijden') }} <span>·</span>
+            {{ i18n.number(s.goals) }} {{ i18n.t('goals') }} <span>·</span>
+            {{ i18n.number(s.assists) }} {{ i18n.t('assists') }}
           </p>
         </div>
         <strong class="shrink-0 text-[21px] font-bold tracking-tight">{{
-          tab() === 'total' ? s.goals + s.assists : tab() === 'goals' ? s.goals : s.assists
+          i18n.number(
+            tab() === 'total' ? s.goals + s.assists : tab() === 'goals' ? s.goals : s.assists
+          )
         }}</strong>
       </div>
     } @empty {
@@ -100,8 +113,8 @@
         class="col-span-full shrink-0 rounded-2xl border border-line bg-surface px-4 py-6 text-center text-sm text-muted [&_h2]:mb-2 [&_h2]:mt-3 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-ink"
       >
         <div aria-hidden="true" class="text-[32px]">☆</div>
-        <h2>Een nieuw begin</h2>
-        <p>De spelers en hun prestaties verschijnen hier.</p>
+        <h2>{{ i18n.t('Een nieuw begin') }}</h2>
+        <p>{{ i18n.t('De spelers en hun prestaties verschijnen hier.') }}</p>
       </div>
     }
   </div>

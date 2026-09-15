@@ -32,6 +32,7 @@ describe('Navbar access', () => {
           },
         ],
       });
+      localStorage.setItem('voetbal.language', 'nl');
       const fixture = TestBed.createComponent(Navbar);
       fixture.detectChanges();
       expect(fixture.nativeElement.querySelector('nav a[href="/games"]')?.textContent).toContain(

@@ -68,6 +68,10 @@ git switch main
 
 De scripts `copy-production-to-test.cjs` en `configure-test-auth.cjs` betreffen uitsluitend het oude Firebase-testproject; ze configureren of vullen Supabase niet.
 
+## Taalkeuze
+
+De vertaalbasis biedt Nederlands en Engels via **Instellingen / Settings**. Zie [taalgedrag, backendmigratie en verificatie](docs/i18n.md). Voor profielopslag moet de nieuwe Supabase-migratie in development worden uitgevoerd; Firebase-regels volgen de bestaande productieprocedure.
+
 ## Techniek
 
 Angular 21, TypeScript 5.9, Tailwind-utilities en officiële Firebase- en Supabase-SDK's. De clubkleuren staan in `tailwind.config.js`. Elke build bevat alleen zijn eigen backend. Lokale back-ups en deploymentcache staan buiten Git.
