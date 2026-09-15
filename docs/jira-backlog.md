@@ -1,6 +1,24 @@
 # Epic: Meerdere teams, wedstrijdregistratie en tweetalige chat
 
-Onderzocht op 15 september 2026. Dit is de volledige Jira-fallbackbacklog; er zijn geen Jira-issues aangemaakt. Pluginzoekopdracht `Jira` gaf geen beschikbare koppeling. Voor synchronisatie zijn een Jira-koppeling, site/project-key en rechten voor epic-, issue- en linkbeheer nodig. Er zijn geen bestaande issue-keys meegegeven. De oorspronkelijke opdracht buiten dit gesprek is niet beschikbaar; alle hier aangeleverde eisen zijn hieronder opgenomen.
+Onderzocht op 15 september 2026. De epic en negen issues zijn op dezelfde dag via de ingelogde Chrome-sessie aangemaakt in Jira-project VOET. Een Jira-connector is niet beschikbaar; beheer kan via de browser. Dit document bewaart de volledige onderzoeksbasis. De oorspronkelijke opdracht buiten dit gesprek is niet beschikbaar; alle hier aangeleverde eisen zijn hieronder opgenomen.
+
+## Jira-koppeling en uitvoervolgorde
+
+Epic: [VOET-1 — Meerdere teams, wedstrijdregistratie en tweetalige chat](https://danielrgumbs.atlassian.net/browse/VOET-1).
+
+| Volgorde | Backlogreferentie | Jira | Branch bij featurestart |
+| --- | --- | --- | --- |
+| 1 | FEATURE-01 | [VOET-2 — Projectonderzoek](https://danielrgumbs.atlassian.net/browse/VOET-2) | `codex/VOET-2-projectonderzoek` |
+| 2 | FEATURE-09 | [VOET-3 — Nederlandse en Engelse vertaalbasis](https://danielrgumbs.atlassian.net/browse/VOET-3) | `codex/VOET-3-nederlands-engels` |
+| 3 | FEATURE-02 | [VOET-4 — Teams en teamtoegang](https://danielrgumbs.atlassian.net/browse/VOET-4) | `codex/VOET-4-meerdere-teams` |
+| 4 | FEATURE-03 | [VOET-5 — Seizoenen, selecties en bijnamen](https://danielrgumbs.atlassian.net/browse/VOET-5) | `codex/VOET-5-seizoenen-selecties` |
+| 5 | FEATURE-04 | [VOET-6 — Gebeurtenissen en kaarten](https://danielrgumbs.atlassian.net/browse/VOET-6) | `codex/VOET-6-wedstrijdgebeurtenissen` |
+| 6 | FEATURE-05 | [VOET-7 — Tweetalige chatinvoer](https://danielrgumbs.atlassian.net/browse/VOET-7) | `codex/VOET-7-chatinvoer` |
+| 7 | FEATURE-06 | [VOET-8 — Chatcorrecties](https://danielrgumbs.atlassian.net/browse/VOET-8) | `codex/VOET-8-chatcorrecties` |
+| 8 | FEATURE-07 | [VOET-9 — Statistieken](https://danielrgumbs.atlassian.net/browse/VOET-9) | `codex/VOET-9-statistieken` |
+| 9 | FEATURE-08 | [VOET-10 — Beheer, export en oplevering](https://danielrgumbs.atlassian.net/browse/VOET-10) | `codex/VOET-10-beheer-export-oplevering` |
+
+Alle negen stories hebben VOET-1 als parent. Afhankelijkheden staan expliciet in de issuebeschrijvingen; nog geen afzonderlijke Jira-blocks-links aangemaakt. De oorspronkelijke FEATURE-nummers hieronder blijven stabiele documentreferenties. De bestaande gepushte onderzoeksbranch `codex/feature-01-projectonderzoek` blijft behouden; bovenstaande nieuwe branchnamen zijn nog niet aangemaakt. Volgende branches ontstaan pas bij featurestart vanaf dan actuele main, na merge van de voorganger.
 
 ## Baseline en werkwijze
 
