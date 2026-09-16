@@ -7,6 +7,8 @@ import { RouterLink } from '@angular/router';
 import { Game, GameService, LeagueType } from '../../services/game.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { AdminService } from '../../services/admin.service';
+import { TeamService } from '../../services/team.service';
+import { SeasonService, LEGACY_SEASON } from '../../services/season.service';
 
 @Component({
   selector: 'app-game-list',
@@ -18,6 +20,9 @@ import { AdminService } from '../../services/admin.service';
 export class GameList {
   games!: Signal<Game[] | undefined>;
   readonly admin = inject(AdminService);
+  readonly team = inject(TeamService).currentTeam;
+  readonly season = toSignal(inject(SeasonService).selected, { requireSync: true });
+  readonly needsSeason = computed(() => this.season() === LEGACY_SEASON);
   readonly leagues = signal<(LeagueType | 'all')[]>(['all', 'competitie', 'beker']);
   readonly selectedLeague = signal<LeagueType | 'all'>('all');
   readonly filteredSortedGames = computed(() => {

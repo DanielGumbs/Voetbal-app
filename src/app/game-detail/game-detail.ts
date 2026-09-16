@@ -1,4 +1,5 @@
-import { Component, computed, Signal } from '@angular/core';
+import { Component, computed, inject, Signal } from '@angular/core';
+import { TeamService } from '../../services/team.service';
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Game, GameService } from '../../services/game.service';
@@ -14,6 +15,7 @@ import { Player, PlayerService } from '../../services/player.service';
   templateUrl: './game-detail.html',
 })
 export class GameDetailComponent {
+  readonly team = inject(TeamService).currentTeam;
   game!: Signal<Game | undefined | null>;
   players!: Signal<Player[] | undefined>;
   goals = computed(() => (this.game()?.events ?? []).filter((e) => e.type === 'goal'));

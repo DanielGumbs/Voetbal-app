@@ -8,6 +8,11 @@ module.exports = {
         accent: '#f04455',
         line: '#363039',
         surface: '#201d23',
+        action: {
+          DEFAULT: '#db3047',
+          hover: '#ef4056',
+          pressed: '#c8243b',
+        },
       },
     },
   },

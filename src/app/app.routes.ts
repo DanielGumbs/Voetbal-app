@@ -4,6 +4,10 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'games' },
   {
+    path: 'teams',
+    loadComponent: () => import('./team-manager/team-manager').then((m) => m.TeamManager),
+  },
+  {
     path: 'games',
     loadComponent: () => import('./game-list/game-list').then((m) => m.GameList),
   },

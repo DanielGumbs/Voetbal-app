@@ -2,6 +2,7 @@ import { SelectField } from '../select-field/select-field';
 import { SeasonSelector } from '../season-selector/season-selector';
 import { Component, computed, effect, inject, Signal } from '@angular/core';
 import { competitionId, SeasonService } from '../../services/season.service';
+import { TeamService } from '../../services/team.service';
 
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -17,6 +18,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
   templateUrl: './create-game.html',
 })
 export class CreateGame {
+  readonly team = inject(TeamService).currentTeam;
   seasons = inject(SeasonService);
   selectedSeason = toSignal(this.seasons.selected, { requireSync: true });
   saving = false;
@@ -100,6 +102,11 @@ export class CreateGame {
 
   async submit() {
     if (this.saving) return;
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      this.error = 'Controleer de gemarkeerde velden.';
+      return;
+    }
     type EventForm = { playerId: string; type: 'goal' | 'assist' };
     type CreateGameForm = {
       opponent: string;

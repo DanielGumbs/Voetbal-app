@@ -5,7 +5,16 @@ import { Observable } from 'rxjs';
 
 export { GoogleAuthProvider, signInWithPopup, signOut, getAuth } from 'firebase/auth';
 export type { User } from 'firebase/auth';
-export { Firestore, collection, doc, addDoc, writeBatch, getFirestore } from 'firebase/firestore';
+export {
+  Firestore,
+  collection,
+  doc,
+  addDoc,
+  setDoc,
+  runTransaction,
+  writeBatch,
+  getFirestore,
+} from 'firebase/firestore';
 export type Auth = FirebaseAuth;
 export const Auth = new InjectionToken<FirebaseAuth>('Firebase Auth');
 

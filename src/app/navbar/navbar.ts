@@ -4,11 +4,12 @@ import { Component, Signal, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Auth, signOut, user, User } from '../../services/supabase';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { TeamSelector } from '../team-selector/team-selector';
 
 @Component({
   selector: 'app-navbar',
   host: { class: 'contents' },
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, TeamSelector],
   templateUrl: './navbar.html',
 })
 export class Navbar {

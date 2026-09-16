@@ -120,8 +120,25 @@ export class Database {
     if (error) throw error;
     return data as { id: string };
   }
-  async addSeason(name: string): Promise<string> {
-    const { data, error } = await this.client.rpc('add_season', { season_name: name });
+  async saveTeam(id: string, value: { name: string; logoUrl: string | null }): Promise<void> {
+    // Updating only editable columns keeps team IDs immutable at the database.
+    const update = () => this.client.from('teams').update(value).eq('id', id).select('id');
+    const updated = await update();
+    if (updated.error) throw updated.error;
+    if (updated.data?.length) return;
+    const inserted = await this.client.from('teams').insert({ id, ...value });
+    if (!inserted.error) return;
+    if (inserted.error.code !== '23505') throw inserted.error;
+    // Another admin may have saved a previously virtual built-in team first.
+    const retried = await update();
+    if (retried.error) throw retried.error;
+    if (!retried.data?.length) throw inserted.error;
+  }
+  async addSeason(name: string, teamId = 'vedette'): Promise<string> {
+    const { data, error } = await this.client.rpc('add_season', {
+      season_name: name,
+      team_id: teamId,
+    });
     if (error) throw error;
     return data as string;
   }

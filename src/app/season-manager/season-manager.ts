@@ -5,6 +5,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { AdminService } from '../../services/admin.service';
 import { SeasonService, LEGACY_SEASON } from '../../services/season.service';
 import { PlayerService } from '../../services/player.service';
+import { TeamService } from '../../services/team.service';
 @Component({
   selector: 'app-season-manager',
   host: { class: 'flex min-h-0 min-w-0 flex-1 flex-col [&>*]:shrink-0' },
@@ -15,6 +16,9 @@ import { PlayerService } from '../../services/player.service';
     >
       <span>Seizoenen beheren<span class="text-accent">.</span></span>
     </h1>
+    <p class="mb-3 text-sm text-muted">
+      Seizoenen en spelers van <strong class="text-ink">{{ team().name }}</strong>
+    </p>
     <div class="mb-3 flex shrink-0 items-center gap-3 [&_label]:text-xs [&_label]:text-muted">
       <label>Seizoen</label><app-season-selector></app-season-selector>
     </div>
@@ -38,14 +42,14 @@ import { PlayerService } from '../../services/player.service';
             />
             <button
               [disabled]="busy || !name.trim()"
-              class="min-h-11 rounded-xl border border-red-500 bg-red-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-red-500 disabled:opacity-50"
+              class="inline-flex min-h-11 items-center justify-center rounded-xl bg-action px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-action-hover active:bg-action-pressed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-action focus-visible:ring-offset-2 focus-visible:ring-offset-surface disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-action disabled:active:bg-action"
             >
               Seizoen toevoegen
             </button>
           </form>
           <p class="text-sm text-muted">
-            Een nieuw seizoen krijgt een competitie en beker. Bestaande statistieken blijven bij het
-            vorige seizoen.
+            Voeg een seizoen toe voor {{ team().name }}. Competitie en beker staan daarna voor je
+            klaar.
           </p>
           @if (selected() !== legacy) {
             <h2 class="mt-6 border-t border-line pt-5 font-semibold text-red-300">
@@ -82,7 +86,7 @@ import { PlayerService } from '../../services/player.service';
               >
               <button
                 [disabled]="busy || !playerName.trim() || number === null || (!league && !cup)"
-                class="min-h-11 rounded-xl border border-red-500 bg-red-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-red-500 disabled:opacity-50"
+                class="inline-flex min-h-11 items-center justify-center rounded-xl bg-action px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-action-hover active:bg-action-pressed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-action focus-visible:ring-offset-2 focus-visible:ring-offset-surface disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-action disabled:active:bg-action"
               >
                 Speler toevoegen
               </button>
@@ -113,6 +117,7 @@ import { PlayerService } from '../../services/player.service';
     </section>`,
 })
 export class SeasonManager {
+  readonly team = inject(TeamService).currentTeam;
   seasons = inject(SeasonService);
   admin = inject(AdminService);
   playerService = inject(PlayerService);

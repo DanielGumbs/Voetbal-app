@@ -1,0 +1,281 @@
+<div
+  class="flex min-h-0 w-full flex-1 flex-col overflow-hidden pt-[5px] sm:pt-2.5 [&_button]:touch-manipulation [&_button]:[-webkit-tap-highlight-color:transparent] [&_button]:transition-colors [&_button]:duration-[140ms] motion-reduce:[&_button]:transition-none [&_button:focus-visible]:outline [&_button:focus-visible]:outline-2 [&_button:focus-visible]:outline-accent [&_button:focus-visible]:outline-offset-[3px] [&_input:focus-visible]:outline [&_input:focus-visible]:outline-2 [&_input:focus-visible]:outline-accent [&_input:focus-visible]:outline-offset-[3px] [&_button:disabled]:opacity-50 [&_button:disabled]:cursor-wait"
+>
+  <header class="mb-[23px] grid shrink-0 grid-cols-[minmax(0,1fr)_auto] items-end gap-x-3 px-0.5 sm:mb-[30px]">
+    <div>
+      <p class="mb-2 text-[9px] font-extrabold tracking-[1.6px] text-[#ee8894]">
+        DE CLUB, BINNEN HANDBEREIK
+      </p>
+      <h1 class="text-[clamp(30px,5vw,40px)] font-[850] leading-[1.15] tracking-[-1.3px]">
+        Jouw teams<span class="text-accent">.</span>
+      </h1>
+    </div>
+    @if (admin.isAdmin()) {
+      <button
+        (click)="edit()"
+        [disabled]="saving()"
+        aria-label="Team toevoegen"
+        class="inline-flex min-h-11 min-w-11 items-center justify-center gap-2 whitespace-nowrap rounded-[11px] bg-action px-3 py-2.5 text-center text-xs font-[750] text-white shadow-[0_3px_15px_#bd233222] hover:bg-action-hover active:bg-action-pressed"
+        title="Team toevoegen"
+        type="button"
+      >
+        Nieuw team
+      </button>
+    }
+    <p class="col-span-full mt-[11px] text-[13px] leading-[1.7] text-muted">
+      Een eigen plek voor ieder team. Kies welk team je volgt.
+    </p>
+  </header>
+
+  <div
+    [attr.data-editing]="editorOpen() && admin.isAdmin()"
+    class="group/team-content flex min-h-0 flex-1 flex-col overflow-hidden px-0.5 data-[editing=true]:block data-[editing=true]:overflow-y-auto [scrollbar-width:thin] [scrollbar-color:#79323e_#201d23]"
+  >
+    @if (success()) {
+      <p
+        class="my-4 flex items-center justify-start gap-3 rounded-[11px] border border-[#335b43] bg-[#163a2733] px-[15px] py-[13px] text-xs leading-[1.6] text-[#b6eac8] [overflow-wrap:anywhere]"
+        role="status"
+      >
+        <span aria-hidden="true">✓</span> {{ success() }}
+      </p>
+    }
+    @if (teams.error()) {
+      <div
+        class="my-4 flex flex-wrap items-center justify-between gap-3 rounded-[11px] border border-[#7b3343] bg-[#a3203520] px-[15px] py-[13px] text-xs leading-[1.6] text-[#ffb3bc] [overflow-wrap:anywhere] sm:flex-nowrap"
+        role="alert"
+      >
+        <p>{{ teams.error() }}</p>
+        <button
+          (click)="teams.reload()"
+          class="min-h-11 shrink-0 font-bold underline hover:text-white"
+          type="button"
+        >
+          Opnieuw laden
+        </button>
+      </div>
+    }
+
+    @if (editorOpen() && admin.isAdmin()) {
+      <section
+        #editorPanel
+        aria-labelledby="editor-title"
+        class="rounded-[18px] border border-[#67414f] bg-[#241f28] px-[15px] py-[18px] sm:p-[22px]"
+      >
+        <div class="mb-[23px] flex items-center justify-between">
+          <div>
+            <p class="mb-2 text-[9px] font-extrabold tracking-[1.6px] text-[#ee8894]">TEAMGEGEVENS</p>
+            <h2 class="text-xl font-[750]" id="editor-title">
+              {{ editingId() ? 'Maak het jouw team' : 'Een nieuw team' }}
+            </h2>
+          </div>
+          <button
+            (click)="closeEditor()"
+            [disabled]="saving()"
+            aria-label="Teamformulier sluiten"
+            class="min-h-11 min-w-11 shrink-0 rounded-[10px] text-[27px] text-[#c7bfcd] hover:bg-[#ffffff09]"
+            type="button"
+          >
+            ×
+          </button>
+        </div>
+        <form (ngSubmit)="save()" [attr.aria-busy]="saving() || readingLogo()">
+          <div class="grid grid-cols-1 gap-[22px] sm:grid-cols-[1fr_1.25fr] sm:gap-[25px]">
+            <div>
+            <span class="mb-2.5 block text-xs font-[750] text-[#ddd8e2]" id="logo-field-label"
+            >Teamlogo</span
+            >
+              <div class="flex items-center gap-3 rounded-2xl border border-line bg-[#18151c]/60 p-3">
+                <app-team-badge
+                  [logoUrl]="logoUrl()"
+                  [name]="name || 'FC'"
+                  class="!size-24 !rounded-2xl shadow-sm shadow-black/20"
+                />
+                <div class="flex min-w-0 flex-1 flex-col gap-2">
+                  <label
+                    [attr.data-disabled]="saving() || readingLogo()"
+                    class="relative inline-flex min-h-11 w-full cursor-pointer touch-manipulation items-center justify-center rounded-xl bg-action px-3 py-2.5 text-center text-xs font-semibold leading-snug text-white shadow-sm shadow-black/10 transition-colors duration-[140ms] [-webkit-tap-highlight-color:transparent] hover:bg-action-hover active:bg-action-pressed focus-within:outline focus-within:outline-2 focus-within:outline-accent focus-within:outline-offset-[3px] data-[disabled=true]:pointer-events-none data-[disabled=true]:cursor-wait data-[disabled=true]:opacity-50 motion-reduce:transition-none"
+                  >
+                    {{
+                      readingLogo() ? 'Logo verwerken…' : logoUrl() ? 'Logo wijzigen' : 'Logo kiezen'
+                    }}
+                    <input
+                      (change)="chooseLogo($event)"
+                      [disabled]="saving() || readingLogo()"
+                      accept="image/jpeg,image/png,image/webp"
+                      aria-describedby="logo-help"
+                      aria-labelledby="logo-field-label"
+                      class="absolute inset-0 size-full cursor-pointer opacity-0"
+                      type="file"
+                    />
+                  </label>
+                  @if (logoUrl()) {
+                    <button
+                      (click)="removeLogo()"
+                      [disabled]="saving() || readingLogo()"
+                      class="inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-[#51404b] bg-[#28212a] px-3 py-2.5 text-center text-xs font-medium leading-snug text-[#e6b9c1] hover:border-accent/50 hover:bg-accent/10 hover:text-white active:bg-accent/15 disabled:pointer-events-none"
+                      type="button"
+                    >
+                      Logo verwijderen
+                    </button>
+                  }
+                </div>
+              </div>
+              <p class="mt-2.5 block text-[11px] leading-relaxed text-muted" id="logo-help">
+                JPG, PNG of WebP · maximaal 5 MB.<br/>Zonder logo tonen we de initialen van je team.
+              </p>
+            </div>
+            <div>
+              <label class="mb-2.5 block text-xs font-[750] text-[#ddd8e2]" for="team-name"
+              >Teamnaam <span aria-hidden="true" class="text-[#f97888]">*</span></label
+              ><input
+              #nameInput
+              [(ngModel)]="name"
+              [disabled]="saving()"
+              aria-describedby="team-name-help"
+              autocomplete="off"
+              class="min-h-12 w-full rounded-[11px] border border-[#564452] bg-[#18151c] px-3.5 py-3 text-base text-white placeholder:text-[#9b909f] sm:text-sm"
+              id="team-name"
+              maxlength="80"
+              name="teamName"
+              placeholder="Bijvoorbeeld IVV 2"
+              required
+              type="text"
+            />
+              <p class="mt-[9px] block text-[10px] leading-[1.7] text-[#a9a0b1]" id="team-name-help">
+                De naam verschijnt bij je wedstrijden en statistieken.
+              </p>
+            </div>
+          </div>
+          @if (formError()) {
+            <p
+              class="my-4 flex flex-wrap items-center justify-between gap-3 rounded-[11px] border border-[#7b3343] bg-[#a3203520] px-[15px] py-[13px] text-xs leading-[1.6] text-[#ffb3bc] [overflow-wrap:anywhere] sm:flex-nowrap"
+              role="alert"
+            >
+              {{ formError() }}
+            </p>
+          }
+          <div
+            class="mt-[25px] flex flex-col items-stretch justify-between gap-4 border-t border-[#44333f] pt-[18px] sm:flex-row sm:items-center"
+          >
+          <span class="block text-[10px] leading-[1.7] text-[#a9a0b1] sm:max-w-[225px]">{{
+              editingId()
+                ? 'Je wijzigingen gelden voor iedereen.'
+                : 'Wedstrijden en statistieken blijven per team gescheiden.'
+            }}</span>
+            <div class="flex justify-end gap-2">
+              <button
+                (click)="closeEditor()"
+                [disabled]="saving()"
+                class="inline-flex min-h-11 items-center justify-center gap-2 rounded-[11px] border border-[#51434e] bg-[#28232c] px-[15px] py-2.5 text-center text-xs font-[750] text-ink hover:bg-[#342b36]"
+                type="button"
+              >
+                Annuleren
+              </button
+              >
+              <button
+                [disabled]="saving() || readingLogo() || teams.loading() || !!teams.error()"
+                class="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-[11px] bg-action px-[15px] py-2.5 text-center text-xs font-[750] text-white shadow-[0_3px_15px_#bd233222] hover:bg-action-hover active:bg-action-pressed sm:flex-initial"
+                type="submit"
+              >
+                {{ saving() ? 'Opslaan…' : editingId() ? 'Wijzigingen opslaan' : 'Team toevoegen' }}
+              </button>
+            </div>
+          </div>
+        </form>
+      </section>
+    }
+
+    <div class="mb-3.5 flex shrink-0 items-center gap-2.5 group-data-[editing=true]/team-content:mt-6">
+      <h2 class="text-base font-[750]">Alle teams</h2>
+      <span class="rounded-md border border-[#403541] px-2 py-[3px] text-[10px] text-muted"
+      >{{ teams.teams().length }} {{ teams.teams().length === 1 ? 'team' : 'teams' }}</span
+      >
+    </div>
+    @if (teams.loading()) {
+      <p class="mb-3.5 shrink-0 text-xs text-muted" role="status">Teams laden…</p>
+    }
+    <div
+      [attr.aria-busy]="teams.loading()"
+      aria-label="Teamlijst"
+      class="grid min-h-0 flex-1 auto-rows-max grid-cols-1 content-start gap-[13px] overflow-y-auto overflow-x-hidden overscroll-contain p-0.5 pb-2 [scrollbar-width:thin] [scrollbar-color:#79323e_#201d23] group-data-[editing=true]/team-content:overflow-visible sm:grid-cols-2 sm:gap-4"
+      role="region"
+      tabindex="0"
+    >
+      @for (team of teams.teams(); track team.id) {
+        <article
+          [attr.data-active]="team.id === teams.currentTeam().id"
+          class="overflow-hidden rounded-[18px] border border-[#3c323f] bg-[linear-gradient(125deg,#27222b,#201d23)] px-[18px] pt-[18px] data-[active=true]:border-[#a23c4c] data-[active=true]:bg-[#251e27] data-[active=true]:bg-[radial-gradient(ellipse_at_top_right,#71283644,transparent_70%)] sm:px-5 sm:pt-[22px]"
+        >
+          <div class="flex items-start justify-between gap-2.5">
+            <app-team-badge
+              [logoUrl]="team.logoUrl"
+              [name]="team.name"
+              class="!size-[58px] !rounded-[17px] sm:!size-[66px]"
+            />
+            @if (team.id === teams.currentTeam().id) {
+              <span
+                class="flex items-center gap-[5px] rounded-[20px] border border-[#7b3846] px-2 py-[5px] text-[9px] font-[750] text-[#ff9ba6]"
+              ><span class="size-[5px] rounded-full bg-[#fc677b]"></span> Geselecteerd</span
+              >
+            } @else {
+              <span class="pt-[7px] text-[8px] font-extrabold tracking-[1px] text-[#a09aa5]"
+              >VOETBALTEAM</span
+              >
+            }
+          </div>
+          <h3
+            class="mb-1.5 mt-[15px] text-[21px] font-extrabold leading-[1.3] tracking-[-0.4px] [overflow-wrap:anywhere] sm:mt-5"
+          >
+            {{ team.name }}
+          </h3>
+          <p class="mb-[22px] text-[11px] text-[#a9a3ae]">Seizoenen, spelers & wedstrijden</p>
+          <div class="flex items-center justify-between gap-2 border-t border-[#46313e]">
+            <button
+              (click)="select(team.id)"
+              [attr.aria-label]="'Bekijk wedstrijden van ' + team.name"
+              [disabled]="saving()"
+              class="flex min-h-[54px] min-w-0 flex-1 items-center gap-2.5 text-[11px] font-[750] text-[#ff8796] hover:text-white"
+              type="button"
+            >
+              {{ team.id === teams.currentTeam().id ? 'Naar wedstrijden' : 'Bekijk team' }}
+              <svg
+                aria-hidden="true"
+                class="size-[17px] shrink-0"
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.7"
+                viewBox="0 0 24 24"
+              >
+                <path d="M6 18 18 6M6 6h12v12"/>
+              </svg>
+            </button>
+            @if (admin.isAdmin()) {
+              <button
+                (click)="edit(team)"
+                [attr.aria-label]="team.name + ' bewerken'"
+                [disabled]="saving()"
+                class="flex min-h-[54px] items-center gap-2.5 text-[11px] font-[750] text-muted hover:text-white"
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="size-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="m15 5 4 4M4 20l4-1L20 7a2.8 2.8 0 0 0-4-4L4 15v5Z"/>
+                </svg
+                >
+                <span>Bewerken</span>
+              </button>
+            }
+          </div>
+        </article>
+      }
+    </div>
+  </div>
+</div>

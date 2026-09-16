@@ -1,9 +1,14 @@
 @if (user(); as u) {
   <p>Ingelogd als {{ u.displayName }}</p>
-  <button class="mt-5 inline-block font-bold text-accent" (click)="logout()">Uitloggen</button>
+  <button
+    class="mt-5 inline-flex min-h-11 items-center justify-center rounded-xl border border-line bg-surface px-4 py-2 text-sm font-semibold text-ink transition-colors hover:bg-white/5"
+    (click)="logout()"
+  >
+    Uitloggen
+  </button>
 } @else {
   <button
-    class="inline-flex min-h-11 items-center justify-center rounded-xl bg-accent px-4 py-2 text-sm font-bold text-white"
+    class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-action px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-action-hover active:bg-action-pressed disabled:pointer-events-none disabled:opacity-50"
     (click)="login()"
     [disabled]="signingIn()"
   >

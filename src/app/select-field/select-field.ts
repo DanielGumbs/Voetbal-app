@@ -25,7 +25,7 @@ export interface SelectOption {
     <button
       #trigger
       type="button"
-      class="flex min-h-11 w-full items-center justify-between gap-2 rounded-xl border border-line bg-surface px-3 py-2 text-left text-sm text-ink disabled:opacity-50"
+      class="flex min-h-11 w-full items-center justify-between gap-2 rounded-xl border border-line bg-surface px-3 py-2 text-left text-sm text-ink transition-colors hover:bg-[#29232c] disabled:pointer-events-none disabled:opacity-50"
       [disabled]="disabled"
       [attr.aria-label]="label()"
       aria-haspopup="listbox"

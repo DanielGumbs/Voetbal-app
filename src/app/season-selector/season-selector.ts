@@ -2,7 +2,7 @@ import { SelectField } from '../select-field/select-field';
 import { Component, computed, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { SeasonService } from '../../services/season.service';
+import { SeasonService, LEGACY_SEASON } from '../../services/season.service';
 @Component({
   selector: 'app-season-selector',
   host: { class: 'inline-block min-w-0 max-w-full' },
@@ -11,6 +11,7 @@ import { SeasonService } from '../../services/season.service';
   template: `<app-select-field
     label="Seizoen"
     [options]="options()"
+    [disabled]="!list()?.length"
     [ngModel]="selected()"
     (ngModelChange)="seasons.selected.next($event)"
   ></app-select-field>`,
@@ -18,6 +19,10 @@ import { SeasonService } from '../../services/season.service';
 export class SeasonSelector {
   seasons = inject(SeasonService);
   list = toSignal(this.seasons.getSeasons());
-  options = computed(() => (this.list() ?? []).map((s) => ({ value: s.id, label: s.name })));
+  options = computed(() =>
+    this.list()?.length
+      ? this.list()!.map((s) => ({ value: s.id, label: s.name }))
+      : [{ value: LEGACY_SEASON, label: this.list() ? 'Nog geen seizoen' : 'Seizoenen laden…' }],
+  );
   selected = toSignal(this.seasons.selected, { requireSync: true });
 }

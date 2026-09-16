@@ -7,10 +7,12 @@ do $$ begin
   end if;
 end $$;
 update source_payload set data = raw::jsonb;
-create temp table import_seasons (like public.seasons) on commit drop;
-create temp table import_competitions (like public.competitions) on commit drop;
-create temp table import_players (like public.players) on commit drop;
-create temp table import_games (like public.games) on commit drop;
+-- This importer handles the original Vedette export. Copy column defaults so the
+-- new NOT NULL teamId field receives 'vedette', matching the live destination row.
+create temp table import_seasons (like public.seasons including defaults) on commit drop;
+create temp table import_competitions (like public.competitions including defaults) on commit drop;
+create temp table import_players (like public.players including defaults) on commit drop;
+create temp table import_games (like public.games including defaults) on commit drop;
 insert into import_seasons(id,name)
 select r->>0,r->>1 from source_payload, jsonb_array_elements(data->'s') r;
 insert into import_competitions(id,"seasonId",type)

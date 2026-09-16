@@ -1,5 +1,5 @@
 <section
-  class="mb-3 grid shrink-0 grid-cols-[minmax(0,1fr)_auto] auto-rows-[44px] items-center gap-3 max-[359px]:grid-cols-1 [&>div]:min-w-0 [&_h1]:text-[23px] [&_h1]:font-extrabold [&_h1]:leading-tight [&_h1]:tracking-tight sm:[&_h1]:text-[26px] [&_p]:hidden"
+  class="mb-3 grid shrink-0 grid-cols-[minmax(0,1fr)_auto] auto-rows-[44px] items-center gap-3 [&>div]:min-w-0 [&_h1]:text-[23px] [&_h1]:font-extrabold [&_h1]:leading-tight [&_h1]:tracking-tight sm:[&_h1]:text-[26px] [&_p]:hidden"
 >
   <div>
     <p class="mb-2 text-[10px] font-extrabold tracking-[2px] text-accent">HET SEIZOEN IN BEELD</p>
@@ -8,9 +8,10 @@
   </div>
   @if (admin.isAdmin()) {
     <a
-      class="inline-flex min-h-11 shrink-0 items-center justify-center whitespace-nowrap rounded-xl border border-red-500 bg-red-600 px-4 py-2.5 text-sm font-semibold leading-5 text-white shadow-sm transition-colors hover:bg-red-500 active:bg-red-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#100f12] max-[359px]:w-full sm:px-5 sm:text-base"
-      routerLink="/games/new"
-      ><span>Nieuwe wedstrijd</span></a
+      [attr.aria-label]="needsSeason() ? 'Nieuw seizoen' : 'Nieuwe wedstrijd'"
+      [routerLink]="needsSeason() ? '/seasons' : '/games/new'"
+      class="inline-flex min-h-11 shrink-0 items-center justify-center whitespace-nowrap rounded-xl bg-action px-3 py-2 text-xs font-semibold text-white transition-colors hover:bg-action-hover active:bg-action-pressed sm:text-sm"
+    >{{ needsSeason() ? 'Nieuw seizoen' : 'Nieuwe wedstrijd' }}</a
     >
   }
 </section>
@@ -32,6 +33,18 @@
     class="col-span-full shrink-0 rounded-2xl border border-line bg-surface px-4 py-6 text-center text-sm text-muted [&_h2]:mb-2 [&_h2]:mt-3 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-ink"
     role="status"
   >
+    <svg
+      aria-hidden="true"
+      class="mx-auto mb-3 size-6 text-accent motion-safe:animate-spin"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-width="1.75"
+      viewBox="0 0 24 24"
+    >
+      <circle class="opacity-20" cx="12" cy="12" r="9"/>
+      <path d="M12 3a9 9 0 0 1 9 9"/>
+    </svg>
     Wedstrijden laden…
   </div>
 } @else {
@@ -40,7 +53,7 @@
     class="my-2 flex shrink-0 items-center justify-between [&_h2]:text-sm [&_h2]:font-bold [&>span]:text-xs [&>span]:text-muted"
   >
     <h2>Wedstrijdoverzicht</h2>
-    <span>{{ list.length }} wedstrijden</span>
+    <span>{{ list.length }} {{ list.length === 1 ? 'wedstrijd' : 'wedstrijden' }}</span>
   </div>
   <div
     aria-label="Wedstrijdoverzicht"
@@ -55,10 +68,25 @@
       >
         <div class="flex items-center gap-2 text-[11px] text-muted">
           <span class="rounded-md bg-[#332730] px-2 py-1 text-[10px] font-bold text-[#efb4bd]">{{
-            g.league === 'beker' ? 'Beker' : 'Competitie'
-          }}</span
-          ><span>{{ g.date | date: 'dd-MM-yyyy' }}</span
-          ><span aria-hidden="true" class="ml-auto text-lg">↗</span>
+              g.league === 'beker'
+                ? 'Beker'
+                : g.league === 'friendly'
+                  ? 'Oefenwedstrijd'
+                  : 'Competitie'
+            }}</span
+          ><span>{{ g.date | date: 'dd-MM-yyyy' }}</span>
+          <svg
+            aria-hidden="true"
+            class="ml-auto size-4 shrink-0"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.75"
+            viewBox="0 0 24 24"
+          >
+            <path d="m9 5 7 7-7 7"/>
+          </svg>
         </div>
         <div class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-3 py-4">
           <div
@@ -66,22 +94,33 @@
           >
             <div class="flex min-w-0 items-center gap-3">
               <span class="grid size-9 shrink-0 place-items-center">
-                <img
-                  class="h-9 w-6 rounded border border-accent/50 bg-white object-contain p-0.5"
-                  alt=""
-                  src="/logo/vedette-logo.jpg"
-                />
+                @if (team().logoUrl; as logo) {
+                  <img
+                    [src]="logo"
+                    alt=""
+                    class="size-9 rounded-lg border-2 border-accent/60 bg-white object-contain p-1"
+                  />
+                } @else {
+                  <span
+                    aria-hidden="true"
+                    class="grid size-9 place-items-center rounded-lg border border-accent/30 bg-accent/10 text-xs font-extrabold text-red-200"
+                  >{{ team().name.slice(0, 3).toUpperCase() }}</span
+                  >
+                }
               </span>
               <div class="min-w-0">
                 <span class="block text-[10px] font-bold uppercase tracking-wider text-red-300"
-                  >Jouw team</span
+                >Jouw team</span
                 >
-                <strong class="block text-sm font-bold leading-snug text-white">Vedette</strong>
+                <strong
+                  class="block break-words text-sm font-bold leading-snug text-white [overflow-wrap:anywhere]"
+                >{{ team().name }}</strong
+                >
               </div>
             </div>
             <span class="min-w-8 text-right text-2xl font-extrabold tabular-nums text-ink">{{
-              g.scoreTeam ?? '–'
-            }}</span>
+                g.scoreTeam ?? '–'
+              }}</span>
           </div>
           <div
             class="col-span-2 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 rounded-xl border border-transparent px-3 py-2.5"
@@ -90,16 +129,16 @@
               <span
                 aria-hidden="true"
                 class="grid size-9 shrink-0 place-items-center rounded-lg border border-line bg-[#332730] text-sm font-bold text-[#e6b9c1]"
-                >{{ g.opponent.charAt(0) }}</span
+              >{{ g.opponent.charAt(0) }}</span
               >
               <strong
                 class="min-w-0 break-words text-sm font-semibold leading-snug text-ink [overflow-wrap:anywhere]"
-                >{{ g.opponent }}</strong
+              >{{ g.opponent }}</strong
               >
             </div>
             <span class="min-w-8 text-right text-2xl font-extrabold tabular-nums text-ink">{{
-              g.scoreOpponent ?? '–'
-            }}</span>
+                g.scoreOpponent ?? '–'
+              }}</span>
           </div>
         </div>
         <div class="flex justify-between border-t border-line py-2.5 text-xs text-muted">
@@ -113,13 +152,42 @@
       <div
         class="col-span-full shrink-0 rounded-2xl border border-line bg-surface px-4 py-6 text-center text-sm text-muted [&_h2]:mb-2 [&_h2]:mt-3 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-ink"
       >
-        <div aria-hidden="true" class="text-[32px]">⚽</div>
-        <h2>Klaar voor de aftrap</h2>
-        <p>Er zijn nog geen wedstrijden voor deze selectie.</p>
-        @if (admin.isAdmin()) {
-          <a class="mt-5 inline-block font-bold text-accent" routerLink="/games/new"
-            >Voeg de eerste wedstrijd toe →</a
+        <div
+          aria-hidden="true"
+          class="mx-auto grid size-14 place-items-center rounded-2xl border border-accent/20 bg-accent/10 text-red-300"
+        >
+          <svg
+            class="size-7"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.75"
+            viewBox="0 0 24 24"
           >
+            <rect height="16" rx="3" width="18" x="3" y="5"/>
+            <path d="M7 3v4m10-4v4M3 11h18m-9 4v3m-1.5-1.5h3"/>
+          </svg>
+        </div>
+        <h2>{{ needsSeason() ? 'Begin met een seizoen' : 'Nog geen wedstrijden' }}</h2>
+        <p class="mx-auto max-w-sm break-words leading-relaxed [overflow-wrap:anywhere]">
+          @if (needsSeason()) {
+            Er is nog geen actief seizoen voor {{ team().name }}.
+          } @else {
+            Er zijn nog geen wedstrijden voor {{ team().name }} in dit seizoen en deze competitie.
+          }
+        </p>
+        @if (admin.isAdmin()) {
+          <a
+            [routerLink]="needsSeason() ? '/seasons' : '/games/new'"
+            class="mt-4 inline-flex min-h-11 items-center justify-center rounded-xl bg-action px-4 py-2.5 font-semibold text-white transition-colors hover:bg-action-hover active:bg-action-pressed"
+          >
+            {{ needsSeason() ? 'Seizoen aanmaken' : 'Wedstrijd toevoegen' }}
+          </a>
+        } @else {
+          <p class="mx-auto mt-2 max-w-sm text-xs leading-relaxed">
+            Zodra je teambeheerder wedstrijden toevoegt, vind je ze hier.
+          </p>
         }
       </div>
     }

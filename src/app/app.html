@@ -16,7 +16,7 @@
       <span>Nieuwe versie beschikbaar. Sla je invoer eerst op.</span>
       <button
         type="button"
-        class="min-h-11 shrink-0 rounded-xl bg-red-600 px-3 py-2 font-semibold text-white"
+        class="min-h-11 shrink-0 rounded-xl bg-action px-3 py-2 font-semibold text-white transition-colors hover:bg-action-hover active:bg-action-pressed"
         (click)="updates.reload()"
       >
         Bijwerken
@@ -34,19 +34,29 @@
       class="min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain [scrollbar-width:thin] [scrollbar-color:#79323e_#201d23] mx-auto w-full max-w-[440px] px-7 py-12 text-center [&_h1]:text-[44px] [&_h1]:font-extrabold [&_h1]:leading-tight"
     >
       <div
-        class="[&_img]:mx-auto [&_img]:mb-8 [&_img]:h-[154px] [&_img]:w-[100px] [&_img]:rounded-xl [&_img]:border-2 [&_img]:border-[#e63649] [&_img]:bg-white [&_img]:object-contain [&_img]:p-1"
+        class="relative mx-auto mb-8 grid size-28 place-items-center rounded-[2rem] border border-accent/30 bg-gradient-to-br from-accent/20 to-surface text-accent shadow-xl shadow-black/20"
+        aria-hidden="true"
       >
-        <img src="/logo/vedette-logo.jpg" alt="ZVV Vedette clublogo" />
+        <svg
+          class="size-14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.4"
+        >
+          <path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z" />
+          <path d="m8.5 11.5 2.5 2.5 4.5-5" />
+        </svg>
       </div>
       <p class="mb-2 text-[10px] font-extrabold tracking-[2px] text-accent">
-        ZVV VEDETTE · DE REMISE
+        JOUW CLUB. JOUW OVERZICHT.
       </p>
       <h1>Jouw team.<br />Elke wedstrijd.</h1>
       <p class="mb-7 mt-5 leading-relaxed text-muted">
-        Alle wedstrijden, goals en assists van je team. Altijd bij de hand.
+        Van Vedette De Remise tot IVV. Al je teams, wedstrijden en prestaties op één plek.
       </p>
       <app-login></app-login>
-      <p class="mt-5 text-xs text-muted">Log in om de club te volgen.</p>
+      <p class="mt-5 text-xs text-muted">Log in en kies jouw team.</p>
     </main>
   }
 </div>

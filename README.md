@@ -9,7 +9,7 @@
 
 ## Supabase-testomgeving instellen
 
-Het bestaande testproject `voetbal-app-supabase-test` (`jfjjsvmqvpghknytydac`) is gekoppeld in de developmentconfiguratie. Beide SQL-migraties zijn daar op 15 september 2026 succesvol uitgevoerd; voer die niet nogmaals uit. De bestaande `pilot_*`-tabellen zijn behouden. Site URL is `http://localhost:4200`, met `http://localhost:4200/games` als toegestane redirect.
+Het bestaande testproject `voetbal-app-supabase-test` (`jfjjsvmqvpghknytydac`) is gekoppeld in de developmentconfiguratie. De twee basismigraties zijn op 15 september 2026 uitgevoerd. De teammigratie en twee opruimmigraties van 16 september zijn ook live uitgevoerd; voer deze vijf migraties daar niet nogmaals uit. De lege, ongebruikte `pilot_*`-tabellen en bijbehorende functies zijn verwijderd. Site URL is `http://localhost:4200`, met `http://localhost:4200/games` als toegestane redirect.
 
 Google-login is live gecontroleerd met het beheeraccount, inclusief de beheerpagina en realtime rolupdates. De Google-testclient is `Voetbal Supabase test`; de callback is `https://jfjjsvmqvpghknytydac.supabase.co/auth/v1/callback`. De secret staat uitsluitend in Supabase. De profieltrigger wacht op e-mailbevestiging: Google schrijft die na de eerste accountaanmaak. Bestaande rollen worden vervolgens behouden.
 
@@ -58,6 +58,8 @@ git switch main
 
 ## Seizoenen en rechten
 
+- Kies bovenaan een team of open **Teams**. **Vedette De Remise** blijft één team met alle bestaande seizoenen; **IVV** heeft eigen seizoenen. Binnen ieder team kun je meerdere seizoenen toevoegen. De laatste teamkeuze wordt op dit apparaat onthouden.
+- Beheerders kunnen via **Nieuw team** een team toevoegen en via **Bewerken** de teamnaam en het logo aanpassen. Kies een JPG-, PNG- of WebP-bestand van maximaal 5 MB. De app verkleint dit lokaal tot maximaal 384 pixels en bewaart een compact logo bij het team. Zonder logo verschijnen initialen.
 - Kies bovenaan een seizoen. Wedstrijden en statistieken volgen deze keuze.
 - Maak via **Seizoenen** een nieuw seizoen aan; de backend maakt competitie en beker in dezelfde transactie aan.
 - Voeg spelers toe aan het gekozen seizoen, daarna wedstrijden via **Nieuwe wedstrijd**.
@@ -67,6 +69,22 @@ git switch main
 - Verwijderen is niet beschikbaar vanuit de app. Historische data wordt niet overschreven.
 
 De scripts `copy-production-to-test.cjs` en `configure-test-auth.cjs` betreffen uitsluitend het oude Firebase-testproject; ze configureren of vullen Supabase niet.
+
+## Teamdatabase bijgewerkt op 16 september 2026
+
+De bestaande team-ID's zijn behouden: `vedette` en `3e50d9da-5e7a-4c3b-ab1a-ec0276b4aa26` (IVV). Alle bestaande seizoenen, spelers en wedstrijden blijven bij Vedette. De migratie controleert dat aantallen, seizoen-ID's, namen en teamrelaties behouden blijven. Nieuwe gegevens krijgen een `teamId`; databasevoorwaarden voorkomen dat een speler of wedstrijd naar het seizoen van een ander team verwijst.
+
+De bestaande kolom `teams.logo` is hernoemd naar `logoUrl`, met behoud van het clublogo. De ongebruikte kolommen `primaryColor` en `secondaryColor` zijn na een back-up verwijderd, zonder `CASCADE`. `teams` bevat nu alleen `id`, `name` en `logoUrl`. De lokale back-up van teamwaarden en het oude schema staat buiten Git in `backups/supabase-teams-before-2026-09-16.csv`.
+
+De oude proefopzet is daarna verwijderd: acht lege `pilot_*`-tabellen, de view `pilot_personal_stats`, acht oude functies en het schema `pilot_private`. De migratie weigert nieuwe proefgegevens of onverwachte afhankelijkheden en gebruikt geen `CASCADE`. Alle rijen van de zes gebruikte tabellen zijn binnen dezelfde transactie voor en na de opruiming vergeleken en bleven exact gelijk, inclusief het nieuwe IVV-seizoen. `public` bevat nu alleen `users`, `teams`, `seasons`, `competitions`, `players` en `games`. De schema- en functieback-ups staan buiten Git in `backups/supabase-pilot-before-cleanup-2026-09-16.csv` en `backups/supabase-pilot-functions-before-cleanup-2026-09-16.csv`.
+
+De live SQL-controle is geslaagd voor teams aanmaken/bewerken, meerdere seizoenen per team, logo's, spelers, wedstrijden, weigering van teamoverschrijdende relaties en beheerdersrechten. De controle draait alle testgegevens terug. Firebase-regels en de productieadapter zijn apart gecontroleerd in een lokale Firestore-emulator; de live Firebase-productieomgeving is niet gewijzigd.
+
+## Mobiele interface
+
+De interface schaalt naar telefoon en desktop, met navigatie onderaan op mobiel, veilige schermmarges, ruime aanraakvlakken en iOS-webappmetadata. Dit project levert momenteel een webapp/PWA. Native iOS-/Android-builds, ondertekening en publicatie in de App Store of Google Play zijn nog niet ingericht.
+
+De vormgeving gebruikt Tailwind-utilities in templates en host-klassen; er zijn geen eigen componentstylesheets of inline component-CSS. Toevoeg- en opslagknoppen gebruiken dezelfde rode `action`-kleuren uit `tailwind.config.js`, inclusief hover, indrukken, focus en uitgeschakelde toestand. De toevoegknoppen bevatten alleen tekst. Keuzelijsten en secundaire acties houden hun donkere stijl. De keuzelijsten berekenen hun positie bij het openen, zodat ze binnen het scherm blijven en niet door scrollgebieden worden afgesneden.
 
 ## Techniek
 

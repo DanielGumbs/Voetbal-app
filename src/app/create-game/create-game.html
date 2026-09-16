@@ -5,13 +5,16 @@
     <span>Nieuwe wedstrijd<span class="text-accent">.</span></span>
   </h1>
 
+  <p class="mb-3 text-sm text-muted">
+    Wedstrijd toevoegen voor <strong class="text-ink">{{ team().name }}</strong>
+  </p>
   <div class="mb-3 flex shrink-0 items-center gap-3">
     <span class="text-xs text-muted">Seizoen</span><app-season-selector></app-season-selector>
   </div>
   @if (selectedSeason() === 'previous-season') {
     <p class="text-amber-200 mb-3">
-      Selecteer een nieuw seizoen of maak er een aan via de tab Seizoenen om een wedstrijd toe te
-      voegen.
+      Maak of selecteer eerst een seizoen voor dit team via
+      <a routerLink="/seasons" class="underline">Beheer</a>.
     </p>
   }
   @if (error) {
@@ -70,7 +73,7 @@
       <div class="grid grid-cols-2 gap-3 mb-4">
         <div>
           <label for="scoreTeam" class="block text-sm font-medium text-ink mb-1"
-            >Score Vedette</label
+            >Score {{ team().name }}</label
           >
           <input
             class="min-h-11 w-full min-w-0 max-w-full rounded-xl border border-line bg-[#171419] px-3 py-2.5 text-base text-ink placeholder:text-muted/60 transition-colors focus:border-accent"
@@ -121,7 +124,7 @@
           <label class="block text-sm font-medium text-ink">Goals en assists</label>
           <button
             (click)="addEvent()"
-            class="min-h-11 rounded-xl border border-accent/40 bg-accent/10 px-3 py-2 text-sm font-semibold text-ink hover:bg-accent/20"
+            class="inline-flex min-h-11 items-center justify-center rounded-xl bg-action px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-action-hover active:bg-action-pressed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-action focus-visible:ring-offset-2 focus-visible:ring-offset-surface disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-action disabled:active:bg-action"
             type="button"
           >
             Toevoegen
@@ -160,7 +163,7 @@
                 <button
                   type="button"
                   (click)="removeEvent(i)"
-                  class="min-h-11 rounded-lg px-3 py-2 text-sm text-red-300 hover:bg-accent/10"
+                  class="inline-flex min-h-11 items-center justify-center rounded-xl border border-line bg-surface px-4 py-2.5 text-sm font-semibold text-red-300 transition-colors hover:bg-white/5 active:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-action focus-visible:ring-offset-2 focus-visible:ring-offset-surface disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-surface disabled:active:bg-surface"
                 >
                   Verwijder
                 </button>
@@ -175,12 +178,12 @@
       class="flex shrink-0 items-center gap-2 border-t border-line px-4 py-3 [&>*]:flex [&>*]:min-h-11 [&>*]:min-w-0 [&>*]:flex-1 [&>*]:items-center [&>*]:justify-center"
     >
       <a
-        class="rounded-xl border border-line px-3 py-2 text-center text-sm font-semibold text-muted hover:bg-white/5"
+        class="inline-flex min-h-11 items-center justify-center rounded-xl border border-line bg-surface px-4 py-2.5 text-center text-sm font-semibold text-ink transition-colors hover:bg-white/5 active:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-action focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
         routerLink="/games"
         >Annuleren</a
       >
       <button
-        class="rounded-xl border border-red-500 bg-red-600 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-red-500"
+        class="inline-flex min-h-11 items-center justify-center rounded-xl bg-action px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-action-hover active:bg-action-pressed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-action focus-visible:ring-offset-2 focus-visible:ring-offset-surface disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-action disabled:active:bg-action"
         [disabled]="saving || selectedSeason() === 'previous-season'"
         type="submit"
       >

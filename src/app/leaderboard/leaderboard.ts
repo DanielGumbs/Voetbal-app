@@ -4,6 +4,8 @@ import { SeasonSelector } from '../season-selector/season-selector';
 import { Component, computed, inject, Signal, signal, WritableSignal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AdminService } from '../../services/admin.service';
+import { TeamService } from '../../services/team.service';
+import { SeasonService, LEGACY_SEASON } from '../../services/season.service';
 
 import { Player, PlayerService } from '../../services/player.service';
 import { Game, GameService, LeagueType } from '../../services/game.service';
@@ -28,6 +30,9 @@ type LeagueFilter = 'all' | LeagueType;
   templateUrl: './leaderboard.html',
 })
 export class LeaderboardComponent {
+  readonly team = inject(TeamService).currentTeam;
+  readonly season = toSignal(inject(SeasonService).selected, { requireSync: true });
+  readonly needsSeason = computed(() => this.season() === LEGACY_SEASON);
   admin = inject(AdminService);
   players!: Signal<Player[] | undefined>;
   games!: Signal<Game[] | undefined>;

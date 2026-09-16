@@ -3,7 +3,7 @@ import { of } from 'rxjs';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { Navbar } from './navbar';
-import { Auth, User } from '../../services/supabase';
+import { Auth, Database, User } from '../../services/supabase';
 import { ADMIN_EMAIL } from '../../services/admin.service';
 describe('Navbar access', () => {
   for (const [email, allowed] of [
@@ -18,6 +18,7 @@ describe('Navbar access', () => {
       TestBed.configureTestingModule({
         imports: [Navbar],
         providers: [
+          { provide: Database, useValue: { watch: () => of([]) } },
           {
             provide: UserProfileService,
             useValue: {
@@ -41,6 +42,9 @@ describe('Navbar access', () => {
         fixture.nativeElement.querySelector('nav a[href="/leaderboard"]')?.textContent,
       ).toContain('Statistieken');
       expect(!!fixture.nativeElement.querySelector('a[href="/seasons"]')).toBe(allowed);
+      expect(fixture.nativeElement.querySelector('nav a[href="/teams"]')?.textContent).toContain(
+        'Teams',
+      );
     });
   }
 });
