@@ -1,9 +1,11 @@
 import {
+  afterNextRender,
   Component,
   DestroyRef,
   ElementRef,
   forwardRef,
   inject,
+  Injector,
   input,
   signal,
   viewChild,
@@ -83,6 +85,7 @@ export interface SelectOption {
   </div>`,
 })
 export class SelectField implements ControlValueAccessor {
+  private readonly injector = inject(Injector);
   private static nextId = 0;
   readonly listId = `select-options-${SelectField.nextId++}`;
   options = input<SelectOption[]>([]);
@@ -135,21 +138,24 @@ export class SelectField implements ControlValueAccessor {
           this.options().findIndex((o) => o.value === this.value()),
         ),
       );
-      setTimeout(() => {
-        if (this.opened()) {
-          const panel = this.panel()?.nativeElement;
-          const rect = this.trigger()?.nativeElement.getBoundingClientRect();
-          if (!panel || !rect) return;
-          Object.assign(panel.style, {
-            top: `${rect.bottom + 4}px`,
-            left: `${rect.left}px`,
-            width: `${rect.width}px`,
-            maxHeight: `${Math.max(0, Math.min(192, window.innerHeight - rect.bottom - 12))}px`,
-          });
-          panel.showPopover();
-          panel.focus({ preventScroll: true });
-        }
-      });
+      afterNextRender(
+        () => {
+          if (this.opened()) {
+            const panel = this.panel()?.nativeElement;
+            const rect = this.trigger()?.nativeElement.getBoundingClientRect();
+            if (!panel || !rect) return;
+            Object.assign(panel.style, {
+              top: `${rect.bottom + 4}px`,
+              left: `${rect.left}px`,
+              width: `${rect.width}px`,
+              maxHeight: `${Math.max(0, Math.min(192, window.innerHeight - rect.bottom - 12))}px`,
+            });
+            panel.showPopover();
+            panel.focus({ preventScroll: true });
+          }
+        },
+        { injector: this.injector },
+      );
     }
   }
   choose(value: string) {

@@ -18,6 +18,18 @@ class Host {
   ];
 }
 describe('SelectField', () => {
+  it('opens the options when the view renders after the click timer queue', fakeAsync(() => {
+    const fixture = TestBed.createComponent(Host);
+    fixture.detectChanges();
+    fixture.nativeElement.querySelector('button').click();
+    // Coalesced change detection can render after zero-delay timers have already run.
+    tick();
+    fixture.detectChanges();
+    const list = fixture.nativeElement.querySelector('[role=listbox]') as HTMLElement;
+    expect(list).not.toBeNull();
+    expect(list.matches(':popover-open')).toBeTrue();
+    expect(document.activeElement).toBe(list);
+  }));
   it('opens below the trigger and updates the reactive form using the keyboard', fakeAsync(() => {
     const fixture = TestBed.createComponent(Host);
     fixture.detectChanges();

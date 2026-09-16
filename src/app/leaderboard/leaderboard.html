@@ -1,190 +1,217 @@
-<section
-  class="mb-3 grid shrink-0 grid-cols-[minmax(0,1fr)_auto] auto-rows-[44px] items-center gap-3 max-[359px]:grid-cols-1 [&>div]:min-w-0 [&_h1]:text-[23px] [&_h1]:font-extrabold [&_h1]:leading-tight [&_h1]:tracking-tight sm:[&_h1]:text-[26px] [&_p]:hidden"
->
+<header class="mb-3 flex h-11 shrink-0 items-center justify-between gap-3">
   <div>
-    <p class="mb-2 text-[10px] font-extrabold tracking-[2px] text-accent">ELKE BIJDRAGE TELT</p>
-    <h1>Statistieken<span class="text-accent">.</span></h1>
-    <p class="mt-2 text-sm text-muted">De spelers achter de cijfers.</p>
+    <h1 class="text-[23px] font-extrabold leading-tight tracking-tight sm:text-[26px]">
+      Statistieken<span class="text-accent">.</span>
+    </h1>
   </div>
-</section>
-<div class="mb-2 grid w-full max-w-[450px] shrink-0 grid-cols-2 gap-2">
-  <app-season-selector></app-season-selector>
-  <app-select-field
-    (ngModelChange)="setLeagueFilter($event)"
-    [ngModel]="leagueFilter()"
-    [options]="[
-      { value: 'all', label: 'Alle competities' },
-      { value: 'competitie', label: 'Competitie' },
-      { value: 'beker', label: 'Beker' },
-    ]"
-    label="Competitie"
-  ></app-select-field>
-</div>
-@if (filteredGames()?.length) {
-  <div
-    aria-label="Rangschikking"
-    class="flex max-w-[430px] shrink-0 gap-1 rounded-xl border border-line bg-[#211c23] p-1 [&_button]:min-h-8 [&_button]:flex-1 [&_button]:rounded-lg [&_button]:px-2 [&_button]:py-1 [&_button]:text-sm [&_button]:font-semibold [&_button]:text-muted [&_button]:transition-colors [&_button:hover]:bg-white/5 [&_button:active]:bg-accent/10 [&_button[aria-pressed=true]]:bg-accent/15 [&_button[aria-pressed=true]]:text-white"
-    role="group"
-  >
-    <button (click)="selectTab('total')" [attr.aria-pressed]="tab() === 'total'" type="button">
-      Totaal
-    </button>
-    <button (click)="selectTab('goals')" [attr.aria-pressed]="tab() === 'goals'" type="button">
-      Goals
-    </button>
-    <button (click)="selectTab('assists')" [attr.aria-pressed]="tab() === 'assists'" type="button">
-      Assists
-    </button>
-  </div>
-}
-<div
-  class="my-2 flex shrink-0 items-center justify-between [&_h2]:text-sm [&_h2]:font-bold [&>span]:text-xs [&>span]:text-muted"
->
-  <h2>Spelersranglijst</h2>
-  @if (filteredGames()?.length) {
-    <span>{{
-        tab() === 'total' ? 'Goals + assists' : tab() === 'goals' ? 'Goals' : 'Assists'
-      }}</span>
-  }
-</div>
-@if (sorted() === undefined) {
-  <div
-    class="col-span-full shrink-0 rounded-2xl border border-line bg-surface px-4 py-6 text-center text-sm text-muted [&_h2]:mb-2 [&_h2]:mt-3 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-ink"
-    role="status"
+  <span
+    class="grid size-11 shrink-0 place-items-center rounded-2xl border border-accent/15 bg-accent/10 text-accent"
+    aria-hidden="true"
   >
     <svg
-      aria-hidden="true"
-      class="mx-auto mb-3 size-6 text-accent motion-safe:animate-spin"
+      class="size-5"
+      viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
+      stroke-width="1.8"
       stroke-linecap="round"
-      stroke-width="1.75"
-      viewBox="0 0 24 24"
     >
-      <circle class="opacity-20" cx="12" cy="12" r="9"/>
-      <path d="M12 3a9 9 0 0 1 9 9"/>
+      <path d="M5 20v-7m7 7V4m7 16V9" />
     </svg>
-    Statistieken laden…
+  </span>
+</header>
+<div class="mb-4 grid shrink-0 grid-cols-2 gap-2.5 sm:max-w-lg">
+  <div class="min-w-0">
+    <p class="mb-1.5 pl-1 text-[10px] font-medium text-muted">Seizoen</p>
+    <app-season-selector class="!block !w-full"></app-season-selector>
   </div>
-} @else if (filteredGames()?.length === 0) {
-  <div
-    class="col-span-full shrink-0 rounded-2xl border border-line bg-surface px-4 py-6 text-center text-sm text-muted [&_h2]:mb-2 [&_h2]:mt-3 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-ink"
-  >
+  <div class="min-w-0">
+    <p class="mb-1.5 pl-1 text-[10px] font-medium text-muted">Competitie</p>
+    <app-select-field
+      label="Competitie"
+      [ngModel]="leagueFilter()"
+      (ngModelChange)="setLeagueFilter($event)"
+      [options]="[
+        { value: 'all', label: 'Alle competities' },
+        { value: 'competitie', label: 'Competitie' },
+        { value: 'beker', label: 'Beker' },
+      ]"
+    ></app-select-field>
+  </div>
+</div>
+<div
+  role="region"
+  aria-label="Statistiekenoverzicht"
+  tabindex="0"
+  class="min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain px-0.5 pb-4 [scrollbar-width:thin] [scrollbar-color:#79323e_#201d23]"
+>
+  @if (sorted() === undefined) {
     <div
-      aria-hidden="true"
-      class="mx-auto grid size-14 place-items-center rounded-2xl border border-accent/20 bg-accent/10 text-red-300"
+      role="status"
+      class="rounded-2xl border border-line bg-surface px-5 py-8 text-center text-sm text-muted"
     >
-      <svg
-        class="size-7"
-        fill="none"
-        stroke="currentColor"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="1.75"
-        viewBox="0 0 24 24"
-      >
-        <path d="M4 20V10m8 10V4m8 16v-7"/>
-        <path d="M2 20h20"/>
-      </svg>
+      <span
+        aria-hidden="true"
+        class="mx-auto mb-3 block size-6 rounded-full border-2 border-accent/20 border-t-accent motion-safe:animate-spin"
+      ></span>
+      Statistieken laden…
     </div>
-    <h2>Nog geen statistieken</h2>
-    <p class="mx-auto max-w-sm break-words leading-relaxed [overflow-wrap:anywhere]">
-      @if (needsSeason()) {
-        De prestaties van {{ team().name }} verschijnen hier zodra het eerste seizoen begint.
-      } @else {
-        Er zijn nog geen wedstrijden voor {{ team().name }} in dit seizoen en deze competitie.
-      }
-    </p>
-    @if (admin.isAdmin()) {
-      <a
-        [routerLink]="needsSeason() ? '/seasons' : '/games/new'"
-        class="mt-4 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-action px-4 py-2.5 font-semibold text-white transition-colors hover:bg-action-hover active:bg-action-pressed"
+  } @else if (!filteredGames()?.length) {
+    <section
+      class="rounded-[22px] border border-line bg-gradient-to-br from-[#2c202a] to-surface px-6 py-9 text-center"
+    >
+      <span
+        aria-hidden="true"
+        class="mx-auto mb-5 grid size-14 place-items-center rounded-2xl border border-accent/20 bg-accent/10 text-red-300"
       >
-        {{ needsSeason() ? 'Seizoen aanmaken' : 'Wedstrijd toevoegen' }}
-      </a>
-    } @else {
-      <p class="mx-auto mt-2 max-w-sm text-xs leading-relaxed">
-        Goals, assists en gespeelde wedstrijden worden hier bijgehouden.
+        <svg
+          class="size-6"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+        >
+          <path d="M5 20v-7m7 7V4m7 16V9M3 20h18" />
+        </svg>
+      </span>
+      <h2 class="text-xl font-bold tracking-tight">Het seizoen begint hier</h2>
+      <p class="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-muted">
+        Er zijn nog geen wedstrijden voor {{ team().name }} in deze selectie. Na de eerste wedstrijd
+        verschijnen hier de goals, assists en spelersprestaties.
       </p>
-    }
-  </div>
-} @else {
-  <div
-    aria-label="Spelersranglijst"
-    class="min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain rounded-2xl border border-line bg-surface [scrollbar-width:thin]"
-    role="region"
-    tabindex="0"
-  >
-    @for (s of sorted(); let i = $index; track s.player.id) {
-      <div
-        [attr.data-leader]="i === 0 && s.goals + s.assists > 0"
-        class="group flex items-center gap-2.5 border-b border-line px-2.5 py-3 last:border-0 data-[leader=true]:bg-gradient-to-r data-[leader=true]:from-[#481d29] data-[leader=true]:to-surface"
-      >
-        <span class="min-w-4 text-xs font-bold text-[#8b94a2]">{{ i + 1 }}</span
-        ><span
-        class="grid h-[34px] w-[35px] shrink-0 place-items-center rounded-lg bg-[#332730] text-sm font-extrabold text-[#e6b9c1] group-data-[leader=true]:bg-[#d52c3b] group-data-[leader=true]:text-white"
-      >{{ s.player.number }}</span
-      >
-        <div
-          class="min-w-0 flex-1 [&_h3]:break-words [&_h3]:text-sm [&_h3]:font-semibold [&_h3]:leading-snug [&_h3]:[overflow-wrap:anywhere] [&_p]:mt-1 [&_p]:text-[11px] [&_p]:leading-relaxed [&_p]:text-muted [&_span]:px-px"
+      @if (admin.isAdmin()) {
+        <a
+          class="mt-6 inline-flex min-h-11 items-center justify-center rounded-xl bg-action px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-action-hover active:bg-action-pressed"
+          [routerLink]="needsSeason() ? '/seasons' : '/games/new'"
+          >{{ needsSeason() ? 'Seizoen aanmaken' : 'Wedstrijd toevoegen' }}</a
         >
-          <h3>{{ s.player.name }}</h3>
-          <p>
-            {{ s.games }} wedstrijden <span>·</span> {{ s.goals }} goals <span>·</span>
-            {{ s.assists }} assists
-          </p>
+      } @else {
+        <p class="mt-5 text-xs text-muted">Je teambeheerder kan wedstrijden toevoegen.</p>
+      }
+    </section>
+  } @else {
+    <section aria-labelledby="ranking-title">
+      <div class="sticky top-0 z-10 bg-[#100f12] pb-3 pt-1">
+        <div class="mb-3 flex items-center justify-between gap-3">
+          <div>
+            <h2 id="ranking-title" class="text-base font-bold tracking-tight">Spelersranglijst</h2>
+            <p class="mt-0.5 text-[11px] text-muted">
+              {{
+                tab() === 'total'
+                  ? 'Goals en assists bij elkaar'
+                  : tab() === 'goals'
+                    ? 'De doelpuntenmakers van je team'
+                    : 'De aangevers van je team'
+              }}
+            </p>
+          </div>
+          <span
+            class="shrink-0 rounded-full border border-white/10 px-2.5 py-1 text-[10px] font-medium tabular-nums text-muted"
+            >{{ sorted()?.length }} {{ sorted()?.length === 1 ? 'speler' : 'spelers' }}</span
+          >
         </div>
-        <strong class="shrink-0 text-[21px] font-bold tabular-nums tracking-tight">{{
-            tab() === 'total' ? s.goals + s.assists : tab() === 'goals' ? s.goals : s.assists
-          }}</strong>
+        <div
+          role="group"
+          aria-label="Rangschikking"
+          class="grid grid-cols-3 gap-1 rounded-xl border border-white/[0.08] bg-[#211c23] p-1 [&_button]:min-h-8 [&_button]:rounded-lg [&_button]:px-2 [&_button]:py-1 [&_button]:text-xs [&_button]:font-semibold [&_button]:text-muted [&_button]:transition-colors [&_button:hover]:text-white [&_button[aria-pressed=true]]:bg-[#49303a] [&_button[aria-pressed=true]]:text-white [&_button[aria-pressed=true]]:shadow-sm"
+        >
+          <button
+            type="button"
+            (click)="selectTab('total')"
+            [attr.aria-pressed]="tab() === 'total'"
+          >
+            Totaal
+          </button>
+          <button
+            type="button"
+            (click)="selectTab('goals')"
+            [attr.aria-pressed]="tab() === 'goals'"
+          >
+            Goals
+          </button>
+          <button
+            type="button"
+            (click)="selectTab('assists')"
+            [attr.aria-pressed]="tab() === 'assists'"
+          >
+            Assists
+          </button>
+        </div>
       </div>
-    } @empty {
-      <div
-        class="col-span-full shrink-0 rounded-2xl border border-line bg-surface px-4 py-6 text-center text-sm text-muted [&_h2]:mb-2 [&_h2]:mt-3 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-ink"
-      >
-        <div
-          aria-hidden="true"
-          class="mx-auto grid size-14 place-items-center rounded-2xl border border-accent/20 bg-accent/10 text-red-300"
-        >
-          <svg
-            class="size-7"
-            fill="none"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="1.75"
-            viewBox="0 0 24 24"
+      <ol aria-label="Spelersranglijst" class="space-y-2.5">
+        @for (s of sorted(); let i = $index; track s.player.id) {
+          @let score =
+            tab() === 'total' ? s.goals + s.assists : tab() === 'goals' ? s.goals : s.assists;
+          <li
+            [attr.data-leader]="i === 0 && score > 0"
+            class="group rounded-[18px] border border-white/[0.07] bg-surface p-3.5 data-[leader=true]:border-accent/30 data-[leader=true]:bg-gradient-to-br data-[leader=true]:from-[#38232e] data-[leader=true]:to-surface sm:p-4"
           >
-            <circle cx="9" cy="8" r="3"/>
-            <path d="M3 20v-2a6 6 0 0 1 12 0v2M16 5a3 3 0 0 1 0 6m2 3a5 5 0 0 1 3 4v2"/>
-          </svg>
-        </div>
-        <h2>Nog geen spelers</h2>
-        <p class="mx-auto max-w-sm break-words leading-relaxed [overflow-wrap:anywhere]">
-          De spelers van {{ team().name }} en hun prestaties verschijnen hier zodra ze aan dit
-          seizoen zijn toegevoegd.
-        </p>
-        @if (admin.isAdmin()) {
-          <a
-            class="mt-4 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-action px-4 py-2.5 font-semibold text-white transition-colors hover:bg-action-hover active:bg-action-pressed"
-            routerLink="/seasons"
-          >
-            Spelers beheren
-            <svg
-              aria-hidden="true"
-              class="size-4 shrink-0"
-              fill="none"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="1.75"
-              viewBox="0 0 24 24"
+            <div class="flex items-center gap-2.5 sm:gap-3">
+              <span
+                class="w-4 shrink-0 text-center text-[11px] font-bold tabular-nums text-muted group-data-[leader=true]:text-[#ff99a8]"
+                [attr.aria-label]="'Positie ' + (i + 1)"
+                >{{ i + 1 }}</span
+              >
+              <span
+                class="grid size-10 shrink-0 place-items-center rounded-xl border border-white/[0.08] bg-[#2d2630] text-sm font-bold tabular-nums text-[#d9cbdc] group-data-[leader=true]:border-accent/25 group-data-[leader=true]:bg-accent/10 group-data-[leader=true]:text-[#ffb9c4] sm:size-11"
+                [attr.aria-label]="'Rugnummer ' + s.player.number"
+                >{{ s.player.number }}</span
+              >
+              <div class="min-w-0 flex-1">
+                <h3
+                  class="text-[13px] font-bold leading-snug tracking-tight [overflow-wrap:anywhere] sm:text-base"
+                >
+                  {{ s.player.name }}
+                </h3>
+                <p class="mt-1 text-xs text-muted sm:text-[13px]">
+                  {{ s.games }} {{ s.games === 1 ? 'wedstrijd' : 'wedstrijden' }}
+                </p>
+              </div>
+              <div class="min-w-10 shrink-0 text-right sm:min-w-16">
+                <strong
+                  class="block text-[28px] font-bold leading-none tracking-tight tabular-nums group-data-[leader=true]:text-[#ffb1bf] sm:text-[30px]"
+                  >{{ score }}</strong
+                >
+                <span class="mt-1 block text-[11px] font-medium text-muted sm:text-xs">{{
+                  tab() === 'total' ? 'totaal' : tab() === 'goals' ? 'goals' : 'assists'
+                }}</span>
+              </div>
+            </div>
+            <div
+              class="mt-3 flex items-center gap-4 border-t border-white/[0.06] pt-2.5 pl-[26px] text-xs text-muted sm:pl-7 sm:text-[13px]"
             >
-              <path d="M5 12h14m-6-6 6 6-6 6"/>
-            </svg>
-          </a>
+              <span
+                ><strong class="mr-1 font-semibold tabular-nums text-[#dfd6e1]">{{
+                  s.goals
+                }}</strong>
+                goals</span
+              >
+              <span class="h-3 w-px bg-white/10" aria-hidden="true"></span>
+              <span
+                ><strong class="mr-1 font-semibold tabular-nums text-[#dfd6e1]">{{
+                  s.assists
+                }}</strong>
+                assists</span
+              >
+            </div>
+          </li>
+        } @empty {
+          <li class="rounded-2xl border border-line bg-surface px-5 py-8 text-center">
+            <h3 class="font-bold">Nog geen spelers</h3>
+            <p class="mt-2 text-sm leading-relaxed text-muted">
+              Voeg spelers toe aan dit seizoen om hun prestaties te zien.
+            </p>
+            @if (admin.isAdmin()) {
+              <a
+                routerLink="/seasons"
+                class="mt-5 inline-flex min-h-11 items-center justify-center rounded-xl bg-action px-4 py-2.5 text-sm font-semibold text-white hover:bg-action-hover active:bg-action-pressed"
+                >Spelers beheren</a
+              >
+            }
+          </li>
         }
-      </div>
-    }
-  </div>
-}
+      </ol>
+    </section>
+  }
+</div>

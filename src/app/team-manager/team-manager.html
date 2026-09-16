@@ -1,12 +1,11 @@
 <div
-  class="flex min-h-0 w-full flex-1 flex-col overflow-hidden pt-[5px] sm:pt-2.5 [&_button]:touch-manipulation [&_button]:[-webkit-tap-highlight-color:transparent] [&_button]:transition-colors [&_button]:duration-[140ms] motion-reduce:[&_button]:transition-none [&_button:focus-visible]:outline [&_button:focus-visible]:outline-2 [&_button:focus-visible]:outline-accent [&_button:focus-visible]:outline-offset-[3px] [&_input:focus-visible]:outline [&_input:focus-visible]:outline-2 [&_input:focus-visible]:outline-accent [&_input:focus-visible]:outline-offset-[3px] [&_button:disabled]:opacity-50 [&_button:disabled]:cursor-wait"
+  class="flex min-h-0 w-full flex-1 flex-col overflow-hidden [&_button]:touch-manipulation [&_button]:[-webkit-tap-highlight-color:transparent] [&_button]:transition-colors [&_button]:duration-[140ms] motion-reduce:[&_button]:transition-none [&_button:focus-visible]:outline [&_button:focus-visible]:outline-2 [&_button:focus-visible]:outline-accent [&_button:focus-visible]:outline-offset-[3px] [&_input:focus-visible]:outline [&_input:focus-visible]:outline-2 [&_input:focus-visible]:outline-accent [&_input:focus-visible]:outline-offset-[3px] [&_button:disabled]:opacity-50 [&_button:disabled]:cursor-wait"
 >
-  <header class="mb-[23px] grid shrink-0 grid-cols-[minmax(0,1fr)_auto] items-end gap-x-3 px-0.5 sm:mb-[30px]">
+  <header
+    class="mb-3 grid shrink-0 grid-cols-[minmax(0,1fr)_auto] grid-rows-[44px_auto] items-center gap-x-3"
+  >
     <div>
-      <p class="mb-2 text-[9px] font-extrabold tracking-[1.6px] text-[#ee8894]">
-        DE CLUB, BINNEN HANDBEREIK
-      </p>
-      <h1 class="text-[clamp(30px,5vw,40px)] font-[850] leading-[1.15] tracking-[-1.3px]">
+      <h1 class="text-[23px] font-extrabold leading-tight tracking-tight sm:text-[26px]">
         Jouw teams<span class="text-accent">.</span>
       </h1>
     </div>
@@ -63,7 +62,9 @@
       >
         <div class="mb-[23px] flex items-center justify-between">
           <div>
-            <p class="mb-2 text-[9px] font-extrabold tracking-[1.6px] text-[#ee8894]">TEAMGEGEVENS</p>
+            <p class="mb-2 text-[9px] font-extrabold tracking-[1.6px] text-[#ee8894]">
+              TEAMGEGEVENS
+            </p>
             <h2 class="text-xl font-[750]" id="editor-title">
               {{ editingId() ? 'Maak het jouw team' : 'Een nieuw team' }}
             </h2>
@@ -81,10 +82,12 @@
         <form (ngSubmit)="save()" [attr.aria-busy]="saving() || readingLogo()">
           <div class="grid grid-cols-1 gap-[22px] sm:grid-cols-[1fr_1.25fr] sm:gap-[25px]">
             <div>
-            <span class="mb-2.5 block text-xs font-[750] text-[#ddd8e2]" id="logo-field-label"
-            >Teamlogo</span
-            >
-              <div class="flex items-center gap-3 rounded-2xl border border-line bg-[#18151c]/60 p-3">
+              <span class="mb-2.5 block text-xs font-[750] text-[#ddd8e2]" id="logo-field-label"
+                >Teamlogo</span
+              >
+              <div
+                class="flex items-center gap-3 rounded-2xl border border-line bg-[#18151c]/60 p-3"
+              >
                 <app-team-badge
                   [logoUrl]="logoUrl()"
                   [name]="name || 'FC'"
@@ -96,7 +99,11 @@
                     class="relative inline-flex min-h-11 w-full cursor-pointer touch-manipulation items-center justify-center rounded-xl bg-action px-3 py-2.5 text-center text-xs font-semibold leading-snug text-white shadow-sm shadow-black/10 transition-colors duration-[140ms] [-webkit-tap-highlight-color:transparent] hover:bg-action-hover active:bg-action-pressed focus-within:outline focus-within:outline-2 focus-within:outline-accent focus-within:outline-offset-[3px] data-[disabled=true]:pointer-events-none data-[disabled=true]:cursor-wait data-[disabled=true]:opacity-50 motion-reduce:transition-none"
                   >
                     {{
-                      readingLogo() ? 'Logo verwerken…' : logoUrl() ? 'Logo wijzigen' : 'Logo kiezen'
+                      readingLogo()
+                        ? 'Logo verwerken…'
+                        : logoUrl()
+                          ? 'Logo wijzigen'
+                          : 'Logo kiezen'
                     }}
                     <input
                       (change)="chooseLogo($event)"
@@ -121,27 +128,31 @@
                 </div>
               </div>
               <p class="mt-2.5 block text-[11px] leading-relaxed text-muted" id="logo-help">
-                JPG, PNG of WebP · maximaal 5 MB.<br/>Zonder logo tonen we de initialen van je team.
+                JPG, PNG of WebP · maximaal 5 MB.<br />Zonder logo tonen we de initialen van je
+                team.
               </p>
             </div>
             <div>
               <label class="mb-2.5 block text-xs font-[750] text-[#ddd8e2]" for="team-name"
-              >Teamnaam <span aria-hidden="true" class="text-[#f97888]">*</span></label
+                >Teamnaam <span aria-hidden="true" class="text-[#f97888]">*</span></label
               ><input
-              #nameInput
-              [(ngModel)]="name"
-              [disabled]="saving()"
-              aria-describedby="team-name-help"
-              autocomplete="off"
-              class="min-h-12 w-full rounded-[11px] border border-[#564452] bg-[#18151c] px-3.5 py-3 text-base text-white placeholder:text-[#9b909f] sm:text-sm"
-              id="team-name"
-              maxlength="80"
-              name="teamName"
-              placeholder="Bijvoorbeeld IVV 2"
-              required
-              type="text"
-            />
-              <p class="mt-[9px] block text-[10px] leading-[1.7] text-[#a9a0b1]" id="team-name-help">
+                #nameInput
+                [(ngModel)]="name"
+                [disabled]="saving()"
+                aria-describedby="team-name-help"
+                autocomplete="off"
+                class="min-h-12 w-full rounded-[11px] border border-[#564452] bg-[#18151c] px-3.5 py-3 text-base text-white placeholder:text-[#9b909f] sm:text-sm"
+                id="team-name"
+                maxlength="80"
+                name="teamName"
+                placeholder="Bijvoorbeeld IVV 2"
+                required
+                type="text"
+              />
+              <p
+                class="mt-[9px] block text-[10px] leading-[1.7] text-[#a9a0b1]"
+                id="team-name-help"
+              >
                 De naam verschijnt bij je wedstrijden en statistieken.
               </p>
             </div>
@@ -157,7 +168,7 @@
           <div
             class="mt-[25px] flex flex-col items-stretch justify-between gap-4 border-t border-[#44333f] pt-[18px] sm:flex-row sm:items-center"
           >
-          <span class="block text-[10px] leading-[1.7] text-[#a9a0b1] sm:max-w-[225px]">{{
+            <span class="block text-[10px] leading-[1.7] text-[#a9a0b1] sm:max-w-[225px]">{{
               editingId()
                 ? 'Je wijzigingen gelden voor iedereen.'
                 : 'Wedstrijden en statistieken blijven per team gescheiden.'
@@ -170,8 +181,7 @@
                 type="button"
               >
                 Annuleren
-              </button
-              >
+              </button>
               <button
                 [disabled]="saving() || readingLogo() || teams.loading() || !!teams.error()"
                 class="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-[11px] bg-action px-[15px] py-2.5 text-center text-xs font-[750] text-white shadow-[0_3px_15px_#bd233222] hover:bg-action-hover active:bg-action-pressed sm:flex-initial"
@@ -185,10 +195,12 @@
       </section>
     }
 
-    <div class="mb-3.5 flex shrink-0 items-center gap-2.5 group-data-[editing=true]/team-content:mt-6">
+    <div
+      class="mb-3.5 flex shrink-0 items-center gap-2.5 group-data-[editing=true]/team-content:mt-6"
+    >
       <h2 class="text-base font-[750]">Alle teams</h2>
       <span class="rounded-md border border-[#403541] px-2 py-[3px] text-[10px] text-muted"
-      >{{ teams.teams().length }} {{ teams.teams().length === 1 ? 'team' : 'teams' }}</span
+        >{{ teams.teams().length }} {{ teams.teams().length === 1 ? 'team' : 'teams' }}</span
       >
     </div>
     @if (teams.loading()) {
@@ -215,11 +227,11 @@
             @if (team.id === teams.currentTeam().id) {
               <span
                 class="flex items-center gap-[5px] rounded-[20px] border border-[#7b3846] px-2 py-[5px] text-[9px] font-[750] text-[#ff9ba6]"
-              ><span class="size-[5px] rounded-full bg-[#fc677b]"></span> Geselecteerd</span
+                ><span class="size-[5px] rounded-full bg-[#fc677b]"></span> Geselecteerd</span
               >
             } @else {
               <span class="pt-[7px] text-[8px] font-extrabold tracking-[1px] text-[#a09aa5]"
-              >VOETBALTEAM</span
+                >VOETBALTEAM</span
               >
             }
           </div>
@@ -248,7 +260,7 @@
                 stroke-width="1.7"
                 viewBox="0 0 24 24"
               >
-                <path d="M6 18 18 6M6 6h12v12"/>
+                <path d="M6 18 18 6M6 6h12v12" />
               </svg>
             </button>
             @if (admin.isAdmin()) {
@@ -267,9 +279,8 @@
                   stroke-width="1.7"
                   viewBox="0 0 24 24"
                 >
-                  <path d="m15 5 4 4M4 20l4-1L20 7a2.8 2.8 0 0 0-4-4L4 15v5Z"/>
-                </svg
-                >
+                  <path d="m15 5 4 4M4 20l4-1L20 7a2.8 2.8 0 0 0-4-4L4 15v5Z" />
+                </svg>
                 <span>Bewerken</span>
               </button>
             }

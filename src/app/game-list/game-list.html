@@ -8,10 +8,10 @@
   </div>
   @if (admin.isAdmin()) {
     <a
-      [attr.aria-label]="needsSeason() ? 'Nieuw seizoen' : 'Nieuwe wedstrijd'"
-      [routerLink]="needsSeason() ? '/seasons' : '/games/new'"
+      aria-label="Nieuwe wedstrijd"
+      routerLink="/games/new"
       class="inline-flex min-h-11 shrink-0 items-center justify-center whitespace-nowrap rounded-xl bg-action px-3 py-2 text-xs font-semibold text-white transition-colors hover:bg-action-hover active:bg-action-pressed sm:text-sm"
-    >{{ needsSeason() ? 'Nieuw seizoen' : 'Nieuwe wedstrijd' }}</a
+    >Nieuwe wedstrijd</a
     >
   }
 </section>

@@ -24,7 +24,7 @@ type LeagueFilter = 'all' | LeagueType;
 
 @Component({
   selector: 'app-leaderboard',
-  host: { class: 'flex min-h-0 min-w-0 flex-1 flex-col [&>*]:shrink-0' },
+  host: { class: 'flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden' },
   standalone: true,
   imports: [SelectField, FormsModule, SeasonSelector, RouterLink],
   templateUrl: './leaderboard.html',
