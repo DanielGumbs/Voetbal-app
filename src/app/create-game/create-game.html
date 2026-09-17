@@ -70,34 +70,49 @@
         ></app-select-field>
       </div>
 
-      <div class="grid grid-cols-2 gap-3 mb-4">
-        <div>
-          <label for="scoreTeam" class="block text-sm font-medium text-ink mb-1"
-            >Score {{ team().name }}</label
+      <fieldset class="mb-5 min-w-0 rounded-2xl border border-line bg-[#171419] p-4">
+        <legend class="px-2 text-sm font-semibold text-ink">Uitslag</legend>
+        <p id="score-help" class="mb-4 text-xs leading-relaxed text-muted">
+          Nog niet gespeeld? Laat de scores leeg.
+        </p>
+        <div class="grid grid-cols-[minmax(0,1fr)_20px_minmax(0,1fr)] items-center gap-x-2 gap-y-2">
+          <label
+            for="scoreTeam"
+            class="min-w-0 break-words text-center text-xs font-semibold leading-snug text-ink"
           >
+            {{ team().name }}
+          </label>
+          <label
+            for="scoreOpponent"
+            class="col-start-3 min-w-0 break-words text-center text-xs font-semibold leading-snug text-ink"
+          >
+            {{ form.get('opponent')?.value || 'Tegenstander' }}
+          </label>
           <input
-            class="min-h-11 w-full min-w-0 max-w-full rounded-xl border border-line bg-[#171419] px-3 py-2.5 text-base text-ink placeholder:text-muted/60 transition-colors focus:border-accent"
+            class="h-20 w-full min-w-0 rounded-xl border border-accent/30 bg-accent/5 px-2 text-center text-3xl font-bold tabular-nums text-ink placeholder:text-muted/40 transition-colors focus:border-accent [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
             id="scoreTeam"
             formControlName="scoreTeam"
+            aria-describedby="score-help"
+            [attr.aria-label]="'Score ' + team().name"
+            placeholder="–"
             inputmode="numeric"
             min="0"
             type="number"
           />
-        </div>
-        <div>
-          <label for="scoreOpponent" class="block text-sm font-medium text-ink mb-1"
-            >Score tegenstander</label
-          >
+          <span class="text-center text-xl font-bold text-muted" aria-hidden="true">:</span>
           <input
-            class="min-h-11 w-full min-w-0 max-w-full rounded-xl border border-line bg-[#171419] px-3 py-2.5 text-base text-ink placeholder:text-muted/60 transition-colors focus:border-accent"
+            class="h-20 w-full min-w-0 rounded-xl border border-line bg-surface px-2 text-center text-3xl font-bold tabular-nums text-ink placeholder:text-muted/40 transition-colors focus:border-accent [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
             id="scoreOpponent"
             formControlName="scoreOpponent"
+            aria-describedby="score-help"
+            [attr.aria-label]="'Score ' + (form.get('opponent')?.value || 'tegenstander')"
+            placeholder="–"
             inputmode="numeric"
             min="0"
             type="number"
           />
         </div>
-      </div>
+      </fieldset>
 
       <div class="mb-4">
         <label class="block text-sm font-medium text-ink mb-2">Spelers die speelden</label>
