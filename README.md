@@ -2,10 +2,12 @@
 
 ## Omgevingen
 
-- `main` / development: **Supabase** voor Google-login, gebruikersrechten en teamgegevens.
-- `production` / productiebuild: **Firebase** voor Google-login, Firestore en hosting.
-- Angular kiest de backend via `fileReplacements` in `angular.json`. De productieconfiguratie vervangt de Supabase-adapter en gebruikersprofielen door de Firebase-implementatie. Ook een productiebuild vanaf main gebruikt dus Firebase.
-- Er wordt geen data automatisch gekopieerd of gesynchroniseerd tussen de omgevingen.
+- Development gebruikt Supabase-testproject `jfjjsvmqvpghknytydac`.
+- Productie gebruikt Supabase-project `dbbfboycceytdwaarwfv` in de aparte gratis organisatie **Voetbal-app productie**.
+- Firebase Hosting blijft de website op https://voetbal-app-6fa54.web.app verzorgen.
+- `main` en `production` bevatten bij iedere publicatie dezelfde commit. De buildconfiguratie bepaalt welke database wordt gebruikt; branchgelijkheid betekent geen gegevenssynchronisatie.
+- De publieke productie-URL en publishable key staan in `src/environments/supabase-production.json`. Geen databasewachtwoorden, OAuth-secrets of service-role keys in Git.
+- De expliciete configuratie `firebase-legacy` bewaart de vorige Firebase-backend voor een gecontroleerde terugkeer. De standaard productiebuild bevat uitsluitend Supabase.
 
 ## Supabase-testomgeving instellen
 
@@ -32,21 +34,19 @@ De lokale bronkopie staat onder `backups/supabase-source-2026-09-15T17-30-10-526
 ## Starten en bouwen
 
 - `npm start` / `npm run start:test`: Supabase-testomgeving op `http://localhost:4200`.
-- `npm run start:production`: Firebase-productieomgeving lokaal op `http://localhost:4201`; writes gaan naar de echte productiedatabase.
+- `npm run start:production`: Supabase-productieomgeving lokaal op `http://localhost:4201`; writes gaan naar de echte productiedatabase.
 - `npm run build:test`: geoptimaliseerde testbuild met controle dat Firebase niet gebundeld is.
-- `npm run build:prod`: Firebase-productiebuild.
+- `npm run build:prod`: Supabase-productiebuild, met controle op de juiste project-URL en publieke key.
 - `npm run test:ci`: unit-tests in Chrome Headless.
 - `npm run format` / `npm run format:check`: formatteren/controleren met Prettier.
 
 `npm run deploy:test` stopt met een uitleg: de oude Firebase-testdeployment is uitgeschakeld. Supabase verzorgt Auth en database; voor de Angular-testsite moet nog een statische host worden ingesteld. Publiceer daar de bestanden uit `dist/voetbal-app/browser` met een SPA-fallback naar `index.html`.
 
-## Productie publiceren (Firebase)
+## Productie publiceren
 
-Productie blijft project `voetbal-app-6fa54` gebruiken, met de bestaande configuratie in `firebase.config.ts`, hosting in `firebase.json` en regels in `firestore.rules`.
+Hosting blijft Firebase-project `voetbal-app-6fa54`. Auth, database, rechten en teamlogo’s worden door Supabase geleverd. `npm run deploy:prod` publiceert uitsluitend hosting; Firestore en de oude productiegegevens blijven bewaard.
 
-`npm run deploy:prod` vereist een schone, gecommitte `production`-branch, bouwt de app, controleert dat de Firebase-productieconfiguratie aanwezig is en publiceert hosting en Firestore-regels. Log zo nodig eerst in met `npm run firebase:login`.
-
-Een geteste versie promoveren:
+Publiceren vereist een schone `production`-branch die exact gelijk is aan `main`. De buildcontrole weigert de testdatabase, ontbrekende instellingen, secret keys en Firebase-databasecode in een Supabase-productiebuild.
 
 ```bash
 git switch production
@@ -55,6 +55,8 @@ npm run deploy:prod
 git push origin main production
 git switch main
 ```
+
+Migratiegegevens, controles en terugkeerprocedure staan in [docs/supabase-production.md](docs/supabase-production.md).
 
 ## Seizoenen en rechten
 
@@ -65,7 +67,7 @@ git switch main
 - Voeg spelers toe aan het gekozen seizoen, daarna wedstrijden via **Nieuwe wedstrijd**.
 - Alleen ingelogde gebruikers kunnen teamgegevens lezen. Alleen geverifieerde beheerders kunnen toevoegen.
 - In Supabase maakt een database-trigger bij de eerste aanmelding een profiel in `public.users`. Het geverifieerde account `daniel.r.gumbs@gmail.com` krijgt aanvankelijk `isAdmin: true`; andere accounts krijgen `false`. Rollen kunnen uitsluitend via vertrouwd databasebeheer worden aangepast. De browser kan geen rollen schrijven. Bestaande rollen blijven behouden.
-- In productie blijven de bestaande Firestore-profielen en regels gelden.
+- Productie gebruikt dezelfde Supabase-profieltrigger en toegangsregels als test. Na de overstap melden gebruikers opnieuw met Google aan; Supabase maakt een nieuw profiel aan. Het geverifieerde beheeraccount krijgt dezelfde beheerdersrol.
 - Verwijderen is niet beschikbaar vanuit de app. Historische data wordt niet overschreven.
 
 De scripts `copy-production-to-test.cjs` en `configure-test-auth.cjs` betreffen uitsluitend het oude Firebase-testproject; ze configureren of vullen Supabase niet.

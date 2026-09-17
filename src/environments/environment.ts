@@ -1,4 +1,4 @@
-// Separate Supabase test project; production uses environment.production.ts (Firebase).
+// Separate Supabase test project; production uses its own Supabase project.
 export const environment = {
   production: false,
   supabase: {

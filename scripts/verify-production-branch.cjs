@@ -6,4 +6,7 @@ if (git('branch', '--show-current') !== 'production') {
 if (git('status', '--porcelain')) {
   throw new Error('Commit alle wijzigingen voordat je productie publiceert.');
 }
+if (git('rev-parse', 'HEAD') !== git('rev-parse', 'main')) {
+  throw new Error('Production en main moeten dezelfde commit bevatten voordat je publiceert.');
+}
 console.log(`Production release: ${git('rev-parse', '--short', 'HEAD')}`);

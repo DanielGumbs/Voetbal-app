@@ -5,20 +5,21 @@
     "ng": "ng",
     "start": "npm run start:test",
     "start:test": "ng serve --configuration development",
-    "start:production": "ng serve --configuration production --port 4201",
+    "start:production": "node scripts/verify-supabase-production.cjs && ng serve --configuration production --port 4201",
     "build": "ng build",
-    "build:prod": "ng build --configuration production",
+    "build:prod": "node scripts/verify-supabase-production.cjs && ng build --configuration production && node scripts/verify-build-environment.cjs production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "firebase:login": "firebase login",
     "firebase:use": "firebase use",
     "deploy": "npm run deploy:prod",
-    "deploy:prod": "node scripts/verify-production-branch.cjs && npm run build:prod && node scripts/verify-build-environment.cjs production && firebase deploy --project production --only hosting,firestore:rules",
+    "deploy:prod": "node scripts/verify-production-branch.cjs && npm run build:prod && firebase deploy --project production --only hosting",
     "build:test": "ng build --configuration development --optimization --source-map=false && node scripts/verify-build-environment.cjs test",
     "deploy:test": "node scripts/deploy-test.cjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test:ci": "ng test --watch=false --browsers=ChromeHeadless"
+    "test:ci": "ng test --watch=false --browsers=ChromeHeadless",
+    "build:firebase-legacy": "ng build --configuration firebase-legacy && node scripts/verify-build-environment.cjs firebase-legacy"
   },
   "prettier": {
     "overrides": [

@@ -1,6 +1,6 @@
-import { firebaseConfig } from '../../firebase.config';
+import supabase from './supabase-production.json';
 
 export const environment = {
   production: true,
-  firebase: firebaseConfig,
+  supabase,
 };

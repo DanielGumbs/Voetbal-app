@@ -33,18 +33,6 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "src/app/app.config.ts",
-                  "with": "src/app/app.config.production.ts"
-                },
-                {
-                  "replace": "src/services/supabase.ts",
-                  "with": "src/services/backend.production.ts"
-                },
-                {
-                  "replace": "src/services/user-profile.service.ts",
-                  "with": "src/services/user-profile.service.production.ts"
-                },
-                {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.production.ts"
                 }
@@ -67,6 +55,39 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "firebase-legacy": {
+              "fileReplacements": [
+                {
+                  "replace": "src/app/app.config.ts",
+                  "with": "src/app/app.config.production.ts"
+                },
+                {
+                  "replace": "src/services/supabase.ts",
+                  "with": "src/services/backend.production.ts"
+                },
+                {
+                  "replace": "src/services/user-profile.service.ts",
+                  "with": "src/services/user-profile.service.production.ts"
+                },
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.firebase.ts"
+                }
+              ],
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
+                }
+              ],
+              "outputHashing": "all"
             }
           },
           "defaultConfiguration": "production"
